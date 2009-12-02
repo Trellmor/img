@@ -32,6 +32,7 @@ if (isset($_GET['i'])) {
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<title>img.pew.cc - <?php echo $original_name; ?></title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<script type="text/javascript" src="lightbox/prototype.js"></script>
@@ -92,6 +93,7 @@ if (isset($_GET['i'])) {
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<title>img.pew.cc - Image Hosting</title>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>

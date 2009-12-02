@@ -39,6 +39,7 @@ WHERE
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<title>img.pew.cc - Image Hosting</title>
 		<script type="text/javascript" src="lightbox/prototype.js"></script>
@@ -107,6 +108,7 @@ WHERE
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<title>img.pew.cc - Image Hosting</title>
 	</head>
