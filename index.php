@@ -114,7 +114,8 @@ $(function () {
 		</form>
 		<p id="info">
 			Maximum upload size: <?php echo byteConvert($maxsize) ?><br />
-			Allowed file types: <?php echo $filetypes; ?>
+			Allowed file types: <?php echo $filetypes; ?><br />
+			Use , (comma) to seperate tags 
 		</p>
 		<p id="browse"><a href="browse.php">Browse images</a></p>
 		</div>
