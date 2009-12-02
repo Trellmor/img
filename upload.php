@@ -92,7 +92,29 @@ $db->exec("INSERT INTO images (
  '" . time() . "');" );
 $res = $db->query("SELECT last_insert_rowid() as id;");
 $row = $db->fetch($res);
-header('Location: ' . url() . '?i=' . urlnumber_encode($row['id']));
-errorMsg('Image saved.<br /><br /><a href="' . url() . '?i=' . $row['id'] . '">Continue</a>');
+$id = $row['id'];
+
+/**
+ * Tags
+ */
+if (isset($_POST['tags'])) {
+	$tags = explode(',', $_POST['tags']);
+	for ($i = 0; $i < count($tags); $i++) {
+		$tags[$i] = trim($tags[$i]);
+	}
+	$tags = array_unique($tags);
+	foreach ($tags as $tag) {
+		if (empty($tag)) continue;
+		$row = $db->fetch($db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'"));
+		if (!$row) {
+			$db->exec("INSERT INTO tags (tag, text) VALUES ('" . $db->escape(strtolower($tag)) . "', '" . $db->escape($tag) . "');");
+			$row = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
+		}
+		$db->exec("INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');");
+	}
+}
+
+header('Location: ' . url() . '?i=' . urlnumber_encode($id));
+errorMsg('Image saved.<br /><br /><a href="' . url() . '?i=' . urlnumber_encode($id) . '">Continue</a>');
 
 ?>

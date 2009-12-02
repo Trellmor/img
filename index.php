@@ -19,6 +19,16 @@ if (isset($_GET['i'])) {
 	$name = $row['location'];
 	$preview = dirname($name) . '/preview/' . basename($name);
 	
+	$res = $db->query("SELECT t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
+	$tags = '';
+	while ($row = $db->fetch($res)) {
+		if (empty($tags)) {
+			$tags .= $row['text'];
+		} else {
+			$tags .= ', ' . $row['text'];
+		}
+	}
+	
 ?>
 <html>
 	<head>
@@ -29,7 +39,7 @@ if (isset($_GET['i'])) {
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
 		<div id="content">
 			<a id="preview" href="<?php echo $name; ?>"><img src="<?php echo $preview ?>" alt="" /></a>
-			<br />
+			<p id="tags">Tags: <?php echo $tags ?><br /></p>
 			<table>
 				<thead>
 					<tr>
