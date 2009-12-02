@@ -60,4 +60,63 @@ function move_uploaded_file_save($f, $d)
 	return move_uploaded_file($f, $d);
 }
 
+function urlnumber_encode($number)
+{
+	//0-9 = 0-9
+	//a-z = 10-35
+	//A-Z = 36-61
+	//$-_.+!*'(), = 62-64 
+	static $table = array(
+	 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+	 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+	 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+	 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+	 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+	 '-', '_', '.',
+	);
+	
+	$r = $number % 64;
+	if ($number - $r == 0)
+		return $table[$r];
+	else
+		return  urlnumber_encode((($number - $r) / 64)) . $table[$r];
+}
+
+function urlnumber_decode($str)
+{
+	static $table = array(
+	 '0' => 0, '1' => 1, '2' => 2, '3' => 3, '4' => 4,
+	 '5' => 5, '6' => 6, '7' => 7, '8' => 8, '9' => 9,
+	 'a' => 10, 'b' => 11, 'c' => 12, 'd' => 13, 'e' => 14,
+	 'f' => 15, 'g' => 16, 'h' => 17, 'i' => 18, 'j' => 19,
+	 'k' => 20, 'l' => 21, 'm' => 22, 'n' => 23, 'o' => 24,
+	 'p' => 25, 'q' => 26, 'r' => 27, 's' => 28, 't' => 29,
+	 'u' => 30, 'v' => 31, 'w' => 32, 'x' => 33, 'y' => 34, 'z' => 35,
+	 'A' => 36, 'B' => 37, 'C' => 38, 'D' => 39, 'E' => 40,
+	 'F' => 41, 'G' => 42, 'H' => 43, 'I' => 44, 'J' => 45,
+	 'K' => 46, 'L' => 47, 'M' => 48, 'N' => 49, 'O' => 50,
+	 'P' => 51, 'Q' => 52, 'R' => 53, 'S' => 54, 'T' => 55,
+	 'U' => 56, 'V' => 57, 'W' => 58, 'X' => 59, 'Y' => 60, 'Z' => 61,
+	 '-' => 62, '_' => 63, '.' => 64,
+	);
+	
+	$str  = trim($str);
+	
+	//echo $str . "\n";
+	
+	$c = substr($str, 0, 1);
+	if (strlen($str) > 1) {
+		return $table[$c] * pow(64, strlen($str) - 1) + urlnumber_decode(substr($str, 1));
+	} else {
+		return $table[$c];
+	}
+}
+
+function unlink_safe($f)
+{
+	if (file_exists($f) && is_writable(($f))) {
+		unlink($f);
+	}
+}
+
 ?>

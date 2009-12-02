@@ -1,13 +1,13 @@
 <?php
 
-/*
+/**
  * name		class.sqlite.php
  * begin	July 11, 2007
  * 
  * $Id: class.sqlite.php 27 2008-07-30 10:35:30Z trellmor $
  */
 
-/*
+/**
  * yabs - yet another blog system
  * Copyright (C) 2007 Daniel Triendl
  *

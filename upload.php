@@ -4,6 +4,7 @@ error_reporting(E_ALL);
 
 require_once('lib/functions.php');
 require_once('lib/config.php');
+require_once('lib/class.sqlite.php');
 
 if (!isset($_POST['submit'])) {
 	errorMsg('No file uploaded.');
@@ -19,12 +20,12 @@ if (!isset($_POST['submit'])) {
 $img = $_FILES['image'];
 
 if ($img['error']) {
-	unlink($img['tmp_name']);
+	unlink_safe($img['tmp_name']);
 	errorMsg('Image uplaod error.');
 }
 
 if ($img['size'] > $maxsize) {
-	unlink($img['tmp_name']);
+	unlink_safe($img['tmp_name']);
 	errorMsg('Image too big.');
 }
 
@@ -41,7 +42,7 @@ if ($img['size'] > $maxsize) {
 $info = getimagesize($img['tmp_name']);
 
 if (!isset($mime[$info['mime']])) {
-	unlink($img['tmp_name']);
+	unlink_safe($img['tmp_name']);
 	errorMsg('Imagetype not allowed.');
 }
 
@@ -57,7 +58,7 @@ if(count($name) < 2) {
 $name = str_replace('//', '/', checkExists($imgdir . '/' . $name));
 
 if (!move_uploaded_file_save($img['tmp_name'], $name)) {
-	unlink($img['tmp_name']);
+	unlink_safe($img['tmp_name']);
 	errorMsg('Can\'t move uploaded file.');
 }
 
@@ -79,8 +80,19 @@ exec('convert -define jpeg:size=' . $preview_width * 2 . 'x' . $preview_height *
  -thumbnail ' . $preview_width . 'x' . $preview_height . ' -unsharp 0x.5 \\
  ' . escapeshellarg($preview));
 
-echo '<img src="' . url() . $preview . '" alt="" /><br /><br />';
+$db = new sqlite('lib/db.sqlite');
 
-echo url() . $name;
+$db->exec("INSERT INTO images (
+ location,
+ ip,
+ time
+) VALUES (
+ '" . $db->escape($name) . "',
+ '" . ip2long($_SERVER['REMOTE_ADDR']) . "',
+ '" . time() . "');" );
+$res = $db->query("SELECT last_insert_rowid() as id;");
+$row = $db->fetch($res);
+header('Location: ' . url() . '?i=' . urlnumber_encode($row['id']));
+errorMsg('Image saved.<br /><br /><a href="' . url() . '?i=' . $row['id'] . '">Continue</a>');
 
 ?>
