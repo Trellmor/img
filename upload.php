@@ -76,9 +76,8 @@ if (!move_uploaded_file_save($img['tmp_name'], $name)) {
 $preview = dirname($name) . '/preview/' . basename($name);
 if (!file_exists(dirname($preview))) mkdir(dirname($preview));
 exec('convert -define jpeg:size=' . $preview_width * 2 . 'x' . $preview_height * 2 . ' \\
- ' . escapeshellarg($name) . ' -auto-orient \\
- -thumbnail ' . $preview_width . 'x' . $preview_height . ' -unsharp 0x.5 \\
- ' . escapeshellarg($preview));
+ ' . escapeshellarg($name) . ' -thumbnail ' . $preview_width . 'x' . $preview_height . ' \\
+ -unsharp 0x.5 ' . escapeshellarg($preview));
 
 $db = new sqlite('lib/db.sqlite');
 
