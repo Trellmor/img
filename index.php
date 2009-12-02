@@ -1,6 +1,6 @@
 <?php
 
-header('Content-Type: application/xhtml+xml; charset=UTF-8');
+header('Content-Type: text/html; charset=UTF-8');
 
 error_reporting(E_ALL);
 
@@ -102,13 +102,13 @@ if (isset($_GET['i'])) {
 		<script src="tag.js" type="text/javascript"></script>
 		<script type="text/javascript">
 $(function () {
+	$('#inputtags').attr('autocomplete', 'off');
 	$('#inputtags').tagSuggest({
 		url: 'tags.php',
 		delay: 250,
 		separator: ', ',
 		tagContainer: 'p',
 	});
-	$('#inputtags').attr('autocomplete', 'off');
 });
     </script>
 	</head>
