@@ -89,3 +89,24 @@ h2 {
 	padding: 5px;
 	line-height: 2.5;
 }
+
+p.tagMatches {
+	margin-left: 50px;
+}
+
+p.tagMatches span {
+	padding: 2px;
+	margin-right: 4px;
+	cursor: pointer;
+	font-size: small;
+	color: #FFD100;
+	border: 1px soldi #FFFFFF;	
+}
+      
+span.tagMatches SPAN {
+	padding: 2px;
+	margin-right: 4px;
+	background-color: #0000AB;
+	color: #fff;
+	cursor: pointer;
+}

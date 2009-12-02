@@ -20,10 +20,10 @@ if (isset($_GET['i'])) {
 	$preview = dirname($name) . '/preview/' . basename($name);
 	$original_name = htmlspecialchars($row['original_name']);
 
-	$res = $db->query("SELECT t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
+	$res = $db->query("SELECT t.tag, t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
 	$tags = '';
 	while ($row = $db->fetch($res)) {
-		$tags .= $row['text'] . ', ';
+		$tags .= '<a href="browse.php?tag=' . urlencode($row['tag']) . '">' . $row['text'] . '</a>, ';
 	}
 	$tags = substr($tags, 0, -2);
 	
@@ -32,12 +32,16 @@ if (isset($_GET['i'])) {
 	<head>
 		<title>img.pew.cc - <?php echo $original_name; ?></title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
+		<script type="text/javascript" src="lightbox/prototype.js"></script>
+		<script type="text/javascript" src="lightbox/scriptaculous.js?load=effects,builder"></script>
+		<script type="text/javascript" src="lightbox/lightbox.js"></script>
+		<link rel="stylesheet" href="lightbox/lightbox.css" type="text/css" media="screen" />
 	</head>
 	<body>
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
 		<div id="content">
 			<h2><a href="<?php echo $name; ?>"><?php echo $original_name; ?></a></h2>
-			<a id="preview" href="<?php echo $name; ?>"><img src="<?php echo $preview ?>" alt="" /></a>
+			<a id="preview" href="<?php echo $name; ?>" rel="lightbox" ><img src="<?php echo $preview ?>" alt="" /></a>
 			<p id="tags">Tags: <?php echo $tags ?><br /></p>
 			<table>
 				<thead>
@@ -86,6 +90,18 @@ if (isset($_GET['i'])) {
 	<head>
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<title>img.pew.cc - Image Hosting</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+		<script src="tag.js" type="text/javascript"></script>
+		<script type="text/javascript">
+$(function () {
+	$('#inputtags').tagSuggest({
+		url: 'tags.php',
+		delay: 250,
+		separator: ', ',
+		tagContainer: 'p',
+	});
+});
+    </script>
 	</head>
 	<body>
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
@@ -93,7 +109,7 @@ if (isset($_GET['i'])) {
 		<form action="upload.php" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxsize; ?>" />
 			<span class="text">File:</span><input type="file" size="40" name="image" /><br /><br />
-			<span class="text">Tags:</span><input type="text" size="40" name="tags" /><br /><br />
+			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" autocomplete="off" />
 			<span class="text">&nbsp;</span><input id="submit" type="Submit" name="submit" value="Upload" />
 		</form>
 		<p id="info">
