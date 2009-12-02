@@ -28,6 +28,8 @@ if (isset($_GET['i'])) {
 	$tags = substr($tags, 0, -2);
 	
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<head>
 		<title>img.pew.cc - <?php echo $original_name; ?></title>
@@ -86,6 +88,8 @@ if (isset($_GET['i'])) {
 	}
 	$filetypes = substr($filetypes, 0, -2);
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="style.css" />
