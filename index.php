@@ -113,20 +113,20 @@ $(function () {
 	</head>
 	<body>
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
-		<div id="content">
 		<form action="upload.php" method="post" enctype="multipart/form-data">
+		<div id="content">
 			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxsize; ?>" />
 			<span class="text">File:</span><input type="file" size="40" name="image" /><br /><br />
 			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" autocomplete="off" />
-			<span class="text">&nbsp;</span><input id="submit" type="Submit" name="submit" value="Upload" />
-		</form>
-		<p id="info">
-			Maximum upload size: <?php echo byteConvert($maxsize) ?><br />
-			Allowed file types: <?php echo $filetypes; ?><br />
-			Use , (comma) to seperate tags 
-		</p>
-		<p id="browse"><a href="browse.php">Browse images</a></p>
+			<span class="text">&nbsp;</span><input id="submit" type="submit" name="submit" value="Upload" />
+			<p id="info">
+				Maximum upload size: <?php echo byteConvert($maxsize) ?><br />
+				Allowed file types: <?php echo $filetypes; ?><br />
+				Use , (comma) to seperate tags 
+			</p>
+			<p id="browse"><a href="browse.php">Browse images</a></p>
 		</div>
+		</form>
 		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
 	</body>
 </html>
