@@ -87,7 +87,6 @@ h2 {
 
 .lightbox {
 	padding: 5px;
-	line-height: 2.5;
 }
 
 p.tagMatches {
@@ -100,13 +99,11 @@ p.tagMatches span {
 	cursor: pointer;
 	font-size: small;
 	color: #FFD100;
-	border: 1px soldi #FFFFFF;	
 }
-      
-span.tagMatches SPAN {
-	padding: 2px;
-	margin-right: 4px;
-	background-color: #0000AB;
-	color: #fff;
-	cursor: pointer;
+
+.previewimage {
+	text-align: center;
+	font-size: x-small;	
+	float: left;
+	margin-bottom: 10px;
 }

@@ -11,6 +11,7 @@ $db = new sqlite('lib/db.sqlite');
 if (isset($_GET['tag'])) {
 	
 	$sql = "SELECT
+ i.ROWID as id,
  i.location as name,
  i.original_name,
  t.text
@@ -29,7 +30,8 @@ WHERE
 	while ($row = $db->fetch($res)) {
 		$tag_text = $row['text'];
 		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
-		$images .= '<a href="' . $row['name'] . '" class="lightbox" rel="lightbox[tag]" /><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a>';
+		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox[tag]" /><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />';
+		$images .= '<a href="index.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>';
 	}
 
 ?>
@@ -47,6 +49,7 @@ WHERE
 		<div id="content">
 			<h2><?php echo htmlentities($tag_text); ?></h2>
 			<?php echo $images; ?>
+			<br style="clear: both;" />
 		</div>
 		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
 	</body>
