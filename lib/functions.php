@@ -46,7 +46,7 @@ function checkExists($f)
 
 function url() {
 	$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
-	if ($url[count($url) - 1] != '/') {
+	if ($url[strlen($url) - 1] != '/') {
 		$url .= '/';
 	}
 	return $url;
