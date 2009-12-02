@@ -1,5 +1,7 @@
 <?php
 
+header('Content-Type: application/xhtml+xml; charset=UTF-8');
+
 error_reporting(E_ALL);
 
 require_once('lib/functions.php');
@@ -30,7 +32,7 @@ if (isset($_GET['i'])) {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<title>img.pew.cc - <?php echo $original_name; ?></title>
@@ -91,7 +93,7 @@ if (isset($_GET['i'])) {
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<link rel="stylesheet" type="text/css" href="style.css" />
