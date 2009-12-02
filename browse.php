@@ -2,6 +2,8 @@
 
 error_reporting(E_ALL);
 
+header('Content-Type: text/html; charset=UTF-8');
+
 require_once('lib/functions.php');
 require_once('lib/config.php');
 require_once('lib/class.sqlite.php');
@@ -30,7 +32,7 @@ WHERE
 	while ($row = $db->fetch($res)) {
 		$tag_text = $row['text'];
 		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
-		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox[tag]" /><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />';
+		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox.tag" /><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />';
 		$images .= '<a href="index.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>';
 	}
 
