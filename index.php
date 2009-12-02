@@ -22,12 +22,9 @@ if (isset($_GET['i'])) {
 	$res = $db->query("SELECT t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
 	$tags = '';
 	while ($row = $db->fetch($res)) {
-		if (empty($tags)) {
-			$tags .= $row['text'];
-		} else {
-			$tags .= ', ' . $row['text'];
-		}
+		$tags .= $row['text'] . ', ';
 	}
+	$tags = substr($tags, 0, -2);
 	
 ?>
 <html>
@@ -77,6 +74,11 @@ if (isset($_GET['i'])) {
 
 } else {
 
+	$filetypes = '';
+	foreach ($mime as $f) {
+		$filetypes .= $f . ', ';
+	}
+	$filetypes = substr($filetypes, 0, -2);
 ?>
 <html>
 	<head>
@@ -92,7 +94,10 @@ if (isset($_GET['i'])) {
 			<span class="text">Tags:</span><input type="text" size="40" name="tags" /><br /><br />
 			<span class="text">&nbsp;</span><input id="submit" type="Submit" name="submit" value="Upload" />
 		</form>
-		<span class="text">&nbsp;</span>Maximum upload size: <?php echo byteConvert($maxsize) ?>
+		<p class="info">
+			Maximum upload size: <?php echo byteConvert($maxsize) ?><br />
+			Allowed file types: <?php echo $filetypes; ?>
+		</p>
 		</div>
 		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
 	</body>

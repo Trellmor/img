@@ -37,6 +37,11 @@ a {
 	width: 50px;
 }
 
+#content .info {
+	padding-left: 50px;
+	font-size: small;
+}
+
 #preview {
 	margin-left: auto;
 	margin-right: auto;
