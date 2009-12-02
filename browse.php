@@ -29,7 +29,7 @@ WHERE
 	while ($row = $db->fetch($res)) {
 		$tag_text = $row['text'];
 		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
-		$images .= '<a href="' . $row['name'] . '" class="lightbox" rel="lightbox[tag]" /><img src="' . $preview . '" alt="' . htmlspecialchars($row['original_name']) . '" /></a>';
+		$images .= '<a href="' . $row['name'] . '" class="lightbox" rel="lightbox[tag]" /><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a>';
 	}
 
 ?>
@@ -45,7 +45,7 @@ WHERE
 	<body>
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
 		<div id="content">
-			<h2><?php echo $tag_text; ?></h2>
+			<h2><?php echo htmlentities($tag_text); ?></h2>
 			<?php echo $images; ?>
 		</div>
 		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
@@ -62,7 +62,7 @@ WHERE
 	$texts = array();
 	while ($row = $db->fetch($res)) {
 		$tags[$row['tag']] = $row['count'];
-		$texts[$row['tag']] = $row['text'];
+		$texts[$row['tag']] = htmlentities($row['text']);
 	}
 	
 	// $tags is the array

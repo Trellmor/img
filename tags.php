@@ -12,7 +12,7 @@ if (isset($_GET['tag'])) {
 	$tags = array();
 	
 	while ($row = $db->fetch($res)) {
-		$tags[] = $row['text'];
+		$tags[] = htmlentities($row['text']);
 	}
 	
 	echo json_encode($tags);

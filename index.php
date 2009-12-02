@@ -18,12 +18,12 @@ if (isset($_GET['i'])) {
 	$id = $row['id'];
 	$name = $row['location'];
 	$preview = dirname($name) . '/preview/' . basename($name);
-	$original_name = htmlspecialchars($row['original_name']);
+	$original_name = htmlentities($row['original_name']);
 
 	$res = $db->query("SELECT t.tag, t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
 	$tags = '';
 	while ($row = $db->fetch($res)) {
-		$tags .= '<a href="browse.php?tag=' . urlencode($row['tag']) . '">' . $row['text'] . '</a>, ';
+		$tags .= '<a href="browse.php?tag=' . urlencode($row['tag']) . '">' . htmlentities($row['text']) . '</a>, ';
 	}
 	$tags = substr($tags, 0, -2);
 	
