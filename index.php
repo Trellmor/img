@@ -108,6 +108,7 @@ $(function () {
 		separator: ', ',
 		tagContainer: 'p',
 	});
+	$('#inputtags').attr('autocomplete', 'off');
 });
     </script>
 	</head>
@@ -117,7 +118,7 @@ $(function () {
 		<div id="content">
 			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $maxsize; ?>" />
 			<span class="text">File:</span><input type="file" size="40" name="image" /><br /><br />
-			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" autocomplete="off" />
+			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" />
 			<span class="text">&nbsp;</span><input id="submit" type="submit" name="submit" value="Upload" />
 			<p id="info">
 				Maximum upload size: <?php echo byteConvert($maxsize) ?><br />
