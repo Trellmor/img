@@ -67,7 +67,7 @@ if (isset($_GET['i'])) {
 					<tr>
 						<td>Preview</td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="<?php echo url() . $name; ?>" /></td>
-						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;a href=&quot;<?php echo url() . $name; ?>&quot;&gt;&lt;img src=&quot;<?php echo url() . $preview ?>&quot alt=&quot;<?php echo $original_name; ?> - img.pew.cc&quot; /&gt;&lt;/a&gt;" /></td>
+						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;a href=&quot;<?php echo url() . $name; ?>&quot;&gt;&lt;img src=&quot;<?php echo url() . $preview ?>&quot; alt=&quot;<?php echo $original_name; ?> - img.pew.cc&quot; /&gt;&lt;/a&gt;" /></td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="[URL=<?php echo url() . $name; ?>][IMG]<?php echo url() . $preview; ?>[/IMG][/URL]" /></td>
 					</tr>
 					<tr>
