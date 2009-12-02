@@ -37,9 +37,13 @@ a {
 	width: 50px;
 }
 
-#content .info {
+#info {
 	padding-left: 50px;
 	font-size: small;
+}
+
+#browse {
+	text-align: right;	
 }
 
 #preview {
@@ -68,3 +72,20 @@ table input {
 #tags {
 	font-size: small;
 	text-align: center;
+}
+
+h2 {
+	text-align: center;
+	margin-top: 0;	
+}
+
+.tags {/*
+	padding: 5px;
+	display: block;
+	float:left;*/
+}
+
+.lightbox {
+	padding: 5px;
+	line-height: 2.5;
+}

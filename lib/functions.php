@@ -30,7 +30,23 @@ function byteConvert($bytes)
 
 function errorMsg($msg)
 {
-	die($msg);
+?> 
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+		<title>img.pew.cc Image Hosting</title>
+	</head>
+	<body>
+		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
+		<div id="content">
+		<?php echo $msg; ?><br /><br />
+		<a href="javascript:history.back();">Return</a>
+		</div>
+		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
+	</body>
+</html>
+<?php
+	die();
 }
 
 function checkExists($f)

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * TODO: Save original name and display it
- * TODO: Add tag count
- */
-
 error_reporting(E_ALL);
 
 require_once('lib/functions.php');
@@ -90,11 +85,14 @@ $db = new sqlite('lib/db.sqlite');
 $db->exec("INSERT INTO images (
  location,
  ip,
- time
+ time,
+ original_name
 ) VALUES (
  '" . $db->escape($name) . "',
  '" . ip2long($_SERVER['REMOTE_ADDR']) . "',
- '" . time() . "');" );
+ '" . time() . "',
+ '" . $db->escape($img['name']) . "'
+);" );
 $res = $db->query("SELECT last_insert_rowid() as id;");
 $row = $db->fetch($res);
 $id = $row['id'];
@@ -108,6 +106,7 @@ if (isset($_POST['tags'])) {
 		$tags[$i] = trim($tags[$i]);
 	}
 	$tags = array_unique($tags);
+	$sql = "BEGIN;\n";
 	foreach ($tags as $tag) {
 		if (empty($tag)) continue;
 		$row = $db->fetch($db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'"));
@@ -115,8 +114,11 @@ if (isset($_POST['tags'])) {
 			$db->exec("INSERT INTO tags (tag, text) VALUES ('" . $db->escape(strtolower($tag)) . "', '" . $db->escape($tag) . "');");
 			$row = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
 		}
-		$db->exec("INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');");
+		$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');\n";
+		$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row['id'] . "';\n";
 	}
+	$sql .= "COMMIT;";
+	$db->exec($sql);
 }
 
 header('Location: ' . url() . '?i=' . urlnumber_encode($id));
