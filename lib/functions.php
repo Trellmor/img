@@ -45,7 +45,11 @@ function checkExists($f)
 }
 
 function url() {
-	return 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']) . '/';
+	$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
+	if ($url[count($url) - 1] != '/') {
+		$url .= '/';
+	}
+	return $url;
 }
 
 function move_uploaded_file_save($f, $d)

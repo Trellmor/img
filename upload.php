@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * TODO: Save original name and display it
+ * TODO: Add tag count
+ */
+
 error_reporting(E_ALL);
 
 require_once('lib/functions.php');
