@@ -58,6 +58,11 @@ if(count($name) < 2) {
 }
 
 $name = str_replace('//', '/', checkExists($imgdir . '/' . $name));
+$location = explodE('/', $name);
+for ($i = 0; $i < count($location), $i++) {
+	$location[$i] = rawurlencode($location[$i]);
+}
+$location = implode('/', $location);
 
 if (!move_uploaded_file_save($img['tmp_name'], $name)) {
 	unlink_safe($img['tmp_name']);
@@ -85,10 +90,12 @@ $db = new sqlite('lib/db.sqlite');
 
 $db->exec("INSERT INTO images (
  location,
+ path,
  ip,
  time,
  original_name
 ) VALUES (
+ '" . $db->escape($location) . "',
  '" . $db->escape($name) . "',
  '" . ip2long($_SERVER['REMOTE_ADDR']) . "',
  '" . time() . "',
