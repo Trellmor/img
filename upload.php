@@ -59,7 +59,7 @@ if(count($name) < 2) {
 
 $name = str_replace('//', '/', checkExists($imgdir . '/' . $name));
 $location = explodE('/', $name);
-for ($i = 0; $i < count($location), $i++) {
+for ($i = 0; $i < count($location); $i++) {
 	$location[$i] = rawurlencode($location[$i]);
 }
 $location = implode('/', $location);
