@@ -35,7 +35,7 @@ if (isset($_GET['i'])) {
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 	<head>
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-		<title>img.pew.cc - <?php echo one_wordwrap($original_name, 5, '<wbr />'); ?></title>
+		<title>img.pew.cc - <?php echo $original_name; ?></title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<script type="text/javascript" src="lightbox/prototype.js"></script>
 		<script type="text/javascript" src="lightbox/scriptaculous.js?load=effects,builder"></script>
@@ -45,7 +45,7 @@ if (isset($_GET['i'])) {
 	<body>
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
 		<div id="content">
-			<h2><a href="<?php echo $name; ?>"><?php echo $original_name; ?></a></h2>
+			<h2><a href="<?php echo $name; ?>"><?php echo one_wordwrap($original_name, 5, '<wbr />'); ?></a></h2>
 			<a id="preview" href="<?php echo $name; ?>" rel="lightbox" ><img src="<?php echo $preview ?>" alt="" /></a>
 			<p id="tags">Tags: <?php echo $tags ?><br /></p>
 			<table>
