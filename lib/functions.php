@@ -142,4 +142,15 @@ function unlink_safe($f)
 	}
 }
 
+function one_wordwrap( $string, $width, $wrap )
+{
+	$s=explode( " ", $string );
+	$new_string = '';
+	foreach( $s as $k => $v ) {
+		if( strlen( $v ) > $width ) $v = wordwrap( $v, $width, $wrap, true );
+		$new_string .= $v . ' ';
+	}
+	return $new_string;
+}
+
 ?>

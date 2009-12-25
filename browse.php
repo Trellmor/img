@@ -52,7 +52,7 @@ WHERE
 	<body>
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
 		<div id="content">
-			<h2><?php echo htmlentities($tag_text); ?></h2>
+			<h2><?php echo one_wordwrap(htmlentities($tag_text), 5, '<wbr />'); ?></h2>
 			<?php echo $images; ?>
 			<br style="clear: both;" />
 		</div>

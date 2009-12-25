@@ -72,7 +72,7 @@ if (!move_uploaded_file_save($img['tmp_name'], $name)) {
 /**
  * Create preview
  * 
- * We use imagemagick because it suüüprts a broad range of file
+ * We use imagemagick because it suports a broad range of file
  * types
  * 
  * Also, we call it directly with exec
