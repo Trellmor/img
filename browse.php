@@ -85,13 +85,13 @@ WHERE
 	$min_qty = min(array_values($tags));
 	       
 	// find the range of values
-	$spread = $max_qty - $min_qty;
-	if ($spread == 0) { // we don't want to divide by zero
-		$spread = 1;
-	}
+	//$spread = $max_qty - $min_qty;
+	//if ($spread == 0) { // we don't want to divide by zero
+	//	$spread = 1;
+	//}
 	       
 	// set the font-size increment
-	$step = ($max_size - $min_size) / ($spread);
+	//$step = ($max_size - $min_size) / ($spread);
 	       
 	// loop through the tag array
 	$cloud = '';
@@ -100,7 +100,11 @@ WHERE
 		// find the $value in excess of $min_qty
 		// multiply by the font-size increment ($size)
 		// and add the $min_size set above
-		$size = round($min_size + (($count - $min_qty) * $step));
+		//$size = round($min_size + (($count - $min_qty) * $step));
+		
+		// Logarythmic tag list
+		$weight = (log($count)-log($min_qty)) / (log($max_qty) - log($min_qty));
+		$size = $min_size + round(($max_size - $min_size) * $weight);
 	    
 		$cloud .= '<a href="browse.php?tag=' . urlencode($tag) . '" class="tags" style="font-size: ' . $size . 'px">' . $texts[$tag] . '</a> ';
 	}
