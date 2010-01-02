@@ -79,6 +79,7 @@ if (isset($_GET['i'])) {
 				</tbody>
 			</table>
 		</div>
+		<?php echo copyright(2009); ?>
 	</body>
 </html>
 <?php
@@ -128,7 +129,7 @@ $(function () {
 			<p id="browse"><a href="browse.php">Browse images</a></p>
 		</div>
 		</form>
-		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
+		<?php echo copyright(2009); ?>
 	</body>
 </html>
 

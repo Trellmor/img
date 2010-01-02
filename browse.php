@@ -56,7 +56,7 @@ WHERE
 			<?php echo $images; ?>
 			<br style="clear: both;" />
 		</div>
-		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
+		<?php echo copyright(2009); ?>
 	</body>
 </html>
 <?php
@@ -125,7 +125,7 @@ WHERE
 			<br style="clear: both;" />
 			<p id="browse"><a href="browse.php?tags=all">Show all tags</a></p>
 		</div>
-		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
+		<?php echo copyright(2009); ?>
 	</body>
 </html>
 <?php

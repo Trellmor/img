@@ -153,4 +153,12 @@ function one_wordwrap( $string, $width, $wrap )
 	return $new_string;
 }
 
+function copyright($year)
+{
+	if ($year < date("Y")) {
+		$year .= '-' . date("Y");
+	}
+	return '<p id="copy">&copy; ' . $year . ' by <a href="http://blog.pew.cc">Daniel Triendl</a> <a href="mailto:daniel@pew.cc">&lt;daniel@pew.cc&gt;</a></p>';
+}
+
 ?>
