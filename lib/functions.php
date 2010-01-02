@@ -45,7 +45,7 @@ function errorMsg($msg)
 		<?php echo $msg; ?><br /><br />
 		<a href="javascript:history.back();">Return</a>
 		</div>
-		<p id="copy">&copy; 2009 <a href="http://blog.pew.cc">Daniel Triendl</a></p>
+		<?php echo copyright(2009); ?>
 	</body>
 </html>
 <?php
@@ -158,7 +158,7 @@ function copyright($year)
 	if ($year < date("Y")) {
 		$year .= '-' . date("Y");
 	}
-	return '<p id="copy">&copy; ' . $year . ' by <a href="http://blog.pew.cc">Daniel Triendl</a> <a href="mailto:daniel@pew.cc">&lt;daniel@pew.cc&gt;</a></p>';
+	return '<p id="copy">&copy; ' . $year . ' by <a href="http://blog.pew.cc">Daniel Triendl</a></p>';
 }
 
 ?>
