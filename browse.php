@@ -33,7 +33,7 @@ WHERE
 		$tag_text = $row['text'];
 		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
 		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox.tag"><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />' . "\n";
-		$images .= '<a href="index.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
+		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
 	}
 
 ?>

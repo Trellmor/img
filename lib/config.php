@@ -22,7 +22,7 @@ $maxsize = ini2bytes(ini_get("upload_max_filesize"));
  */
 $mime = array(
 	'image/gif'		=> 'gif',
-	'image/jpeg'	=> 'jpeg',
+	'image/jpeg'	=> 'jpg',
 	'image/png'		=> 'png',
 	'image/bmp'		=> 'bmp',
 );

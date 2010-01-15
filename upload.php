@@ -129,7 +129,7 @@ if (isset($_POST['tags'])) {
 	$db->exec($sql);
 }
 
-header('Location: ' . url() . '?i=' . urlnumber_encode($id));
-errorMsg('Image saved.<br /><br /><a href="' . url() . '?i=' . urlnumber_encode($id) . '">Continue</a>');
+header('Location: ' . url() . 'image.php?i=' . urlnumber_encode($id));
+errorMsg('Image saved.<br /><br /><a href="' . url() . 'image.php?i=' . urlnumber_encode($id) . '">Continue</a>');
 
 ?>
