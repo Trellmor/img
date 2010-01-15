@@ -27,7 +27,9 @@ $tagjs .= "$(function () {
 });
 </script>";
 
-$content = '<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
+$content = '<form action="upload.php" method="post" enctype="multipart/form-data">
+			<div id="conent">
+			<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
 			<span class="text">File:</span><input type="file" size="40" name="image" /><br /><br />
 			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" />
 			<span class="text">&nbsp;</span><input id="submit" type="submit" name="submit" value="Upload" />
@@ -36,8 +38,10 @@ $content = '<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
 				Allowed file types: ' . $filetypes . '<br />
 				Use , (comma) to seperate tags 
 			</p>
-			<p id="browse"><a href="browse.php">Browse images</a></p>';
+			<p id="browse"><a href="browse.php">Browse images</a></p>
+			</div>
+			</form>';
 
-outputHTML($content, array('header' => $tagjs));
+outputHTML($content, array('header' => $tagjs, 'div' => false));
 
 ?>

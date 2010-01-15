@@ -147,6 +147,10 @@ function outputHTML($content, $opt = NULL) {
 	$title = 'img.pew.cc - Image Hosting';
 	$title = (isset($opt['title'])) ? $opt['title'] . ' - ' . $title : $title;
 
+	
+	if (!isset($opt['div']) || $opt['div'] != false) {
+		$content = '<div id="content">' . $content . '</div>';
+	}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
    "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
@@ -169,9 +173,7 @@ function outputHTML($content, $opt = NULL) {
 	</head>
 	<body>
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
-		<div id="content">
-			<?php echo $content ?>
-		</div>
+		<?php echo $content ?>
 		<?php echo copyright(2009); ?>
 	</body>
 </html>
