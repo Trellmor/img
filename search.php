@@ -23,7 +23,7 @@ WHERE
 
 	foreach ($search as $s) {
 		$s = trim($s);
-		$sql .= " t.tag LIKE '" . $db->escape($s) . "' " . $opt;
+		$sql .= " t.tag LIKE '%" . $db->escape($s) . "%' " . $opt;
 	}
 	$sql = substr($sql, 0, -(strlen($opt)));
 	$sql.= "
