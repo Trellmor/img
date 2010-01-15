@@ -103,9 +103,11 @@ p.tagMatches span {
 
 .previewimage {
 	text-align: center;
-	font-size: x-small;	
+	font-size: x-small;     
 	float: left;
-	margin-bottom: 10px;
+	margin: 5px;
+	width: 150px;
+	height: 160px;
 }
 
 #search {
