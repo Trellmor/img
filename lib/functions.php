@@ -30,25 +30,7 @@ function byteConvert($bytes)
 
 function errorMsg($msg)
 {
-?> 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
-   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-	<head>
-		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="style.css" />
-		<title>img.pew.cc Image Hosting</title>
-	</head>
-	<body>
-		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
-		<div id="content">
-		<?php echo $msg; ?><br /><br />
-		<a href="javascript:history.back();">Return</a>
-		</div>
-		<?php echo copyright(2009); ?>
-	</body>
-</html>
-<?php
+	outputHTML($msg . '<br /><br /><a href="javascript:history.back();">Return</a>');
 	die();
 }
 
@@ -159,6 +141,41 @@ function copyright($year)
 		$year .= '-' . date("Y");
 	}
 	return '<p id="copy">&copy; ' . $year . ' by <a href="http://blog.pew.cc">Daniel Triendl</a></p>';
+}
+
+function outputHTML($content, $opt = NULL) {
+	$title = 'img.pew.cc - Image Hosting';
+	$title = (isset($opt['title'])) ? $opt['title'] . ' - ' . $title : $title;
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
+   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+	<head>
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
+		<title><?php echo $title; ?></title>
+		<link rel="stylesheet" type="text/css" href="style.css" />
+<?php
+	if (isset($opt['lgihtbox']) && $opt['lightbox']) {
+?>
+		<script type="text/javascript" src="lightbox/prototype.js"></script>
+		<script type="text/javascript" src="lightbox/scriptaculous.js?load=effects,builder"></script>
+		<script type="text/javascript" src="lightbox/lightbox.js"></script>
+		<link rel="stylesheet" href="lightbox/lightbox.css" type="text/css" media="screen" />
+<?php
+	}
+	if (isset($opt['header'])) echo $opt['header'];
+?>
+	</head>
+	<body>
+		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
+		<div id="content">
+			<?php echo $content ?>
+		</div>
+		<?php echo copyright(2009); ?>
+	</body>
+</html>
+<?php
 }
 
 ?>

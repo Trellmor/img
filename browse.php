@@ -35,31 +35,8 @@ WHERE
 		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox.tag"><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />' . "\n";
 		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
 	}
+	outputHTML('<h2>' . one_wordwrap(htmlentities($tag_text), 5, '<wbr />') . '</h2>' . $images . '<br style="clear: both;" />', array('title' => 'Tag: ' . htmlentities($tag_text), 'lightbox' => true));
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
-   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-	<head>
-		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="style.css" />
-		<title>img.pew.cc - Image Hosting</title>
-		<script type="text/javascript" src="lightbox/prototype.js"></script>
-		<script type="text/javascript" src="lightbox/scriptaculous.js?load=effects,builder"></script>
-		<script type="text/javascript" src="lightbox/lightbox.js"></script>
-		<link rel="stylesheet" href="lightbox/lightbox.css" type="text/css" media="screen" />
-	</head>
-	<body>
-		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
-		<div id="content">
-			<h2><?php echo one_wordwrap(htmlentities($tag_text), 5, '<wbr />'); ?></h2>
-			<?php echo $images; ?>
-			<br style="clear: both;" />
-		</div>
-		<?php echo copyright(2009); ?>
-	</body>
-</html>
-<?php
 } else {
 
 	$sql = "SELECT tag, text, count FROM tags ORDER BY count DESC";
@@ -109,27 +86,7 @@ WHERE
 		$cloud .= '<a href="browse.php?tag=' . urlencode($tag) . '" class="tags" style="font-size: ' . $size . 'px">' . $texts[$tag] . '</a> ';
 	}
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" 
-   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-	<head>
-		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
-		<link rel="stylesheet" type="text/css" href="style.css" />
-		<title>img.pew.cc - Image Hosting</title>
-	</head>
-	<body>
-		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
-		<div id="content">
-			<p><?php echo $cloud; ?></p>
-			<br style="clear: both;" />
-			<p id="browse"><a href="browse.php?tags=all">Show all tags</a></p>
-		</div>
-		<?php echo copyright(2009); ?>
-	</body>
-</html>
-<?php
-
+	outputHTML('<p>' . $cloud . '</p><br style="clear: both;" /><p id="browse"><a href="browse.php?tags=all">Show all tags</a></p>', array('title' => 'Tags'));
 }
 
 ?>
