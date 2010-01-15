@@ -63,7 +63,7 @@ if (isset($_GET['q'])) {
 	foreach ($images as $i) {
 		$preview = dirname($full_images[$i]['location']) . '/preview/' . basename($full_images[$i]['location']);
 		$output .= '<div class="previewimage"><a href="' . $full_images[$i]['location'] . '" class="lightbox" rel="lightbox.search"><img src="' . $preview . '" alt="' . htmlentities($full_images[$i]['original_name']) . '" /></a><br />' . "\n";
-		$output .= '<a href="image.php?i=' . urlnumber_encode($i) . '">Schow</a></div>' . "\n";
+		$output .= '<a href="image.php?i=' . urlnumber_encode($i) . '">Show</a></div>' . "\n";
 	}
 
 	outputHTML('<h2>' . one_wordwrap(htmlentities($_GET['q']), 5, '<wbr />') . '</h2>' . $output . '<br style="clear: both;" />', array('title' => 'Search: ' . htmlentities($_GET['q']), 'lightbox' => true));
