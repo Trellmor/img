@@ -44,9 +44,10 @@ if (isset($_GET['q'])) {
 	
 	// Order by relevance
 	arsort($images);
-	// Image must contain all tags
-	//$images = array_keys($images, $count);
-	$images = array_keys($images);
+	// Images must contain all tags
+	$images = array_keys($images, $count);
+	// Images can contain any tags
+	//$images = array_keys($images);
 	
 	// Get the results
 	$sql = "SELECT ROWID as id, location, original_name from images WHERE ROWID IN ('" . implode("', '", $images) . "');";
