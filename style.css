@@ -107,3 +107,7 @@ p.tagMatches span {
 	float: left;
 	margin-bottom: 10px;
 }
+
+#search {
+	text-align: center;
+}

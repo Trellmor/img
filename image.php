@@ -60,6 +60,6 @@ $output = '<h2><a href="' . $name . '">' . one_wordwrap($original_name, 5, '<wbr
 				</tbody>
 			</table>';
 
-outputHTML($output, array('title' => $original_name, 'lightbox' => true));
+outputHTML($output, array('title' => 'Image: ' . $original_name, 'lightbox' => true));
 
 ?>
