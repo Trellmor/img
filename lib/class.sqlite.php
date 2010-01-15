@@ -44,6 +44,7 @@ class sqlite {
 		if ( !$this->_dbhandle ) {
 			throw new SQLException( 'Can\'t open database connection' );
 		}
+		$this->exec('PRAGMA short_column_names = ON');
 	}
 	
 	public function query( $sql = '' )
@@ -77,9 +78,11 @@ class sqlite {
 	{
 		if ( is_resource( $result ) ) {		
 			// crap, why can't it strip everything befor a . on it's own?
-			$row = sqlite_fetch_array( $result );
+			$row = sqlite_fetch_array($result, SQLITE_ASSOC);
+			/*
 			if( is_array( $row ) ) {
 				$return = array();
+				
 				foreach( $row as $key => $val ) {
 					if( strpos( $key, '.' ) !== false ) {
 						$key = explode( '.', $key );
@@ -89,6 +92,7 @@ class sqlite {
 				}
 				return $return;
 			}
+			*/
 			return $row;
 		} else {
 			throw new SQLException( 'Got invalid ressource for sqlite::fetch()' );
