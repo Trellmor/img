@@ -28,7 +28,7 @@ $tagjs .= "$(function () {
 </script>";
 
 $content = '<form action="upload.php" method="post" enctype="multipart/form-data">
-			<div id="conent">
+			<div id="content">
 			<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
 			<span class="text">File:</span><input type="file" size="40" name="image" /><br /><br />
 			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" />
