@@ -1,5 +1,35 @@
 <?php
+/**
+ * @package img.pew.cc
+ * @author Daniel Triendl <daniel@pew.cc>
+ * @version $Id$
+ * @license http://opensource.org/licenses/agpl-v3.html
+ */
 
+/**
+ * img.pew.cc Image Hosting
+ * Copyright (C) 2009-2010  Daniel Triendl <daniel@pew.cc>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ */
+
+/**
+ * Converts a php.ini value to an integer value
+ *
+ * @param	string		$s					The php.ini value
+ * @return	integer							Value in bytes
+ */
 function ini2bytes($s)
 {
 	$s = trim($s);
@@ -15,6 +45,12 @@ function ini2bytes($s)
 	return $s;
 }
 
+/**
+ * Converts bytes to an human readable value
+ *
+ * @param 	integer			$bytes
+ * @return	string
+ */
 function byteConvert($bytes)
 {
         $s = array('B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB');
@@ -28,12 +64,24 @@ function byteConvert($bytes)
         }
 }
 
+/**
+ * Generates an error page
+ *
+ * After sending the page to the browser this function will stop the script (die)
+ * @param 	string			$msg	Error Message
+ */
 function errorMsg($msg)
 {
 	outputHTML($msg . '<br /><br /><a href="javascript:history.back();">Return</a>');
 	die();
 }
 
+/**
+ * Generates a new file name if the file already exists
+ *
+ * @param	string			$f				Filename to check
+ * @return	string							Name of a non-existing file
+ */
 function checkExists($f)
 {
 	$chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -45,6 +93,11 @@ function checkExists($f)
 	return $f;
 }
 
+/**
+ * Generates the URL of the script based on the HTTP headers and script location
+ *
+ * @return	string							URL
+ */
 function url() {
 	$url = 'http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
 	if ($url[strlen($url) - 1] != '/') {
@@ -53,6 +106,13 @@ function url() {
 	return $url;
 }
 
+/**
+ * Moves a uploaded file and creates all directories as needed
+ *
+ * @param	string			$f				The file to move
+ * @param	string			$d				The destination file
+ * @return	bool							Success
+ */
 function move_uploaded_file_save($f, $d)
 {
 	$dir = dirname($d);
@@ -65,6 +125,12 @@ function move_uploaded_file_save($f, $d)
 	return move_uploaded_file($f, $d);
 }
 
+/**
+ * Converts an integer in a URL save string
+ *
+ * @param 	integer		$number
+ * @return	string							Encoded number
+ */
 function urlnumber_encode($number)
 {
 	//0-9 = 0-9
@@ -87,6 +153,12 @@ function urlnumber_encode($number)
 		return  urlnumber_encode((($number - $r) / 64)) . $table[$r];
 }
 
+/**
+ * Decodes a URL save number to an integer
+ *
+ * @param	string			$str			String to decode
+ * @return	integet							Decoded number
+ */
 function urlnumber_decode($str)
 {
 	static $table = array(
@@ -117,6 +189,11 @@ function urlnumber_decode($str)
 	}
 }
 
+/**
+ * Removes a file if possible
+ *
+ * @param	string			$f				Filename
+ */
 function unlink_safe($f)
 {
 	if (file_exists($f) && is_writable(($f))) {
@@ -124,17 +201,31 @@ function unlink_safe($f)
 	}
 }
 
+/**
+ * Inserts a wrapping string if a word is longer than $width
+ *
+ * @param	string			$string
+ * @param	integer			$width			Maximum lenght of a word
+ * @param	string			$wrap			String to insert
+ * @return	string							Wrapped string
+ */
 function one_wordwrap( $string, $width, $wrap )
 {
-	$s=explode( " ", $string );
+	$s=explode(" ", $string);
 	$new_string = '';
-	foreach( $s as $k => $v ) {
-		if( strlen( $v ) > $width ) $v = wordwrap( $v, $width, $wrap, true );
+	foreach ($s as $k => $v) {
+		if(strlen($v) > $width) $v = wordwrap($v, $width, $wrap, true);
 		$new_string .= $v . ' ';
 	}
-	return $new_string;
+	return substr($new_string, 0, -1);
 }
 
+/**
+ * Generates a copyright notice from $year to current year
+ *
+ * @param 	integer			$year			Starting year
+ * @return	string							Copyright notice
+ */
 function copyright($year)
 {
 	if ($year < date("Y")) {
@@ -143,14 +234,18 @@ function copyright($year)
 	return '<p id="copy">&copy; ' . $year . ' by <a href="http://blog.pew.cc">Daniel Triendl</a></p>';
 }
 
+/**
+ * Generates the HTML output
+ *
+ * @param	string			$content		HTML content
+ * @param	array			$opt			Options:
+ * 											title		Title to display
+ * 											lightbox	Insert lightbox JavaScript and css
+ * 											header		Additional HTML headers
+ */
 function outputHTML($content, $opt = NULL) {
 	$title = 'img.pew.cc - Image Hosting';
 	$title = (isset($opt['title'])) ? $opt['title'] . ' - ' . $title : $title;
-
-	
-	if (!isset($opt['div']) || $opt['div'] != false) {
-		$content = '<div id="content">' . $content . '</div>';
-	}
 
 	header('Content-Type: text/html; charset=UTF-8');
 ?>
@@ -162,7 +257,7 @@ function outputHTML($content, $opt = NULL) {
 		<title><?php echo $title; ?></title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
 <?php
-	if (isset($opt['lgihtbox']) && $opt['lightbox']) {
+	if (isset($opt['lightbox']) && $opt['lightbox']) {
 ?>
 		<script type="text/javascript" src="lightbox/prototype.js"></script>
 		<script type="text/javascript" src="lightbox/scriptaculous.js?load=effects,builder"></script>

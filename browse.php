@@ -1,4 +1,28 @@
 <?php
+/**
+ * @package img.pew.cc
+ * @author Daniel Triendl <daniel@pew.cc>
+ * @version $Id$
+ * @license http://opensource.org/licenses/agpl-v3.html
+ */
+
+/**
+ * img.pew.cc Image Hosting
+ * Copyright (C) 2009-2010  Daniel Triendl <daniel@pew.cc>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ */
 
 error_reporting(E_ALL);
 
@@ -6,10 +30,12 @@ require_once('lib/functions.php');
 require_once('lib/config.php');
 require_once('lib/class.sqlite.php');
 
+// Open database
 $db = new sqlite('lib/db.sqlite');
 
 if (isset($_GET['tag'])) {
 
+	// Calculate page offset
 	$page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int)$_GET['p'] : 1;
 	$offset =  ($page - 1) * $pagelimit;
 	
@@ -34,13 +60,17 @@ LIMIT
 	$res = $db->query($sql);
 	$images = '';
 	$tag_text = '';
+	// Generate HTML output
 	while ($row = $db->fetch($res)) {
+		// Save tag text to display as header
 		$tag_text = $row['text'];
+		
 		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
 		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox.tag"><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />' . "\n";
 		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
 	}
 	
+	// Generate page count
 	$sql = "SELECT
  count(i.ROWID) as count
 FROM
@@ -53,7 +83,6 @@ WHERE
  i.ROWID = it.image;";
 	$row = $db->fetch($db->query($sql));
 	
-	// Generate page counter
 	$pages = '<p id="pages">';
 	for ($i = 1; $i <= ceil($row['count']/$pagelimit); $i++) {
 		if ($i != $page) $pages .= '<a href="browse.php?tag=' . $_GET['tag'] . '&amp;p=' . $i . '">' . $i . '</a>';
@@ -66,6 +95,7 @@ WHERE
 
 } else {
 
+	// Get tags from db
 	$sql = "SELECT tag, text, count FROM tags ORDER BY count DESC";
 	$sql .= (isset($_GET['tags']) && $_GET['tags'] == 'all') ? ';' : ' LIMIT 100;';
 	
@@ -78,34 +108,16 @@ WHERE
 	}
 	
 	// $tags is the array
-	       
 	ksort($tags);
-	       
-	$max_size = 32; // max font size in pixels
-	$min_size = 12; // min font size in pixels
-	       
+
 	// largest and smallest array values
 	$max_qty = max(array_values($tags));
 	$min_qty = min(array_values($tags));
 	       
-	// find the range of values
-	//$spread = $max_qty - $min_qty;
-	//if ($spread == 0) { // we don't want to divide by zero
-	//	$spread = 1;
-	//}
 	       
-	// set the font-size increment
-	//$step = ($max_size - $min_size) / ($spread);
-	       
-	// loop through the tag array
+	// loop through the tag array and generate HTML output
 	$cloud = '';
-	foreach ($tags as $tag => $count) {
-		// calculate font-size
-		// find the $value in excess of $min_qty
-		// multiply by the font-size increment ($size)
-		// and add the $min_size set above
-		//$size = round($min_size + (($count - $min_qty) * $step));
-		
+	foreach ($tags as $tag => $count) {		
 		// Logarythmic tag list
 		$weight = (log($count)-log($min_qty)) / (log($max_qty) - log($min_qty));
 		$size = $min_size + round(($max_size - $min_size) * $weight);

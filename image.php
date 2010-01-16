@@ -1,4 +1,28 @@
 <?php
+/**
+ * @package img.pew.cc
+ * @author Daniel Triendl <daniel@pew.cc>
+ * @version $Id$
+ * @license http://opensource.org/licenses/agpl-v3.html
+ */
+
+/**
+ * img.pew.cc Image Hosting
+ * Copyright (C) 2009-2010  Daniel Triendl <daniel@pew.cc>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
+ */
 
 error_reporting(E_ALL);
 
@@ -10,9 +34,11 @@ if (!isset($_GET['i'])) {
 	errorMsg('Image not found.');
 }
 
+// Open database connection
 $db = new sqlite('lib/db.sqlite');
 $id = urlnumber_decode($_GET['i']);
 	
+// Select image
 $row = $db->fetch($db->query("SELECT ROWID as id, location, original_name FROM images WHERE ROWID = '" . $id . "';"));
 if (!$row) {
 	errorMsg('Image not found.');
@@ -23,6 +49,7 @@ $name = $row['location'];
 $preview = dirname($name) . '/preview/' . basename($name);
 $original_name = htmlentities($row['original_name']);
 
+// Get tags
 $res = $db->query("SELECT t.tag, t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
 $tags = '';
 while ($row = $db->fetch($res)) {
@@ -30,6 +57,7 @@ while ($row = $db->fetch($res)) {
 }
 $tags = substr($tags, 0, -2);
 
+// Generate HTML and code snippets for inserting the image
 $output = '<h2><a href="' . $name . '">' . one_wordwrap($original_name, 5, '&shy;') . '</a></h2>
 			<a id="preview" href="' . $name . '" rel="lightbox" ><img src="' . $preview . '" alt="" /></a>
 			<p id="tags">Tags: ' . $tags . '<br /></p>
