@@ -270,7 +270,9 @@ function outputHTML($content, $opt = NULL) {
 	</head>
 	<body>
 		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
-		<?php echo $content ?>
+		<div id="content">
+			<?php echo $content ?>
+		</div>
 		<?php echo copyright(2009); ?>
 	</body>
 </html>
