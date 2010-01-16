@@ -1,5 +1,7 @@
 <?php
 
+require_once('lib/functions.php');
+
 /**
  * Maximum allowed size for an image file
  * 
@@ -45,5 +47,12 @@ $imgdir = date('Y/m/');
  */
 $preview_width = 150;
 $preview_height = 150;
+
+/**
+ * Browse/Search limit
+ * 
+ * Controls how many images per page are returned for tag browsing/search
+ */
+$pagelimit = 30;
 
 ?>

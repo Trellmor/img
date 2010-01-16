@@ -9,6 +9,9 @@ require_once('lib/class.sqlite.php');
 $db = new sqlite('lib/db.sqlite');
 
 if (isset($_GET['tag'])) {
+
+	$page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int)$_GET['p'] : 1;
+	$offset =  ($page - 1) * $pagelimit;
 	
 	$sql = "SELECT
  i.ROWID as id,
@@ -22,8 +25,12 @@ FROM
 WHERE
  t.tag = '" . $db->escape(urldecode($_GET['tag'])) . "' and
  it.tag = t.ROWID and
- i.ROWID = it.image;";
-	
+ i.ROWID = it.image
+ORDER BY
+ i.time DESC
+LIMIT
+ " . $offset . ", " . $pagelimit . ";";
+
 	$res = $db->query($sql);
 	$images = '';
 	$tag_text = '';
@@ -33,7 +40,29 @@ WHERE
 		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox.tag"><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />' . "\n";
 		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
 	}
-	outputHTML('<h2>' . one_wordwrap(htmlentities($tag_text), 5, '&shy;') . '</h2>' . $images . '<br style="clear: both;" />', array('title' => 'Tag: ' . htmlentities($tag_text), 'lightbox' => true));
+	
+	$sql = "SELECT
+ count(i.ROWID) as count
+FROM
+ images i,
+ tags t,
+ imagetags it
+WHERE
+ t.tag = '" . $db->escape(urldecode($_GET['tag'])) . "' and
+ it.tag = t.ROWID and
+ i.ROWID = it.image;";
+	$row = $db->fetch($db->query($sql));
+	
+	// Generate page counter
+	$pages = '<p id="pages">';
+	for ($i = 1; $i <= ceil($row['count']/$pagelimit); $i++) {
+		if ($i != $page) $pages .= '<a href="browse.php?tag=' . $_GET['tag'] . '&amp;p=' . $i . '">' . $i . '</a>';
+		else $pages .= $i; 
+		$pages .= ' &middot; ';
+	}
+	$pages = substr($pages, 0, -10) . '</p>';
+	
+	outputHTML('<h2>' . one_wordwrap(htmlentities($tag_text), 5, '&shy;') . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($tag_text), 'lightbox' => true));
 
 } else {
 

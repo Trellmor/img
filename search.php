@@ -1,5 +1,6 @@
 <?php
 
+require_once('lib/config.php');
 require_once('lib/functions.php');
 
 if (isset($_GET['q'])) {
@@ -42,12 +43,34 @@ if (isset($_GET['q'])) {
 		else $images[$row['image']]++;
 	}
 	
+	// Search image names
+	$sql = "SELECT ROWID as id FROM images WHERE ";
+	$clause = '';
+	foreach ($search as $s) {
+		$s = trim($s);
+		if (!empty($s)) {
+			if (!empty($clause)) $clause .= ' or ';
+			$clause .= "original_name LIKE '%" . $db->escape($s) . "%'";
+		}
+	}
+	// No real need to recheck if $clause, because we checked it earlier when we searched tags
+	$sql .= $clause;
+	$res = $db->query($sql);
+	while ($row = $db->fetch($res)) {
+		if (!isset($images[$row['id']])) $images[$row['id']] = 1;
+		else $images[$row['id']]++;
+	}
+	
 	// Order by relevance
 	arsort($images);
-	// Images must contain all tags
-	$images = array_keys($images, $count);
-	// Images can contain any tags
-	//$images = array_keys($images);
+	// Images can contain any tags or matches in filename
+	$images = array_keys($images);
+	$imagecount = count($images);
+	
+	// Only get a limited number of result
+	$page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int)$_GET['p'] : 1;
+	$offset =  ($page - 1) * $pagelimit;
+	$images = array_slice($images, $offset, $pagelimit);
 	
 	// Get the results
 	$sql = "SELECT ROWID as id, location, original_name from images WHERE ROWID IN ('" . implode("', '", $images) . "');";
@@ -67,7 +90,16 @@ if (isset($_GET['q'])) {
 		$output .= '<a href="image.php?i=' . urlnumber_encode($i) . '">Show</a></div>' . "\n";
 	}
 
-	outputHTML('<h2>' . one_wordwrap(htmlentities($_GET['q']), 5, '&shy;') . '</h2>' . $output . '<br style="clear: both;" />', array('title' => 'Search: ' . htmlentities($_GET['q']), 'lightbox' => true));
+	// Generate page counter
+	$pages = '<p id="pages">';
+	for ($i = 1; $i <= ceil($imagecount/$pagelimit); $i++) {
+		if ($i != $page) $pages .= '<a href="search.php?q=' . $_GET['q'] . '&amp;p=' . $i . '">' . $i . '</a>';
+		else $pages .= $i; 
+		$pages .= ' &middot; ';
+	}
+	$pages = substr($pages, 0, -10) . '</p>';
+	
+	outputHTML('<h2>' . one_wordwrap(htmlentities($_GET['q']), 5, '&shy;') . '</h2>' . $output . '<br style="clear: both;" />' . $pages, array('title' => 'Search: ' . htmlentities($_GET['q']), 'lightbox' => true));
 	
 } else {
 	$header = '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>';

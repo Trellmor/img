@@ -113,3 +113,8 @@ p.tagMatches span {
 #search {
 	text-align: center;
 }
+
+#pages {
+	text-align: center;
+	font-size: small;
+}
