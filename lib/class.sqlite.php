@@ -54,7 +54,7 @@ class sqlite {
 	 */
 	public function __construct($dbname, $persistent = true)
 	{
-		if ($persisten) {
+		if ($persistent) {
 			// Use persistent connection if possible, saves use some time for opening the database
 			$this->_dbhandle = @sqlite_popen($dbname, 0666, $error);
 		} else {
