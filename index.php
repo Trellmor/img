@@ -2,8 +2,6 @@
 
 error_reporting(E_ALL);
 
-header('Content-Type: text/html; charset=UTF-8');
-
 require_once('lib/functions.php');
 require_once('lib/config.php');
 
@@ -28,7 +26,6 @@ $tagjs .= "$(function () {
 </script>";
 
 $content = '<form action="upload.php" method="post" enctype="multipart/form-data">
-			<div id="content">
 			<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
 			<span class="text">File:</span><input type="file" size="40" name="image" /><br /><br />
 			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" />
@@ -39,9 +36,8 @@ $content = '<form action="upload.php" method="post" enctype="multipart/form-data
 				Use , (comma) to seperate tags 
 			</p>
 			<p id="browse"><a href="browse.php">Browse</a> | <a href="search.php">Search</a></p>
-			</div>
 			</form>';
 
-outputHTML($content, array('header' => $tagjs, 'div' => false));
+outputHTML($content, array('header' => $tagjs);
 
 ?>

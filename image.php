@@ -2,8 +2,6 @@
 
 error_reporting(E_ALL);
 
-header('Content-Type: text/html; charset=UTF-8');
-
 require_once('lib/functions.php');
 require_once('lib/config.php');
 require_once('lib/class.sqlite.php');
