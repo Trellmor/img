@@ -35,7 +35,7 @@ WHERE
 		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox.tag"><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />' . "\n";
 		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
 	}
-	outputHTML('<h2>' . one_wordwrap(htmlentities($tag_text), 5, '<wbr />') . '</h2>' . $images . '<br style="clear: both;" />', array('title' => 'Tag: ' . htmlentities($tag_text), 'lightbox' => true));
+	outputHTML('<h2>' . one_wordwrap(htmlentities($tag_text), 5, '&shy;') . '</h2>' . $images . '<br style="clear: both;" />', array('title' => 'Tag: ' . htmlentities($tag_text), 'lightbox' => true));
 
 } else {
 

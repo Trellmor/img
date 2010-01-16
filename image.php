@@ -32,7 +32,7 @@ while ($row = $db->fetch($res)) {
 }
 $tags = substr($tags, 0, -2);
 
-$output = '<h2><a href="' . $name . '">' . one_wordwrap($original_name, 5, '<wbr />') . '</a></h2>
+$output = '<h2><a href="' . $name . '">' . one_wordwrap($original_name, 5, '&shy;') . '</a></h2>
 			<a id="preview" href="' . $name . '" rel="lightbox" ><img src="' . $preview . '" alt="" /></a>
 			<p id="tags">Tags: ' . $tags . '<br /></p>
 			<table>

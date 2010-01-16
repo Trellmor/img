@@ -38,7 +38,7 @@ $content = '<form action="upload.php" method="post" enctype="multipart/form-data
 				Allowed file types: ' . $filetypes . '<br />
 				Use , (comma) to seperate tags 
 			</p>
-			<p id="browse"><a href="browse.php">Browse images</a> | <a href="search.php">Search images</a></p>
+			<p id="browse"><a href="browse.php">Browse</a> | <a href="search.php">Search</a></p>
 			</div>
 			</form>';
 

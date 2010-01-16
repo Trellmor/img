@@ -67,7 +67,7 @@ if (isset($_GET['q'])) {
 		$output .= '<a href="image.php?i=' . urlnumber_encode($i) . '">Show</a></div>' . "\n";
 	}
 
-	outputHTML('<h2>' . one_wordwrap(htmlentities($_GET['q']), 5, '<wbr />') . '</h2>' . $output . '<br style="clear: both;" />', array('title' => 'Search: ' . htmlentities($_GET['q']), 'lightbox' => true));
+	outputHTML('<h2>' . one_wordwrap(htmlentities($_GET['q']), 5, '&shy;') . '</h2>' . $output . '<br style="clear: both;" />', array('title' => 'Search: ' . htmlentities($_GET['q']), 'lightbox' => true));
 	
 } else {
 	$header = '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>';
