@@ -27,6 +27,7 @@ $tagjs .= "$(function () {
 
 $content = '<form action="upload.php" method="post" enctype="multipart/form-data">
 			<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
+			<div>
 			<span class="text">File:</span><input type="file" size="40" name="image" /><br /><br />
 			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" />
 			<span class="text">&nbsp;</span><input id="submit" type="submit" name="submit" value="Upload" />
@@ -36,8 +37,9 @@ $content = '<form action="upload.php" method="post" enctype="multipart/form-data
 				Use , (comma) to seperate tags 
 			</p>
 			<p id="browse"><a href="browse.php">Browse</a> | <a href="search.php">Search</a></p>
+			</div>
 			</form>';
 
-outputHTML($content, array('header' => $tagjs);
+outputHTML($content, array('header' => $tagjs));
 
 ?>
