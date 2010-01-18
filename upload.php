@@ -85,7 +85,7 @@ if(count($name) < 2) {
 }
 
 // Choose the location for the file
-$name = str_replace('//', '/', checkExists($imgdir . '/' . $name));
+$name = trim(str_replace('//', '/', checkExists($imgdir . '/' . $name)));
 
 // Generate a URL save string to send to the browser
 $location = explode('/', $name);
@@ -114,7 +114,7 @@ if (!move_uploaded_file_save($img['tmp_name'], $name)) {
 $preview = dirname($name) . '/preview/' . basename($name);
 if (!file_exists(dirname($preview))) mkdir(dirname($preview));
 exec('convert -define jpeg:size=' . $preview_width * 2 . 'x' . $preview_height * 2 . ' \\
- ' . escapeshellarg($name) . ' -thumbnail ' . $preview_width . 'x' . $preview_height . ' \\
+ ' . escapeshellarg($name) . '[0] -thumbnail ' . $preview_width . 'x' . $preview_height . ' \\
  -unsharp 0x.5 ' . escapeshellarg($preview));
 
 // Open database
