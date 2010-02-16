@@ -282,7 +282,10 @@ $(document).ready(function() {
 			<?php echo $content ?>
 		</div>
 		<?php echo copyright(2009); ?>
-		<div id="login_icon"><img src="images/openid-login-bg.gif" alt="OpenID Login" title="Login using OpenID" /></div>
+<?php
+	if(!isLogin()) {
+?>
+		<div id="login_icon"><img src="images/openid-login-bg.gif" alt="OpenID Login" title="Login using OpenID" /> Login</div>
 		<div id="login_form">
 			<form action="login.php" method="post">
 				<div>
@@ -293,6 +296,7 @@ $(document).ready(function() {
 			</form>
 		</div>
 <?php
+	}
 	if (isLogin()) {
 ?>
 		<div id="login_status">

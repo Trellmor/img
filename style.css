@@ -136,9 +136,19 @@ p.tagMatches span {
 	position: absolute;
 	top: 0;
 	right: 0;
-	width: 16px;
-	height: 16px;
+	padding: 5px;
 	cursor: pointer;
+	font-size: small;
+	color: #FFD100;
+	background-color: #161616;
+	border: 2px solid #404040;
+	border-top: none;
+	border-right: none;
+}
+
+#login_icon img {
+	float: left;
+	margin-right: 5px;
 }
 
 #login_form, #login_status {
