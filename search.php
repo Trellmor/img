@@ -111,7 +111,7 @@ if (isset($_GET['q'])) {
 	$output = '';
 	foreach ($images as $i) {
 		$preview = dirname($full_images[$i]['location']) . '/preview/' . basename($full_images[$i]['location']);
-		$output .= '<div class="previewimage"><a href="' . $full_images[$i]['location'] . '" class="lightbox" rel="lightbox.search"><img src="' . $preview . '" alt="' . htmlentities($full_images[$i]['original_name']) . '" /></a><br />' . "\n";
+		$output .= '<div class="previewimage"><a href="' . $full_images[$i]['location'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($full_images[$i]['original_name']) . '" /></a><br />' . "\n";
 		$output .= '<a href="image.php?i=' . urlnumber_encode($i) . '">Show</a></div>' . "\n";
 	}
 

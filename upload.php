@@ -136,7 +136,7 @@ $db->exec("INSERT INTO images (
  '" . ip2long($_SERVER['REMOTE_ADDR']) . "',
  '" . time() . "',
  '" . $db->escape($img['name']) . "',
- '" . $db->escape($user) . "',
+ '" . $db->escape($user) . "'
 );" );
 $res = $db->query("SELECT last_insert_rowid() as id;");
 $row = $db->fetch($res);

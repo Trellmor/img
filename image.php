@@ -39,7 +39,7 @@ $db = new sqlite('lib/db.sqlite');
 $id = urlnumber_decode($_GET['i']);
 	
 // Select image
-$row = $db->fetch($db->query("SELECT ROWID as id, location, original_name FROM images WHERE ROWID = '" . $id . "';"));
+$row = $db->fetch($db->query("SELECT ROWID as id, location, original_name, user FROM images WHERE ROWID = '" . $id . "';"));
 if (!$row) {
 	errorMsg('Image not found.');
 }
@@ -48,6 +48,7 @@ $id = $row['id'];
 $name = $row['location'];
 $preview = dirname($name) . '/preview/' . basename($name);
 $original_name = htmlentities($row['original_name']);
+$user = $row['user'];
 
 // Get tags
 $res = $db->query("SELECT t.tag, t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
@@ -58,7 +59,7 @@ while ($row = $db->fetch($res)) {
 $tags = substr($tags, 0, -2);
 
 // Generate HTML and code snippets for inserting the image
-$output = '<h2><a href="' . $name . '">' . one_wordwrap($original_name, 5, '&shy;') . '</a></h2>
+$output = '<h2 id="imagename"><a href="' . $name . '">' . one_wordwrap($original_name, 5, '&shy;') . '</a></h2>
 			<a id="preview" href="' . $name . '" rel="lightbox" ><img src="' . $preview . '" alt="" /></a>
 			<p id="tags">Tags: ' . $tags . '<br /></p>
 			<table>
@@ -86,6 +87,18 @@ $output = '<h2><a href="' . $name . '">' . one_wordwrap($original_name, 5, '&shy
 				</tbody>
 			</table>';
 
-outputHTML($output, array('title' => 'Image: ' . $original_name, 'lightbox' => true));
+$header = '';
+
+if(isLogin()) {
+	if ($user == $_SESSION['openid_identity'] || isAdmin()) {
+		$header = '<script type="text/javascript">
+$(document).ready(function() {
+
+}); 
+</script>';
+	}
+}
+
+outputHTML($output, array('title' => 'Image: ' . $original_name, 'lightbox' => true, 'header' => $header));
 
 ?>

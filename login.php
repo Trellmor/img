@@ -56,7 +56,7 @@ if ($oid->IsResponse()) {
 		if ($mode == 'id_res') {
 			if($oid->VerifyAssertion()) {
 				$_SESSION['openid_identity'] = $oid->GetIdentifier();
-				errorMsg('Login successful.<br />You are now logged in as <i>' . $oid->GetIdentifier() . '</i>', url());
+				errorMsg('Login successful.<br />You are now logged in as <a href="browse.php?user=' . urlencode($oid->GetIdentifier()) . '"><i>' . htmlentities($oid->GetIdentifier()) . '</i></a>', url());
 			} else {
 				session_destroy();
 				errorMsg('Login failed.', url());
@@ -72,7 +72,7 @@ if ($oid->IsResponse()) {
 }
 
 if (!empty($_SESSION['openid_identity'])) {
-	outputHTML('You are logged in as <i>' . $_SESSION['openid_identity'] . '</i><br /><br /><a href="login.php?action=logout">Logout</a>');
+	outputHTML('You are logged in as <a href="browse.php?user=' . urlencode($_SESSION['openid_identity']) . '"><i>' . htmlentities($_SESSION['openid_identity']) . '</i></a><br /><br /><a href="login.php?action=logout">Logout</a>');
 } else {
 	$output = '<h2>OpenID Login</h2>
 <form action="login.php" method="post">

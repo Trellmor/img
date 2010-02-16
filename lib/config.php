@@ -85,6 +85,12 @@ $pagelimit = 30;
 $max_size = 32;
 $min_size = 12;
 
+/**
+ * Admin OpenID accounts
+ */
+$admins = array(
+	'http://trellmor.myopenid.com/',
+);
 
 /**
  * Start a session for logged in users

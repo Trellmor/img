@@ -3,7 +3,8 @@ location VARCHAR(255),
 path VARCHAR(255),
 original_name VARCHAR(255),
 ip INTEGER,
-time INTEGER
+time INTEGER,
+user VARCHAR(255)
 );
 CREATE TABLE imagetags (
 image INTEGER,

@@ -35,7 +35,7 @@ foreach ($mime as $f) {
 }
 $filetypes = substr($filetypes, 0, -2);
 
-$tagjs  = '<script src="tag.js" type="text/javascript"></script>';
+$tagjs  = '<script src="js/tag.js" type="text/javascript"></script>';
 $tagjs .= '<script type="text/javascript">';
 $tagjs .= "$(function () {
 	$('#inputtags').attr('autocomplete', 'off');
