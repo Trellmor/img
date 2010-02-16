@@ -30,6 +30,9 @@ require_once('lib/openid/class.openid.php');
 if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 	$_SESSION['openid_identity'] = '';
 	session_destroy();
+	if (isset($_COOKIE['openid_cookie'])) {
+		setcookie('openid_cookie', NULL, 0);
+	}
 	errorMsg('You have been logged out.');
 }
 

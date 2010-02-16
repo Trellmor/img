@@ -39,7 +39,7 @@ session_start();
 if (!isLogin()) {
 	if (isset($_COOKIE['openid_cookie'])) {
 		list($identity, $cookie) = @unserialize($_COOKIE['openid_cookie']);
-		$res = $db->query("SELECT count(*) as count FROM users WHERE user = '" . $db->escape($identity) . "' and cookie = '" . $coookie . "';");
+		$res = $db->query("SELECT count(*) as count FROM users WHERE user = '" . $db->escape($identity) . "' and cookie = '" . $cookie . "';");
 		$row = $db->fetch($res);
 		if ($row['count']) {
 			$_SESSION['openid_identity'] = $identity;
