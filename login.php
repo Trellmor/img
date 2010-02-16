@@ -60,7 +60,7 @@ if ($oid->IsResponse()) {
 				$_SESSION['openid_identity'] = $oid->GetIdentifier();
 				if (isset($_SESSION['openid_remember']) && $_SESSION['openid_remember']) {
 					$cookie = md5($oid->GetIdentifier().microtime().mt_rand());
-					$db->exec("INSERT OR REPLACE INTO user (
+					$db->exec("INSERT OR REPLACE INTO users (
  user,
  cookie,
  last_login
