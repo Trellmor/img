@@ -76,7 +76,7 @@ table input {
 
 h2 {
 	text-align: center;
-	margin-top: 0;	
+	margin-top: 0;
 }
 
 .tags {/*
@@ -176,4 +176,12 @@ p.tagMatches span {
 #login_form #inputopenid_submit {
 	float: right;
 	margin: 0;
+}
+
+#imagedelete {
+	margin-left: 5px;
+}
+
+#imagedelete img {
+	border: none;
 }

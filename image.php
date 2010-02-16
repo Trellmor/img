@@ -91,11 +91,7 @@ $header = '';
 
 if(isLogin()) {
 	if ($user == $_SESSION['openid_identity'] || isAdmin()) {
-		$header = '<script type="text/javascript">
-$(document).ready(function() {
-
-}); 
-</script>';
+		$header = '<script type="text/javascript" src="js/image.js"></script>';
 	}
 }
 
