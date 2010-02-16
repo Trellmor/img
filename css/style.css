@@ -120,7 +120,7 @@ p.tagMatches span {
 }
 
 #inputopenid_identifier {
-	background: url(images/openid-login-bg.gif) no-repeat;
+	background: url(/images/openid-login-bg.gif) no-repeat;
 	background-color: #ffffff;
 	background-position: 0 50%;
 	padding-left: 18px;
