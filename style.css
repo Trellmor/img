@@ -110,11 +110,19 @@ p.tagMatches span {
 	height: 160px;
 }
 
-#search {
+#search, #login {
 	text-align: center;
 }
 
 #pages {
 	text-align: center;
 	font-size: small;
+}
+
+#inputopenid_identifier {
+	background: url(images/openid-login-bg.gif) no-repeat;
+	background-color: #ffffff;
+	background-position: 0 50%;
+	padding-left: 18px;
+	margin-right: 10px;
 }

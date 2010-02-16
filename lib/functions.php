@@ -70,9 +70,9 @@ function byteConvert($bytes)
  * After sending the page to the browser this function will stop the script (die)
  * @param 	string			$msg	Error Message
  */
-function errorMsg($msg)
+function errorMsg($msg, $return = 'javascript:history.back();')
 {
-	outputHTML($msg . '<br /><br /><a href="javascript:history.back();">Return</a>');
+	outputHTML($msg . '<br /><br /><a href="' . $return . '">Return</a>');
 	die();
 }
 

@@ -85,4 +85,9 @@ $pagelimit = 30;
 $max_size = 32;
 $min_size = 12;
 
+
+/**
+ * Start a session for logged in users
+ */
+session_start();
 ?>
