@@ -93,6 +93,53 @@ WHERE
 	
 	outputHTML('<h2>' . one_wordwrap(htmlentities($tag_text), 5, '&shy;') . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($tag_text), 'lightbox' => true));
 
+} elseif(isset($_GET['user'])) {
+
+	// Calculate page offset
+	$page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int)$_GET['p'] : 1;
+	$offset =  ($page - 1) * $pagelimit;
+	
+	$sql = "SELECT
+ ROWID as id,
+ location as name,
+ original_name
+FROM
+ images
+WHERE
+ user = '" . $db->escape(urldecode($_GET['user'])) . "'
+ORDER BY
+ time DESC
+LIMIT
+ " . $offset . ", " . $pagelimit . ";";
+
+	$res = $db->query($sql);
+	$images = '';
+	// Generate HTML output
+	while ($row = $db->fetch($res)) {
+		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
+		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox.tag"><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />' . "\n";
+		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
+	}
+	
+	// Generate page count
+	$sql = "SELECT
+ count(ROWID) as count
+FROM
+ images
+WHERE
+ user = '" . $db->escape(urldecode($_GET['user'])) . "';";
+	$row = $db->fetch($db->query($sql));
+	
+	$pages = '<p id="pages">';
+	for ($i = 1; $i <= ceil($row['count']/$pagelimit); $i++) {
+		if ($i != $page) $pages .= '<a href="browse.php?user=' . $_GET['user'] . '&amp;p=' . $i . '">' . $i . '</a>';
+		else $pages .= $i; 
+		$pages .= ' &middot; ';
+	}
+	$pages = substr($pages, 0, -10) . '</p>';
+	
+	outputHTML('<h2>' . one_wordwrap(htmlentities(urldecode($_GET['user'])), 5, '&shy;') . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($_GET['user']), 'lightbox' => true));
+	
 } else {
 
 	// Get tags from db

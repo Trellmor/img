@@ -300,7 +300,7 @@ $(document).ready(function() {
 	if (isLogin()) {
 ?>
 		<div id="login_status">
-			<i><?php echo $_SESSION['openid_identity'] ?></i> <a href="login.php?action=logout">Logout</a>
+			<a href="browse.php?user=<?php echo urlencode($_SESSION['openid_identity']) ?>"><i><?php echo htmlentities($_SESSION['openid_identity']) ?></i></a> <a href="login.php?action=logout">Logout</a>
 		</div>
 <?php
 	}
