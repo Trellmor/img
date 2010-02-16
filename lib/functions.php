@@ -256,6 +256,14 @@ function outputHTML($content, $opt = NULL) {
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<title><?php echo $title; ?></title>
 		<link rel="stylesheet" type="text/css" href="style.css" />
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>
+		<script type="text/javascript">
+$(document).ready(function() {
+	$("#login_icon").click(function() {
+		$("#login_form").show("slow");
+	});
+});
+		</script>
 <?php
 	if (isset($opt['lightbox']) && $opt['lightbox']) {
 ?>
@@ -274,9 +282,33 @@ function outputHTML($content, $opt = NULL) {
 			<?php echo $content ?>
 		</div>
 		<?php echo copyright(2009); ?>
+		<div id="login_icon"><img src="images/openid-login-bg.gif" alt="OpenID Login" title="Login using OpenID" /></div>
+		<div id="login_form">
+			<form action="login.php" method="post">
+				<div>
+					<input type="text" name="openid_identifier" id="inputopenid_identifier" /><br />
+					<a id="openid_get" href="http://openid.net/get-an-openid/">Get an OpenID</a>
+					<input type="submit" name="openid_submit" value="Login" id="inputopenid_submit" />
+				</div>
+			</form>
+		</div>
+<?php
+	if (isLogin()) {
+?>
+		<div id="login_status">
+			<i><?php echo $_SESSION['openid_identity'] ?></i> <a href="login.php?action=logout">Logout</a>
+		</div>
+<?php
+	}
+?>
 	</body>
 </html>
 <?php
+}
+
+function isLogin()
+{
+	return !empty($_SESSION['openid_identity']);
 }
 
 ?>

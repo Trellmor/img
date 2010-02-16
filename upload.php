@@ -120,19 +120,23 @@ exec('convert -define jpeg:size=' . $preview_width * 2 . 'x' . $preview_height *
 // Open database
 $db = new sqlite('lib/db.sqlite');
 
+$user = (isset($_SESSION['openid_identity'])) ? $_SESSION['openid_identity'] : '';
+
 // Save image info
 $db->exec("INSERT INTO images (
  location,
  path,
  ip,
  time,
- original_name
+ original_name,
+ user
 ) VALUES (
  '" . $db->escape($location) . "',
  '" . $db->escape($name) . "',
  '" . ip2long($_SERVER['REMOTE_ADDR']) . "',
  '" . time() . "',
- '" . $db->escape($img['name']) . "'
+ '" . $db->escape($img['name']) . "',
+ '" . $db->escape($user) . "',
 );" );
 $res = $db->query("SELECT last_insert_rowid() as id;");
 $row = $db->fetch($res);
