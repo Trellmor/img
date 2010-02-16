@@ -23,24 +23,29 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
+error_reporting(E_ALL);
 
+header('Content-Type: text/html; charset=UTF-8');
 
-if (isset($_GET['tag'])) {
-	
-	require_once('lib/init.php');
-	
-	// Find all tags that start with the search string
-	$sql = "SELECT text FROM tags WHERE tag LIKE '" . $db->escape($_GET['tag']) . "%' LIMIT 10;";
-	
-	$res = $db->query($sql);
-	$tags = array();
-	
-	while ($row = $db->fetch($res)) {
-		$tags[] = htmlentities($row['text']);
+require_once('lib/functions.php');
+require_once('lib/config.php');
+require_once('lib/class.sqlite.php');
+
+$db = new sqlite('lib/db.sqlite');
+
+session_start();
+
+// Check if the user wants to be logged in automatically
+if (!isLogin()) {
+	if (isset($_COOKIE['openid_cookie'])) {
+		list($identity, $cookie) = @unserialize($_COOKIE['openid_cookie']);
+		$res = $db->query("SELECT count(*) as count FROM users WHERE user = '" . $db->escape($identity) . "' and cookie = '" . $coookie . "';");
+		$row = $db->fetch($res);
+		if ($row['count']) {
+			$_SESSION['openid_identity'] = $identity;
+			$db->exec("UPDATE users SET last_login = '" . time() . "' WHERE user = '" . $db->escape($identity) . "';");
+		}
 	}
-	
-	// Send results
-	echo json_encode($tags);
 }
 
 ?>

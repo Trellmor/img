@@ -24,10 +24,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
 
-error_reporting(E_ALL);
-
-require_once('lib/functions.php');
-require_once('lib/config.php');
+require_once('lib/init.php');
 
 $filetypes = '';
 foreach ($mime as $f) {
@@ -35,7 +32,7 @@ foreach ($mime as $f) {
 }
 $filetypes = substr($filetypes, 0, -2);
 
-$tagjs  = '<script src="js/tag.js" type="text/javascript"></script>';
+$tagjs  = '<script src="js/jquery.tag.js" type="text/javascript"></script>';
 $tagjs .= '<script type="text/javascript">';
 $tagjs .= "$(function () {
 	$('#inputtags').attr('autocomplete', 'off');

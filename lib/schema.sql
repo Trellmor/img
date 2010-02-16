@@ -15,4 +15,9 @@ tag VARCHAR(255),
 text VARCHAR(255),
 count INTEGER DEFAULT 0
 );
+CREATE TABLE users (
+user VARCHAR(255) UNIQUE PRIMARY KEY,
+cookie VARCHAR(32),
+last_login INTEGER
+);
 

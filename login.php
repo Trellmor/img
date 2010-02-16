@@ -24,9 +24,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
 
-require_once('lib/config.php');
-require_once('lib/functions.php');
-require_once('lib/openid/class.openid.php');
+require_once('lib/init.php');
 
 if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 	$_SESSION['openid_identity'] = '';
@@ -46,8 +44,11 @@ if (isset($_POST['openid_identifier'])) {
 	}
 	$oid->SetReturnTo(url() . 'login.php');
 	$oid->SetRealm(url());
+	if (isset($_POST['openid_remember']) && $_POST['openid_remember'] == 'remember') {
+		$_SESSION['openid_remember'] = true;
+	}
 	$oid->RedirectUser();
-	die();
+	exit();
 }
 
 if ($oid->IsResponse()) {
@@ -56,6 +57,19 @@ if ($oid->IsResponse()) {
 		if ($mode == 'id_res') {
 			if($oid->VerifyAssertion()) {
 				$_SESSION['openid_identity'] = $oid->GetIdentifier();
+				if (isset($_SESSION['openid_remember']) && $_SESSION['openid_remember']) {
+					$cookie = md5($oid->GetIdentifier().microtime().mt_rand());
+					$db->exec("INSERT OR REPLACE INTO user (
+ user,
+ cookie,
+ last_login
+) VALUES (
+ '" . $db->escape($oid->GetIdentifier()) . "',
+ '" . $db->escape($cookie) . "',
+ '" . time() . "'
+);");
+					setcookie('openid_cookie', serialize(array($oid->GetIdentifier(), $cookie)), time() + 60 * 60 * 24 * 30);
+				}
 				errorMsg('Login successful.<br />You are now logged in as <a href="browse.php?user=' . urlencode($oid->GetIdentifier()) . '"><i>' . htmlentities($oid->GetIdentifier()) . '</i></a>', url());
 			} else {
 				session_destroy();

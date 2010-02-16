@@ -166,6 +166,7 @@ p.tagMatches span {
 
 #login_form {
 	display: none;
+	text-align: right;
 }
 
 #openid_get {
@@ -175,7 +176,7 @@ p.tagMatches span {
 
 #login_form #inputopenid_submit {
 	float: right;
-	margin: 0;
+	margin-bottom: 5px;
 }
 
 #imagedelete {

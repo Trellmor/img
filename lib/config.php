@@ -24,8 +24,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
 
-require_once('lib/functions.php');
-
 /**
  * Maximum allowed size for an image file
  * 
@@ -92,8 +90,4 @@ $admins = array(
 	'http://trellmor.myopenid.com/',
 );
 
-/**
- * Start a session for logged in users
- */
-session_start();
 ?>

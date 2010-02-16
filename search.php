@@ -24,13 +24,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
  */
 
-require_once('lib/config.php');
-require_once('lib/functions.php');
+require_once('lib/init.php');
 
 if (isset($_GET['q'])) {
-	require_once('lib/class.sqlite.php');
-	$db = new sqlite('lib/db.sqlite');
-	
 	$search = explode(' ', $_GET['q']);
 	
 	// Get matching tags

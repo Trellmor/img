@@ -267,27 +267,11 @@ $(document).ready(function() {
 <?php
 	if (isset($opt['lightbox']) && $opt['lightbox']) {
 ?>
-<!-- 
-		<script type="text/javascript" src="lightbox/prototype.js"></script>
-		<script type="text/javascript" src="lightbox/scriptaculous.js?load=effects,builder"></script>
-		<script type="text/javascript" src="lightbox/lightbox.js"></script>
-		<link rel="stylesheet" href="lightbox/lightbox.css" type="text/css" media="screen" />
-		
- -->
  		<script type="text/javascript" src="js/jquery.lightbox-0.5.min.js"></script>
  		<link rel="stylesheet" type="text/css" href="css/jquery.lightbox-0.5.css" media="screen" />
  		<script type="text/javascript">
 $(function() {
-	//$('#preview').lightBox();
-	// Use this example, or...
 	$('a[rel*=lightbox]').lightBox(); // Select all links that contains lightbox in the attribute rel
-	// This, or...
-	//$('#gallery a').lightBox(); // Select all links in object with gallery ID
-	// This, or...
-	//$('a.lightbox').lightBox(); // Select all links with lightbox class
-	// This, or...
-	//$('a').lightBox(); // Select all links in the page
-	// ... The possibility are many. Use your creative or choose one in the examples above
 });
 </script>
 <?php
@@ -311,6 +295,8 @@ $(function() {
 					<input type="text" name="openid_identifier" id="inputopenid_identifier" /><br />
 					<a id="openid_get" href="http://openid.net/get-an-openid/">Get an OpenID</a>
 					<input type="submit" name="openid_submit" value="Login" id="inputopenid_submit" />
+					<br style="clear: both;" />
+					Stay logged in <input type="checkbox" name="openid_remember" value="remember" id="inputopenid_remember" />
 				</div>
 			</form>
 		</div>
