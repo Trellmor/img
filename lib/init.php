@@ -38,6 +38,7 @@ session_start();
 // Check if the user wants to be logged in automatically
 if (!isLogin()) {
 	if (isset($_COOKIE['openid_cookie'])) {
+		if (get_magic_quotes_gpc()) $_COOKIE['openid_cookie'] = stripslashes($_COOKIE['openid_cookie']);
 		list($identity, $cookie) = @unserialize($_COOKIE['openid_cookie']);
 		$res = $db->query("SELECT count(*) as count FROM users WHERE user = '" . $db->escape($identity) . "' and cookie = '" . $cookie . "';");
 		$row = $db->fetch($res);

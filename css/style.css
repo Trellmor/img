@@ -8,9 +8,14 @@ body {
 	margin-top: 50px;
 }
 
+#bug {
+	font-size: small;
+	float: left;
+}
+
 #copy {
 	font-size: small;
-	text-align: right;
+	float: right;
 }
 
 #content {

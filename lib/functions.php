@@ -231,7 +231,7 @@ function copyright($year)
 	if ($year < date("Y")) {
 		$year .= '-' . date("Y");
 	}
-	return '<p id="copy">&copy; ' . $year . ' by <a href="http://blog.pew.cc">Daniel Triendl</a></p>';
+	return '<p id="copy">&copy;' . $year . ' by <a href="http://pew.cc">Daniel Triendl</a></p>';
 }
 
 /**
@@ -284,6 +284,7 @@ $(function() {
 		<div id="content">
 			<?php echo $content ?>
 		</div>
+		<p id="bug"><a href="http://dev.pew.cc/newticket">Report a bug</a></p>
 		<?php echo copyright(2009); ?>
 <?php
 	if(!isLogin()) {
