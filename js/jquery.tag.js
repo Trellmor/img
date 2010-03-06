@@ -15,7 +15,7 @@
     delay - optional sets the delay between keyup and the request - can help throttle ajax requests, defaults to zero delay
     separator - optional separator string, defaults to ' ' (Brian J. Cardiff)
   @license: Creative Commons License - ShareAlike http://creativecommons.org/licenses/by-sa/3.0/
-  @version: 1.4
+  @version: 1.4 - Using async request
   @changes: fixed filtering to ajax hits
 */
 
@@ -70,6 +70,7 @@
             var workingTags = [];
             var currentTag = {"position": 0, tag: ""};
             var tagMatches = document.createElement(settings.tagContainer);
+            var currentRequest = null;
             
             function showSuggestionsDelayed(el, key) {
                 if (settings.delay) {
@@ -85,7 +86,7 @@
             function showSuggestions(el, key) {
                 workingTags = el.value.split(settings.separator);
                 matches = [];
-                var i, html = '', chosenTags = {}, tagSelected = false;
+                var i, chosenTags = {}, tagSelected = false;
 
                 // we're looking to complete the tag on currentTag.position (to start with)
                 currentTag = { position: currentTags.length-1, tag: '' };
@@ -103,13 +104,20 @@
                 if (currentTag.tag) {
                     // collect potential tags
                     if (settings.url) {
-                        $.ajax({
+						// cancel previous request if exists.
+						if (currentRequest != null) {
+							currentRequest.abort();
+						}
+						
+                        currentRequest = $.ajax({
                             'url' : settings.url,
                             'dataType' : 'json',
                             'data' : { 'tag' : currentTag.tag },
-                            'async' : false, // wait until this is ajax hit is complete before continue
+                            'async' : true,
                             'success' : function (m) {
+								currentRequest = null; // forget this request. it is completed
                                 matches = m;
+                                updateSuggestions(matches, chosenTags);
                             }
                         });
                     } else {
@@ -117,10 +125,18 @@
                             if (userTags[i].indexOf(currentTag.tag) === 0) {
                                 matches.push(userTags[i]);
                             }
-                        }                        
-                    }
-                    
-                    matches = $.grep(matches, function (v, i) {
+                        }
+                        updateSuggestions(matches, chosenTags);
+                    }                                        
+                } else {
+                    hideSuggestions();
+                }
+            }
+            
+            function updateSuggestions(matches, chosenTags) {
+					html = '';
+					
+					matches = $.grep(matches, function (v, i) {
                         return !chosenTags[v.toLowerCase()];
                     });
 
@@ -133,10 +149,7 @@
                     }
 
                     tagMatches.html(html);
-                    suggestionsShow = !!(matches.length);
-                } else {
-                    hideSuggestions();
-                }
+                    suggestionsShow = !!(matches.length);            
             }
 
             function hideSuggestions() {
