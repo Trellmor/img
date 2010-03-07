@@ -255,7 +255,6 @@ function outputHTML($content, $opt = NULL) {
 	<head>
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8" />
 		<title><?php echo $title; ?></title>
-		<link rel="stylesheet" type="text/css" href="css/style.css" />
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 		<script type="text/javascript">
 $(document).ready(function() {
@@ -273,7 +272,8 @@ $(document).ready(function() {
 $(function() {
 	$('a[rel*=lightbox]').lightBox(); // Select all links that contains lightbox in the attribute rel
 });
-</script>
+		</script>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
 <?php
 	}
 	if (isset($opt['header'])) echo $opt['header'];
