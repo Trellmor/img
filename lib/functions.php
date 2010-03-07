@@ -263,6 +263,7 @@ $(document).ready(function() {
 	});
 });
 		</script>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
 <?php
 	if (isset($opt['lightbox']) && $opt['lightbox']) {
 ?>
@@ -273,7 +274,6 @@ $(function() {
 	$('a[rel*=lightbox]').lightBox(); // Select all links that contains lightbox in the attribute rel
 });
 		</script>
-		<link rel="stylesheet" type="text/css" href="css/style.css" />
 <?php
 	}
 	if (isset($opt['header'])) echo $opt['header'];
