@@ -63,9 +63,9 @@ $mime = array(
 $imgdir = date('Y/m/');
 
 /**
- * Preview size and with
+ * Preview height and width
  * 
- * The sapect ratio of the image will be kept
+ * The aspect ratio of the image will be kept
  */
 $preview_width = 150;
 $preview_height = 150;
