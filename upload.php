@@ -69,7 +69,9 @@ if (!isset($mime[$info['mime']])) {
 }
 
 // Assign the correct extension for this image
-$name = explode('.', $img['name']);
+$name = (get_magic_quotes_gpc()) ? stripslashes($img['name']) : $img['name'];
+$name = str_replace('\'', '', $name);
+$name = explode('.', $name);
 
 if(count($name) < 2) {
 	$name = $name[0] . '.' . $mime[$info['mime']];
@@ -108,8 +110,8 @@ if (!move_uploaded_file_save($img['tmp_name'], $name)) {
 $preview = dirname($name) . '/preview/' . basename($name);
 if (!file_exists(dirname($preview))) mkdir(dirname($preview));
 exec('convert -define jpeg:size=' . $preview_width * 2 . 'x' . $preview_height * 2 . ' \\
- ' . escapeshellarg($name) . '[0] -thumbnail ' . $preview_width . 'x' . $preview_height . ' \\
- -unsharp 0x.5 ' . escapeshellarg($preview));
+  \'' . $name . '\'[0] -thumbnail ' . $preview_width . 'x' . $preview_height . ' \\
+ -unsharp 0x.5 \'' . $preview . '\'');
 
 // Open database
 $db = new sqlite('lib/db.sqlite');
