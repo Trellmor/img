@@ -214,19 +214,16 @@ function unlink_safe($f)
 function utf8_wordwrap($str, $width = 75, $break = "\n") // wordwrap() with utf-8 support
 {
 	$str =  preg_split('/([\x20\r\n\t]++|\xc2\xa0)/sSX', $str, -1, PREG_SPLIT_NO_EMPTY);
-	$len = 0;
 	$return = '';
 	foreach ($str as $val) {
-		$val .= ' ';
-		$tmp = mb_strlen($val, 'utf-8');
-		$len += $tmp;
-		if ($len >= $width) {
-			$return .= $break . $val;
-			$len = $tmp;
-		} else
-			$return .= $val;
+		do {
+			$return .= mb_substr($val, 0, $width, 'utf-8');
+			if (mb_strlen($val, 'utf-8') > $width) $return .= $break;
+			$val = mb_substr($val, $width, mb_strlen($val, 'utf-8') - $width);
+		} while ($val != '');
+		$return .= ' ';
 	}
-	return $return;
+	return mb_substr($return, 0, -1, 'utf-8');
 }
 
 /**
