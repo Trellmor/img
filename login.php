@@ -74,7 +74,7 @@ if ($oid->IsResponse()) {
 );");
 					setcookie('openid_cookie', serialize(array($oid->GetIdentifier(), $cookie)), time() + 60 * 60 * 24 * 30);
 				}
-				errorMsg('Login successful.<br />You are now logged in as <a href="browse.php?user=' . urlencode($oid->GetIdentifier()) . '"><i>' . htmlentities($oid->GetIdentifier()) . '</i></a>', url());
+				errorMsg('Login successful.<br />You are now logged in as <a href="browse.php?user=' . urlencode($oid->GetIdentifier()) . '"><i>' . htmlentities($oid->GetIdentifier(), ENT_QUOTES, 'UTF-8') . '</i></a>', url());
 			} else {
 				session_destroy();
 				errorMsg('Login failed.', url());
@@ -90,7 +90,7 @@ if ($oid->IsResponse()) {
 }
 
 if (!empty($_SESSION['openid_identity'])) {
-	outputHTML('You are logged in as <a href="browse.php?user=' . urlencode($_SESSION['openid_identity']) . '"><i>' . htmlentities($_SESSION['openid_identity']) . '</i></a><br /><br /><a href="login.php?action=logout">Logout</a>');
+	outputHTML('You are logged in as <a href="browse.php?user=' . urlencode($_SESSION['openid_identity']) . '"><i>' . htmlentities($_SESSION['openid_identity'], ENT_QUOTES, 'UTF-8') . '</i></a><br /><br /><a href="login.php?action=logout">Logout</a>');
 } else {
 	$output = '<h2>OpenID Login</h2>
 <form action="login.php" method="post">

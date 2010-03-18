@@ -107,7 +107,7 @@ if (isset($_GET['q'])) {
 	$output = '';
 	foreach ($images as $i) {
 		$preview = dirname($full_images[$i]['location']) . '/preview/' . basename($full_images[$i]['location']);
-		$output .= '<div class="previewimage"><a href="' . $full_images[$i]['location'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($full_images[$i]['original_name']) . '" /></a><br />' . "\n";
+		$output .= '<div class="previewimage"><a href="' . $full_images[$i]['location'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($full_images[$i]['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
 		$output .= '<a href="image.php?i=' . urlnumber_encode($i) . '">Show</a></div>' . "\n";
 	}
 
@@ -120,7 +120,7 @@ if (isset($_GET['q'])) {
 	}
 	$pages = substr($pages, 0, -10) . '</p>';
 	
-	outputHTML('<h2>' . one_wordwrap(htmlentities($_GET['q']), 5, '&shy;') . '</h2>' . $output . '<br style="clear: both;" />' . $pages, array('title' => 'Search: ' . htmlentities($_GET['q']), 'lightbox' => true));
+	outputHTML('<h2>' . htmlentities(one_wordwrap($_GET['q'], 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $output . '<br style="clear: both;" />' . $pages, array('title' => 'Search: ' . htmlentities($_GET['q'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 	
 } else {
 	// For advanced options

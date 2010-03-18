@@ -202,6 +202,34 @@ function unlink_safe($f)
 }
 
 /**
+ * Wordwrap an UTF-8 string
+ * Function by andrnag at yandex dot ru
+ * See http://de.php.net/manual/en/function.wordwrap.php#94452
+ *
+ * @param 	sring			$str			Input string
+ * @param	integer			$width			The column width. 
+ * @param	string			$break			The line is broken using the optional break  parameter. 
+ * @return	string							Returns the given string wrapped at the specified column. 
+ */
+function utf8_wordwrap($str, $width = 75, $break = "\n") // wordwrap() with utf-8 support
+{
+	$str =  preg_split('/([\x20\r\n\t]++|\xc2\xa0)/sSX', $str, -1, PREG_SPLIT_NO_EMPTY);
+	$len = 0;
+	$return = '';
+	foreach ($str as $val) {
+		$val .= ' ';
+		$tmp = mb_strlen($val, 'utf-8');
+		$len += $tmp;
+		if ($len >= $width) {
+			$return .= $break . $val;
+			$len = $tmp;
+		} else
+			$return .= $val;
+	}
+	return $return;
+}
+
+/**
  * Inserts a wrapping string if a word is longer than $width
  *
  * @param	string			$string
@@ -214,7 +242,7 @@ function one_wordwrap( $string, $width, $wrap )
 	$s=explode(" ", $string);
 	$new_string = '';
 	foreach ($s as $k => $v) {
-		if(strlen($v) > $width) $v = wordwrap($v, $width, $wrap, true);
+		if(strlen($v) > $width) $v = utf8_wordwrap($v, $width, $wrap);
 		$new_string .= $v . ' ';
 	}
 	return substr($new_string, 0, -1);

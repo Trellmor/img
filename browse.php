@@ -62,7 +62,7 @@ LIMIT
 		$tag_text = $row['text'];
 		
 		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
-		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />' . "\n";
+		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
 		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
 	}
 	
@@ -87,7 +87,7 @@ WHERE
 	}
 	$pages = substr($pages, 0, -10) . '</p>';
 	
-	outputHTML('<h2>' . one_wordwrap(htmlentities($tag_text), 5, '&shy;') . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($tag_text), 'lightbox' => true));
+	outputHTML('<h2>' . htmlentities(one_wordwrap($tag_text, 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($tag_text, ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 
 } elseif(isset($_GET['user'])) {
 
@@ -113,7 +113,7 @@ LIMIT
 	// Generate HTML output
 	while ($row = $db->fetch($res)) {
 		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
-		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name']) . '" /></a><br />' . "\n";
+		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
 		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
 	}
 	
@@ -134,20 +134,20 @@ WHERE
 	}
 	$pages = substr($pages, 0, -10) . '</p>';
 	
-	outputHTML('<h2>' . one_wordwrap(htmlentities(urldecode($_GET['user'])), 5, '&shy;') . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($_GET['user']), 'lightbox' => true));
+	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['user']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($_GET['user'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 	
 } else {
 
 	// Get tags from db
-	$sql = "SELECT tag, text, count FROM tags ORDER BY count DESC";
+	$sql = "SELECT tag, text, count FROM tags ORDER BY count DESC, ROWID DESC";
 	$sql .= (isset($_GET['tags']) && $_GET['tags'] == 'all') ? ';' : ' LIMIT 100;';
-	
+
 	$res = $db->query($sql);
 	$tags = array();
 	$texts = array();
 	while ($row = $db->fetch($res)) {
 		$tags[$row['tag']] = $row['count'];
-		$texts[$row['tag']] = htmlentities($row['text']);
+		$texts[$row['tag']] = htmlentities($row['text'], ENT_QUOTES, 'UTF-8');
 	}
 	
 	// $tags is the array

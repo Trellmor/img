@@ -43,19 +43,19 @@ if (!$row) {
 $id = $row['id'];
 $name = $row['location'];
 $preview = dirname($name) . '/preview/' . basename($name);
-$original_name = htmlentities($row['original_name']);
+$original_name = $row['original_name'];
 $user = $row['user'];
 
 // Get tags
 $res = $db->query("SELECT t.tag, t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
 $tags = '';
 while ($row = $db->fetch($res)) {
-	$tags .= '<a href="browse.php?tag=' . urlencode($row['tag']) . '">' . htmlentities($row['text']) . '</a>, ';
+	$tags .= '<a href="browse.php?tag=' . urlencode($row['tag']) . '">' . htmlentities($row['text'], ENT_QUOTES, 'UTF-8') . '</a>, ';
 }
 $tags = substr($tags, 0, -2);
 
 // Generate HTML and code snippets for inserting the image
-$output = '<h2 id="imagename"><a href="' . $name . '">' . one_wordwrap($original_name, 5, '&shy;') . '</a></h2>
+$output = '<h2 id="imagename"><a href="' . $name . '">' . htmlentities(one_wordwrap($original_name, 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</a></h2>
 			<a id="preview" href="' . $name . '" rel="lightbox" ><img src="' . $preview . '" alt="" /></a>
 			<p id="tags">Tags: ' . $tags . '<br /></p>
 			<table>
@@ -71,13 +71,13 @@ $output = '<h2 id="imagename"><a href="' . $name . '">' . one_wordwrap($original
 					<tr>
 						<td>Preview</td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="' . url() . $name . '" /></td>
-						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;a href=&quot;' . url() . $name . '&quot;&gt;&lt;img src=&quot;' . url() . $preview . '&quot; alt=&quot;' . $original_name . ' - img.pew.cc&quot; /&gt;&lt;/a&gt;" /></td>
+						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;a href=&quot;' . url() . $name . '&quot;&gt;&lt;img src=&quot;' . url() . $preview . '&quot; alt=&quot;' . htmlentities($original_name, ENT_QUOTES, 'UTF-8') . ' - img.pew.cc&quot; /&gt;&lt;/a&gt;" /></td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="[URL=' . url() . $name . '][IMG]' . url() . $preview . '[/IMG][/URL]" /></td>
 					</tr>
 					<tr>
 						<td>Full</td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="' .  url() . $name . '" /></td>
-						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;img src=&quot;' . url() . $name . '&quot; alt=&quot;' . $original_name . ' - img.pew.cc&quot; /&gt;" /></td>
+						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;img src=&quot;' . url() . $name . '&quot; alt=&quot;' . htmlentities($original_name, ENT_QUOTES, 'UTF-8') . ' - img.pew.cc&quot; /&gt;" /></td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="[IMG]' . url() . $name . '[/IMG]" /></td>
 					</tr>
 				</tbody>
@@ -91,6 +91,6 @@ if(isLogin()) {
 	}
 }
 
-outputHTML($output, array('title' => 'Image: ' . $original_name, 'lightbox' => true, 'header' => $header));
+outputHTML($output, array('title' => 'Image: ' . htmlentities($original_name, ENT_QUOTES, 'UTF-8'), 'lightbox' => true, 'header' => $header));
 
 ?>

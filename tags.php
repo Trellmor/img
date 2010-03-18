@@ -36,7 +36,7 @@ if (isset($_GET['tag'])) {
 	$tags = array();
 	
 	while ($row = $db->fetch($res)) {
-		$tags[] = htmlentities($row['text']);
+		$tags[] = htmlentities($row['text'], ENT_QUOTES, 'UTF-8');
 	}
 	
 	// Send results
