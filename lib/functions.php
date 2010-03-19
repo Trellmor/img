@@ -219,7 +219,7 @@ function utf8_wordwrap($str, $width = 75, $break = "\n") // wordwrap() with utf-
 		do {
 			$return .= mb_substr($val, 0, $width, 'utf-8');
 			if (mb_strlen($val, 'utf-8') > $width) $return .= $break;
-			$val = mb_substr($val, $width, mb_strlen($val, 'utf-8') - $width);
+			$val = mb_substr($val, $width, mb_strlen($val, 'utf-8') - $width, 'utf-8');
 		} while ($val != '');
 		$return .= ' ';
 	}
@@ -236,6 +236,7 @@ function utf8_wordwrap($str, $width = 75, $break = "\n") // wordwrap() with utf-
  */
 function one_wordwrap( $string, $width, $wrap )
 {
+	return utf8_wordwrap($string, $width, $wrap);
 	$s=explode(" ", $string);
 	$new_string = '';
 	foreach ($s as $k => $v) {
