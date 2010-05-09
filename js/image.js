@@ -23,11 +23,25 @@ $(document).ready(function() {
 	});
 	
 	$('#tags').hover(function() {
-		$('#tags').append('<a id="tagsedit"><img src="images/edit.phn" alt="Edit" /></a>').click(funcion(e) {
-			alert('test')
+		$('#tags').append(' <img id="tagsedit" src="images/edit.png" alt="Edit" />').click(function(e) {
+			$("#tags").unbind();
+			var tags = '';
+			$('#tags a').each(function() { tags += $(this).text() + ', '; });
+			$('#tags').empty().css('text-align', 'left').append('<form action="action.php?action=edit&amp;type="tags" method="post">' + 
+				'<span class="text">Tags:</span><input id="inputtags" type="text" name="tags" value="' + tags + '" size="50" /> ' + 
+				'<span class="text">&nbsp;</span><input type="submit" value="Save" />' +
+				'<span class="tagMatches"></span>' + 
+				'</form>');
+			$('#inputtags').attr('autocomplete', 'off');
+			$('#inputtags').tagSuggest({
+				url: 'tags.php',
+				delay: 250,
+				separator: ', ',
+				tagContainer: 'p',
+			});
 		});
 	}, function() {
-		$('#tagsedit').emtpy().rempoe()
+		$('#tagsedit').empty().remove();
 	}); 
 	/*
 	$('#imagename').mouseover(function() {

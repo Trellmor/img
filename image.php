@@ -57,7 +57,7 @@ $tags = substr($tags, 0, -2);
 // Generate HTML and code snippets for inserting the image
 $output = '<h2 id="imagename"><a href="' . $name . '">' . htmlentities(one_wordwrap($original_name, 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</a></h2>
 			<a id="preview" href="' . $name . '" rel="lightbox" ><img src="' . $preview . '" alt="" /></a>
-			<p id="tags">Tags: ' . $tags . '<br /></p>
+			<p id="tags">Tags: ' . $tags . '</p>
 			<table>
 				<thead>
 					<tr>
@@ -87,7 +87,8 @@ $header = '';
 
 if(isLogin()) {
 	if ($user == $_SESSION['openid_identity'] || isAdmin()) {
-		$header = '<script type="text/javascript" src="js/image.js"></script>';
+		$header  = '<script src="js/jquery.tag.js" type="text/javascript"></script>';
+		$header .= '<script type="text/javascript" src="js/image.js"></script>';
 	}
 }
 
