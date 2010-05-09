@@ -27,7 +27,7 @@ $(document).ready(function() {
 			$("#tags").unbind();
 			var tags = '';
 			$('#tags a').each(function() { tags += $(this).text() + ', '; });
-			$('#tags').empty().css('text-align', 'left').append('<form action="action.php?action=edit&amp;type="tags" method="post">' + 
+			$('#tags').empty().css('text-align', 'left').append('<form action="action.php?action=edit&amp;type=tags&amp;image=' + $.getUrlVar('i') + '" method="post">' + 
 				'<span class="text">Tags:</span><input id="inputtags" type="text" name="tags" value="' + tags + '" size="50" /> ' + 
 				'<span class="text">&nbsp;</span><input type="submit" value="Save" />' +
 				'<span class="tagMatches"></span>' + 

@@ -70,23 +70,27 @@ DELETE FROM imagetags WHERE image = '" . $row['id'] . "';\n";
 					$tags = array_unique($tags);
 					foreach ($tags as $tag) {
 						if (empty($tag)) continue;
-						// check if the taga already exists
-						$row = $db->fetch($db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'"));
-						if (!$row) {
+						// check if the tag already exists
+						$row2 = $db->fetch($db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'"));
+						if (!$row2) {
 							$db->exec("INSERT INTO tags (tag, text) VALUES ('" . $db->escape(strtolower($tag)) . "', '" . $db->escape($tag) . "');");
-							$row = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
+							$row2 = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
 						}
 						// Save the tag for this image and update tag counter
-						$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');\n";
-						$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row['id'] . "';\n";
+						$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $row['id'] . "', '" . $row2['id'] . "');\n";
+						$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row2['id'] . "';\n";
 					}
 					$sql .= "DELETE FROM tags WHERE count < 1;\n";
 					$sql .= "COMMIT;";
 					$db->exec($sql);
+					header('Location: ' . url() . 'image.php?i=' . urlnumber_encode($row['id']));
+					errorMsg('Tags edited.', 'image.php?i=' . urlnumber_encode($row['id']));
 				}
+				break;
 			default:
 				errorMsg('No action set.');
 				break;	
+			}
 		break;
 	default:
 		errorMsg('No action type set.');
