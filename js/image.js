@@ -21,6 +21,14 @@ $(document).ready(function() {
 	}, function() {
 		$('#imagedelete').empty().remove();
 	});
+	
+	$('#tags').hover(function() {
+		$('#tags').append('<a id="tagsedit"><img src="images/edit.phn" alt="Edit" /></a>').click(funcion(e) {
+			alert('test')
+		});
+	}, function() {
+		$('#tagsedit').emtpy().rempoe()
+	}); 
 	/*
 	$('#imagename').mouseover(function() {
 		$('#imagename h2').append('<a id="imagedelete" href="actions.php?action=delete&amp;type=image&amp;image=' + $.getUrlVar('i') + '">' +
