@@ -43,13 +43,25 @@ $tagjs .= "$(function () {
 		tagContainer: 'p',
 	});
 });
+
+$(document).ready(function () {
+	$('#addimage').click(function() {
+		$('#addimage').remove();
+		$('#inputimagecontainer').append('<span class=\"text\">&nbsp;</span><input type=\"file\" size=\"39\" name=\"image[]\" />&nbsp;' +
+			'<img src=\"images/add.png\" id=\"addimage\" alt=\"Add another image\" title=\"Add another image\" /><br /><br />');
+		$('#addimage').click(arguments.callee);
+	});
+});
 </script>";
 
 $content = '<form action="upload.php" method="post" enctype="multipart/form-data">
 			<div>
 			<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
-			<span class="text">File:</span><input type="file" size="40" name="image" /><br /><br />
-			<span class="text">Tags:</span><input id="inputtags" type="text" size="40" name="tags" />
+			<div id="inputimagecontainer">
+			<span class="text">File:</span><input type="file" size="39" name="image[]" />&nbsp;
+			<img src="images/add.png" id="addimage" alt="Add another image" title="Add another image" /><br /><br />
+			</div>
+			<span class="text">Tags:</span><input id="inputtags" type="text" size="39" name="tags" />
 			<span class="text">&nbsp;</span><input id="submit" type="submit" name="submit" value="Upload" />
 			<p id="info">
 				Maximum upload size: ' . byteConvert($maxsize) . '<br />

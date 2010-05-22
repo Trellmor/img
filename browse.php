@@ -90,7 +90,6 @@ WHERE
 	outputHTML('<h2>' . htmlentities(one_wordwrap($tag_text, 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($tag_text, ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 
 } elseif(isset($_GET['user'])) {
-
 	// Calculate page offset
 	$page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int)$_GET['p'] : 1;
 	$offset =  ($page - 1) * $pagelimit;
@@ -136,6 +135,27 @@ WHERE
 	
 	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['user']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($_GET['user'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 	
+} elseif(isset($_GET['ip']) && isset($_GET['time'])) {
+	$sql = "SELECT
+ ROWID as id,
+ location as name,
+ original_name
+FROM
+ images
+WHERE
+ ip = '" . $db->escape($_GET['ip']) . "' and
+ time = '" . $db->escape($_GET['time']) . "';";
+
+	$res = $db->query($sql);
+	$images = '';
+	// Generate HTML output
+	while ($row = $db->fetch($res)) {
+		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
+		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
+		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
+	}
+	
+	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['ip'] . ' - ' . $_GET['time']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />', array('title' => 'Upload: ' . htmlentities($_GET['ip'] . ' - ' . $_GET['time'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 } else {
 
 	// Get tags from db
