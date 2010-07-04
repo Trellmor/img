@@ -74,6 +74,8 @@ foreach ($_FILES['image'] as $img) {
 		continue;
 		//errorMsg('Imagetype not allowed.');
 	}
+	
+	$md5 = md5_file($img['tmp_name']);
 
 	// Assign the correct extension for this image
 	$name = (get_magic_quotes_gpc()) ? stripslashes($img['name']) : $img['name'];
@@ -129,14 +131,16 @@ foreach ($_FILES['image'] as $img) {
 	 ip,
 	 time,
 	 original_name,
-	 user
+	 user,
+	 md5
 	) VALUES (
 	 '" . $db->escape($location) . "',
 	 '" . $db->escape($name) . "',
 	 '" . ip2long($_SERVER['REMOTE_ADDR']) . "',
 	 '" . $time . "',
 	 '" . $db->escape($img['name']) . "',
-	 '" . $db->escape($user) . "'
+	 '" . $db->escape($user) . "',
+	 '" . $db->escape($md5) . "'
 	);" );
 	$res = $db->query("SELECT last_insert_rowid() as id;");
 	$row = $db->fetch($res);
