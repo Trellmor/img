@@ -163,7 +163,7 @@ foreach ($_FILES['image'] as $img) {
 			if (empty($tag)) continue;
 			// check if the tag already exists
 			$row = $db->fetch($db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'"));
-			if ($row->numrows() == 0) {
+			if ($db->numrows($row) == 0) {
 				$db->exec("INSERT INTO tags (tag, text) VALUES ('" . $db->escape(strtolower($tag)) . "', '" . $db->escape($tag) . "');");
 				$row = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
 			}
