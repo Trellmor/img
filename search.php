@@ -124,7 +124,9 @@ if (isset($_GET['q'])) {
 	
 } else {
 	// For advanced options
-	$header = '';
+	$header = '<script type="text/javascript">' . "\n";
+	$header .= '$(document).ready(function() { $("#inputsearch").focus(); });' . "\n";
+	$header .= '</script>' . "\n";
 	/*$header .= '<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3/jquery.min.js"></script>';
 	$header .= '<script type="text/javascript">';
 	$header .= "$(document).ready(function() {
