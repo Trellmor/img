@@ -120,8 +120,11 @@ foreach ($_FILES['image'] as $img) {
 	if (!file_exists(dirname($preview))) mkdir(dirname($preview));
 	exec('convert -define jpeg:size=' . $preview_width * 2 . 'x' . $preview_height * 2 . ' \\
 	  \'' . $name . '\'[0] -thumbnail ' . $preview_width . 'x' . $preview_height . ' \\
-	 -unsharp 0x.5 \'' . $preview . '\'');
-
+	 -unsharp 0x.5 -strip \'' . $preview . '\'');
+	
+	// This is to make sure the image contains no privacy releated tags or anything
+	exec('mogrify -strip \'' . $name . '\'');
+	
 	$user = (isset($_SESSION['openid_identity'])) ? $_SESSION['openid_identity'] : '';
 	
 	// Save image info
@@ -158,9 +161,9 @@ foreach ($_FILES['image'] as $img) {
 		$sql = "BEGIN;\n";
 		foreach ($tags as $tag) {
 			if (empty($tag)) continue;
-			// check if the taga already exists
+			// check if the tag already exists
 			$row = $db->fetch($db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'"));
-			if (!$row) {
+			if ($row->numrows() = 0) {
 				$db->exec("INSERT INTO tags (tag, text) VALUES ('" . $db->escape(strtolower($tag)) . "', '" . $db->escape($tag) . "');");
 				$row = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
 			}

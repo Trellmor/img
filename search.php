@@ -139,8 +139,8 @@ if (isset($_GET['q'])) {
 	$output = '<h2>Search</h2>
 <form action="search.php" method="get">
 <div id="search">
-	<input type="text" name="q" size="40" id="inputsearch" />
-	<input type="submit" value="Search" />
+	<input type="text" name="q" size="40" id="inputsearch" tabindex="1" />
+	<input type="submit" value="Search" tabindex="2" />
 	<br />&nbsp;
 </div>
 </form>
