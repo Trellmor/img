@@ -162,10 +162,12 @@ foreach ($_FILES['image'] as $img) {
 		foreach ($tags as $tag) {
 			if (empty($tag)) continue;
 			// check if the tag already exists
-			$row = $db->fetch($db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'"));
-			if ($db->numrows($row) == 0) {
+			$res = $db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'");
+			if ($db->numrows($res) == 0) {
 				$db->exec("INSERT INTO tags (tag, text) VALUES ('" . $db->escape(strtolower($tag)) . "', '" . $db->escape($tag) . "');");
 				$row = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
+			} else {
+				$row = $db->fetch($res);
 			}
 			// Save the tag for this image and update tag counter
 			$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');\n";
