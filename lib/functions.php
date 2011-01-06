@@ -367,4 +367,18 @@ function fixFilesArray(&$files)
 	}
 }
 
+/**
+ * Removes slashes from a string if magic_quotes_gpc is enabled
+ *
+ * @param 	string			$str			Encoded string
+ * @return	string							Unencode string
+ */
+function stripslashes_safe($str)
+{
+	if (get_magic_quotes_gpc()) {
+		$str = stripslashes($str);
+	}
+	return $str;
+}
+
 ?>

@@ -114,13 +114,13 @@ if (isset($_GET['q'])) {
 	// Generate page counter
 	$pages = '<p id="pages">';
 	for ($i = 1; $i <= ceil($imagecount/$pagelimit); $i++) {
-		if ($i != $page) $pages .= '<a href="search.php?q=' . $_GET['q'] . '&amp;p=' . $i . '">' . $i . '</a>';
+		if ($i != $page) $pages .= '<a href="search.php?q=' . stripslashes_safe($_GET['q']) . '&amp;p=' . $i . '">' . $i . '</a>';
 		else $pages .= $i; 
 		$pages .= ' &middot; ';
 	}
 	$pages = substr($pages, 0, -10) . '</p>';
 	
-	outputHTML('<h2>' . htmlentities(one_wordwrap($_GET['q'], 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $output . '<br style="clear: both;" />' . $pages, array('title' => 'Search: ' . htmlentities($_GET['q'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
+	outputHTML('<h2>' . htmlentities(one_wordwrap(stripslashes_safe($_GET['q']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $output . '<br style="clear: both;" />' . $pages, array('title' => 'Search: ' . htmlentities(stripslashes_safe($_GET['q']), ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 	
 } else {
 	// For advanced options

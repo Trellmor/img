@@ -81,7 +81,7 @@ WHERE
 	
 	$pages = '<p id="pages">';
 	for ($i = 1; $i <= ceil($row['count']/$pagelimit); $i++) {
-		if ($i != $page) $pages .= '<a href="browse.php?tag=' . $_GET['tag'] . '&amp;p=' . $i . '">' . $i . '</a>';
+		if ($i != $page) $pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . $i . '">' . $i . '</a>';
 		else $pages .= $i; 
 		$pages .= ' &middot; ';
 	}
@@ -127,13 +127,13 @@ WHERE
 	
 	$pages = '<p id="pages">';
 	for ($i = 1; $i <= ceil($row['count']/$pagelimit); $i++) {
-		if ($i != $page) $pages .= '<a href="browse.php?user=' . $_GET['user'] . '&amp;p=' . $i . '">' . $i . '</a>';
+		if ($i != $page) $pages .= '<a href="browse.php?user=' . stripslashes_safe($_GET['user']) . '&amp;p=' . $i . '">' . $i . '</a>';
 		else $pages .= $i; 
 		$pages .= ' &middot; ';
 	}
 	$pages = substr($pages, 0, -10) . '</p>';
 	
-	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['user']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($_GET['user'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
+	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode(stripslashes_safe($_GET['user'])), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities(stripslashes_safe($_GET['user']), ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 	
 } elseif(isset($_GET['ip']) && isset($_GET['time'])) {
 	$sql = "SELECT

@@ -37,7 +37,7 @@ if (!isset($_POST['submit'])) {
  * ["error"]	- upload error
  * ["size"]		- Size in bytes
  */
-header('Content-type: text/plain');
+//header('Content-type: text/plain');
 fixFilesArray($_FILES['image']);
 $time = time();
 $uploadcount = 0;
