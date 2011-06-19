@@ -68,6 +68,14 @@ class sqlite {
 	}
 	
 	/**
+	 * Destructor
+	 */
+	public function __destruct()
+	{
+		$this->disconnect();
+	}
+	
+	/**
 	 * Execute a SQL query and returns a resource handle
 	 *
 	 * @param	string		$sql			SQL query to execute

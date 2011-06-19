@@ -25,6 +25,7 @@
  */
 
 require_once(__DIR__ . '/class.sqlite.php');
+require_once(__DIR__ . '/functions.php');
 
 class UploadException extends Exception {};
 
@@ -235,7 +236,14 @@ class upload {
 		for ($i = 0; $i < count($tags); $i++) {
 			$tags[$i] = trim($tags[$i]);
 		}
-		$tags = array_unique($tags);
+		
+		//Get old tags
+		$res = $db->query("SELECT i.text FROM tags t, imagetags it WHERE t.ROWID = it.tag and it.images = '" . $this->db->escape($id) . "';");
+		while ($row = $this->$db->fetch($res)) {
+			$tags[] = $row['text'];
+		}
+		
+		$tags = $this->array_unique($tags);
 		$sql = "BEGIN;\n";
 		foreach ($tags as $tag) {
 			if (empty($tag)) continue;
@@ -254,6 +262,19 @@ class upload {
 		$sql .= "COMMIT;";
 		// Commit all changes
 		$this->db->exec($sql);
+	}
+	
+	protected function array_unique($a)
+	{
+		$va = array();
+		foreach($a as $k => $v) {
+			if (array_key_exists(strtolower($v), $va)) {
+				unset($a[$k]);
+			} else {
+				$va[strtolower($v)] = $v;
+			}
+		}
+		return $a;
 	}
 }
 
