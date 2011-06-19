@@ -147,15 +147,15 @@ class upload {
 			$name = implode('.', $name);
 		}
 
-		// Choose the location for the file
-		$name = trim(str_replace('//', '/', checkExists($this->dir . '/' . $name)));
-
 		// Generate a URL save string to send to the browser
-		$location = explode('/', $name);
+		$location = explode('/', trim(str_replace('//', '', $this->dir . '/' . $name)));
 		for ($i = 0; $i < count($location); $i++) {
 			$location[$i] = rawurlencode($location[$i]);
 		}
 		$location = implode('/', $location);
+		
+		// Choose the location for the file
+		$name = trim(str_replace('//', '/', checkExists(__DIR__ . '/' . $this->dir . '/' . $name)));
 
 		// Move the file to it's new location
 		if (!isCLI()) {
