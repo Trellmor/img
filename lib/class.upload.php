@@ -238,7 +238,7 @@ class upload {
 		}
 		
 		//Get old tags
-		$res = $this->db->query("SELECT i.text FROM tags t, imagetags it WHERE t.ROWID = it.tag and it.images = '" . $this->db->escape($id) . "';");
+		$res = $this->db->query("SELECT t.text FROM tags t, imagetags it WHERE t.ROWID = it.tag and it.images = '" . $this->db->escape($id) . "';");
 		while ($row = $this->db->fetch($res)) {
 			$tags[] = $row['text'];
 		}
