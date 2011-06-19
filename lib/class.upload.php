@@ -48,7 +48,7 @@ class upload {
 	}
 
 	public function __destruct() {
-		$db = NULL;
+		$this->db = NULL;
 	}
 
 	public function image($img = NULL)
@@ -238,8 +238,8 @@ class upload {
 		}
 		
 		//Get old tags
-		$res = $db->query("SELECT i.text FROM tags t, imagetags it WHERE t.ROWID = it.tag and it.images = '" . $this->db->escape($id) . "';");
-		while ($row = $this->$db->fetch($res)) {
+		$res = $this->db->query("SELECT i.text FROM tags t, imagetags it WHERE t.ROWID = it.tag and it.images = '" . $this->db->escape($id) . "';");
+		while ($row = $this->db->fetch($res)) {
 			$tags[] = $row['text'];
 		}
 		
