@@ -158,10 +158,10 @@ class upload {
 		$location = implode('/', $location);
 
 		// Move the file to it's new location
-		if (isCLI()) {
+		if (!isCLI()) {
 			if (!move_uploaded_file_save($this->img, $name)) {
 				unlink_safe($this->img);
-				throw new UploadException('Can\' move uploaded file.');
+				throw new UploadException('Can\'t move uploaded file.');
 			}
 		} else {
 			if (!file_exists($this->dir)) {
@@ -198,7 +198,7 @@ class upload {
 		$user = (isset($_SESSION['openid_identity'])) ? $_SESSION['openid_identity'] : '';
 
 		// Save image info
-		$ip = (isCLI()) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+		$ip = (!isCLI()) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
 		$this->db->exec("INSERT INTO images (
 		 location,
 		 path,
