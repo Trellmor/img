@@ -31,7 +31,6 @@ if (!isset($_GET['i'])) {
 }
 
 // Open database connection
-$db = new sqlite('lib/db.sqlite');
 $id = urlnumber_decode($_GET['i']);
 	
 // Select image
