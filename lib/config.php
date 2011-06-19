@@ -90,4 +90,9 @@ $admins = array(
 	'http://trellmor.myopenid.com/',
 );
 
+/**
+ * Page title
+ */
+$page_title = 'img.pew.cc';
+
 ?>

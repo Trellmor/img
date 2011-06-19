@@ -252,7 +252,9 @@ function copyright($year)
  * 											header		Additional HTML headers
  */
 function outputHTML($content, $opt = NULL) {
-	$title = 'img.pew.cc - Image Hosting';
+	global $page_title;
+	
+	$title = $page_title . ' - Image Hosting';
 	$title = (isset($opt['title'])) ? $opt['title'] . ' - ' . $title : $title;
 
 	header('Content-Type: text/html; charset=UTF-8');
@@ -288,7 +290,7 @@ $(function() {
 ?>
 	</head>
 	<body>
-		<h1><a href="http://img.pew.cc">img.pew.cc</a></h1>
+		<h1><a href="<?php echo url(); ?>"><?php echo $page_title; ?></a></h1>
 		<div id="content">
 			<?php echo $content ?>
 		</div>
@@ -379,6 +381,19 @@ function stripslashes_safe($str)
 		$str = stripslashes($str);
 	}
 	return $str;
+}
+
+/**
+ * Scrit running from CLI
+ * @return									True if started from command line
+ */
+function isCLI()
+{
+	if(php_sapi_name() == 'cli' && empty($_SERVER['REMOTE_ADDR'])) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 ?>

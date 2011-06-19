@@ -174,15 +174,16 @@ WHERE
 	ksort($tags);
 
 	// largest and smallest array values
-	$max_qty = max(array_values($tags));
-	$min_qty = min(array_values($tags));
-	       
+	$max_qty = (count($tags) > 0) ? max(array_values($tags)) : 0;
+	$min_qty = (count($tags) > 0) ? min(array_values($tags)) : 0;
 	       
 	// loop through the tag array and generate HTML output
 	$cloud = '';
 	foreach ($tags as $tag => $count) {		
 		// Logarythmic tag list
-		$weight = (log($count)-log($min_qty)) / (log($max_qty) - log($min_qty));
+		$div = log($max_qty) - log($min_qty);
+		if ($div == 0) $div = 1;
+		$weight = (log($count)-log($min_qty)) / $div;
 		$size = $min_size + round(($max_size - $min_size) * $weight);
 	    
 		$cloud .= '<a href="browse.php?tag=' . urlencode($tag) . '" class="tags" style="font-size: ' . $size . 'px">' . $texts[$tag] . '</a> ';

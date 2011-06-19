@@ -71,13 +71,13 @@ $output = '<h2 id="imagename"><a href="' . $name . '">' . htmlentities(one_wordw
 					<tr>
 						<td>Preview</td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="' . url() . $name . '" /></td>
-						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;a href=&quot;' . url() . $name . '&quot;&gt;&lt;img src=&quot;' . url() . $preview . '&quot; alt=&quot;' . htmlentities($original_name, ENT_QUOTES, 'UTF-8') . ' - img.pew.cc&quot; /&gt;&lt;/a&gt;" /></td>
+						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;a href=&quot;' . url() . $name . '&quot;&gt;&lt;img src=&quot;' . url() . $preview . '&quot; alt=&quot;' . htmlentities($original_name, ENT_QUOTES, 'UTF-8') . ' - ' . $page_title . '&quot; /&gt;&lt;/a&gt;" /></td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="[URL=' . url() . $name . '][IMG]' . url() . $preview . '[/IMG][/URL]" /></td>
 					</tr>
 					<tr>
 						<td>Full</td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="' .  url() . $name . '" /></td>
-						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;img src=&quot;' . url() . $name . '&quot; alt=&quot;' . htmlentities($original_name, ENT_QUOTES, 'UTF-8') . ' - img.pew.cc&quot; /&gt;" /></td>
+						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;img src=&quot;' . url() . $name . '&quot; alt=&quot;' . htmlentities($original_name, ENT_QUOTES, 'UTF-8') . ' - ' . $page_title . '&quot; /&gt;" /></td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="[IMG]' . url() . $name . '[/IMG]" /></td>
 					</tr>
 				</tbody>

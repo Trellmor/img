@@ -25,6 +25,7 @@
  */
 
 require_once('lib/init.php');
+require_once(__DIR__ . '/lib/class.upload.php');
 
 if (!isset($_POST['submit'])) {
 	errorMsg('No file uploaded.');
@@ -43,6 +44,7 @@ $time = time();
 $uploadcount = 0;
 
 foreach ($_FILES['image'] as $img) {
+	
 	// Upload failed
 	if ($img['error']) {
 		unlink_safe($img['tmp_name']);
@@ -56,126 +58,27 @@ foreach ($_FILES['image'] as $img) {
 		continue;
 		//errorMsg('Image too big.');
 	}
-
-	/*
-	 * [0]			- width
-	 * [1]			- geight
-	 * [2]			- IMAGETYPE_XXX
-	 + [3]			- Text string with width and height
-	 * ["bits"]
-	 * ["channels"]
-	 * ["mime"]		- Mime type
-	 */
-	$info = getimagesize($img['tmp_name']);
-
-	// Check if this type of immage is allowed
-	if (!isset($mime[$info['mime']])) {
-		unlink_safe($img['tmp_name']);
-		continue;
-		//errorMsg('Imagetype not allowed.');
-	}
 	
-	$md5 = md5_file($img['tmp_name']);
-
-	// Assign the correct extension for this image
+	$upload = new upload();
+	$upload->time($time);
+	$upload->image($img['tmp_name']);
+	$upload->mimeTypes($mime);
 	$name = (get_magic_quotes_gpc()) ? stripslashes($img['name']) : $img['name'];
-	$name = str_replace('\'', '', $name);
-	$name = explode('.', $name);
-
-	if(count($name) < 2) {
-		$name = $name[0] . '.' . $mime[$info['mime']];
-	} else {
-		$name[count($name) - 1] = $mime[$info['mime']];
-		$name = implode('.', $name);
-	}
-
-	// Choose the location for the file
-	$name = trim(str_replace('//', '/', checkExists($imgdir . '/' . $name)));
-	
-	// Generate a URL save string to send to the browser
-	$location = explode('/', $name);
-	for ($i = 0; $i < count($location); $i++) {
-		$location[$i] = rawurlencode($location[$i]);
-	}
-	$location = implode('/', $location);
-	
-	// Move the file to it's new location
-	if (!move_uploaded_file_save($img['tmp_name'], $name)) {
-		unlink_safe($img['tmp_name']);
-		errorMsg('Can\'t move uploaded file.');
-	}
-
-	/*
-	 * Create preview
-	 * 
-	 * We use imagemagick because it suports a broad range of file
-	 * types
-	 * 
-	 * Also, we call it directly with exec
-	 * 
-	 * See http://www.imagemagick.org/Usage/thumbnails/ for more
-	 * information about the commands used
-	 */
-	$preview = dirname($name) . '/preview/' . basename($name);
-	if (!file_exists(dirname($preview))) mkdir(dirname($preview));
-	exec('convert -define jpeg:size=' . $preview_width * 2 . 'x' . $preview_height * 2 . ' \\
-	  \'' . $name . '\'[0] -thumbnail ' . $preview_width . 'x' . $preview_height . ' \\
-	 -unsharp 0x.5 -strip \'' . $preview . '\'');
-	
-	// This is to make sure the image contains no privacy releated tags or anything
-	exec('mogrify -strip \'' . $name . '\'');
-	
-	$user = (isset($_SESSION['openid_identity'])) ? $_SESSION['openid_identity'] : '';
-	
-	// Save image info
-	$db->exec("INSERT INTO images (
-	 location,
-	 path,
-	 ip,
-	 time,
-	 original_name,
-	 user,
-	 md5
-	) VALUES (
-	 '" . $db->escape($location) . "',
-	 '" . $db->escape($name) . "',
-	 '" . ip2long($_SERVER['REMOTE_ADDR']) . "',
-	 '" . $time . "',
-	 '" . $db->escape($img['name']) . "',
-	 '" . $db->escape($user) . "',
-	 '" . $db->escape($md5) . "'
-	);" );
-	$res = $db->query("SELECT last_insert_rowid() as id;");
-	$row = $db->fetch($res);
-	$id = $row['id'];
-
-	/*
-	 * Tags
-	 */
+	$upload->name($name);
+	$upload->db($db);
+	$upload->preview_height($preview_height);
+	$upload->preview_width($preview_width);
 	if (isset($_POST['tags'])) {
-		$tags = explode(',', $_POST['tags']);
-		for ($i = 0; $i < count($tags); $i++) {
-			$tags[$i] = trim($tags[$i]);
+		$upload->tags($_POST['tags']);
+	}
+	$upload->dir($imgdir);
+	
+	try {
+		if ($upload->save()) {
+			$uploadcount++;
 		}
-		$tags = array_unique($tags);
-		$sql = "BEGIN;\n";
-		foreach ($tags as $tag) {
-			if (empty($tag)) continue;
-			// check if the tag already exists
-			$res = $db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'");
-			if ($db->numrows($res) == 0) {
-				$db->exec("INSERT INTO tags (tag, text) VALUES ('" . $db->escape(strtolower($tag)) . "', '" . $db->escape($tag) . "');");
-				$row = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
-			} else {
-				$row = $db->fetch($res);
-			}
-			// Save the tag for this image and update tag counter
-			$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');\n";
-			$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row['id'] . "';\n";
-		}
-		$sql .= "COMMIT;";
-		// Commit all changes
-		$db->exec($sql);
+	} catch (UploadException $e) {
+		errorMsg($$e->getMessage());
 	}
 	$uploadcount++;
 }
