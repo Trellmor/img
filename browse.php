@@ -65,7 +65,7 @@ LIMIT
 	
 	// Generate page count
 	$sql = "SELECT
- count(i.ROWID) as count
+ count(*) as count
 FROM
  images i,
  tags t,

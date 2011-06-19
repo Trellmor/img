@@ -249,15 +249,15 @@ class upload {
 		foreach ($tags as $tag) {
 			if (empty($tag)) continue;
 			// check if the tag already exists
-			$res = $this->db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $this->db->escape(strtolower($tag)) . "'");
+			$res = $this->db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $this->db->escape(strtolower($tag)) . "' LIMIT 1");
 			if ($this->db->numrows($res) == 0) {
 				$this->db->exec("INSERT INTO tags (tag, text) VALUES ('" . $this->db->escape(strtolower($tag)) . "', '" . $this->db->escape($tag) . "');");
 				$row = $this->db->fetch($this->db->query("SELECT last_insert_rowid() as id;"));
 			} else {
 				$row = $this->db->fetch($res);
 			}
-			$res = $this->db->query("SELECT ROWID FROM imagetags WHERE image = '" . $id . "' and tag = '" . $row['id'] . "';");
-			if ($this->db->numrows($res) == 0) {
+			$count = $this->db->fetch($this->db->query("SELECT count(*) as count FROM imagetags WHERE image = '" . $id . "' and tag = '" . $row['id'] . "';"));
+			if ($count['count'] == 0) {
 				// Save the tag for this image and update tag counter
 				$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');\n";
 				$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row['id'] . "';\n";

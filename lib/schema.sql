@@ -21,4 +21,10 @@ user VARCHAR(255) UNIQUE PRIMARY KEY,
 cookie VARCHAR(32),
 last_login INTEGER
 );
+create index idx_images_time on images(time);
+create index idx_images_md5 on images(md5);
+create index idx_imagetags_image_tag on imagetags(image,tag);
+create index idx_tags_count on tags(count);
+create index idx_tags_tag on tags(tag);
+create index idx_tags_text on tags(text);
 
