@@ -155,7 +155,7 @@ class upload {
 		$location = implode('/', $location);
 		
 		// Choose the location for the file
-		$name = trim(str_replace('//', '/', checkExists(__DIR__ . '/' . $this->dir . '/' . $name)));
+		$name = trim(str_replace('//', '/', checkExists(realpath(__DIR__ . '../' . $this->dir . '/' . $name))));
 
 		// Move the file to it's new location
 		if (!isCLI()) {
@@ -171,7 +171,7 @@ class upload {
 			}
 
 			if (!rename($this->img, $name)) {
-				throw new UploadException('Can\'t move file. (File rename failed.)');
+				throw new UploadException('Can\'t move file. (File rename failed ' . $name . ')');
 			}
 		}
 
