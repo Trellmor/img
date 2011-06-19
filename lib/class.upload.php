@@ -255,9 +255,12 @@ class upload {
 			} else {
 				$row = $this->db->fetch($res);
 			}
-			// Save the tag for this image and update tag counter
-			$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');\n";
-			$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row['id'] . "';\n";
+			$res = $this->db->query("SELECT ROWID FROM imagetags WHERE image = '" . $id . "' and tag = '" . $row['id'] . "';");
+			if ($this->db->numrows($res) == 0) {
+				// Save the tag for this image and update tag counter
+				$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');\n";
+				$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row['id'] . "';\n";
+			}
 		}
 		$sql .= "COMMIT;";
 		// Commit all changes
