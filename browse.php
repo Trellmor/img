@@ -26,9 +26,6 @@
 
 require_once('lib/init.php');
 
-// Open database
-$db = new sqlite('lib/db.sqlite');
-
 if (isset($_GET['tag'])) {
 
 	// Calculate page offset
