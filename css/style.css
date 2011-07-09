@@ -192,3 +192,21 @@ p.tagMatches span {
 #imagedelete img {
 	border: none;
 }
+
+#taglist {
+	position: absolute;
+	left: 5px;
+	top: 108px;
+	width: 200px;
+	text-align: left;
+	background-color: #181818;
+	border: 2px solid #404040;
+	padding: 0px;
+	margin: 0px;
+}
+
+#taglist ul {
+	list-style-type: none;
+	padding: 5px;
+	margin: 0px;
+}

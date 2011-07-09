@@ -83,6 +83,7 @@ class sqlite {
 	 */
 	public function query($sql)
 	{
+		//echo '<!-- ' . $sql . '-->';
 		$result = @sqlite_query($this->_dbhandle, $sql, SQLITE_ASSOC, $error);
 		if(!$result) {
 			// Something's wrong with the sqlite_last_error...

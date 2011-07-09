@@ -32,19 +32,25 @@ if (isset($_GET['tag'])) {
 	$page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int)$_GET['p'] : 1;
 	$offset =  ($page - 1) * $pagelimit;
 	
+	$tags_in = urldecode($_GET['tag']);
+	$tags_in = explode(',', $_GET['tag']);
+	$tag_in = '';
+	for($i = 0; $i < count($tags_in); $i++) {
+		$tag_in .= "'" . $db->escape($tags_in[$i]) . "',";
+	}
+	$tag_in = substr($tag_in, 0, -1);
+
 	$sql = "SELECT
  i.ROWID as id,
  i.location as name,
- i.original_name,
- t.text
+ i.original_name
 FROM
- images i,
- tags t,
- imagetags it
-WHERE
- t.tag = '" . $db->escape(urldecode($_GET['tag'])) . "' and
- it.tag = t.ROWID and
- i.ROWID = it.image
+ images i 
+INNER JOIN imagetags it ON it.image = i.ROWID
+INNER JOIN tags t on t.ROWID = it.tag 
+WHERE t.tag in (" . $tag_in . ")
+GROUP BY (i.ROWID)
+HAVING COUNT(*) = " . count($tags_in) . "
 ORDER BY
  i.time DESC
 LIMIT
@@ -52,11 +58,11 @@ LIMIT
 
 	$res = $db->query($sql);
 	$images = '';
-	$tag_text = '';
+	$tag_text = ucwords(str_ireplace(',', ', ', stripslashes_safe($_GET['tag'])));
 	// Generate HTML output
 	while ($row = $db->fetch($res)) {
 		// Save tag text to display as header
-		$tag_text = $row['text'];
+		//$tag_text = $row['text'];
 		
 		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
 		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
@@ -65,26 +71,74 @@ LIMIT
 	
 	// Generate page count
 	$sql = "SELECT
- count(*) as count
+ count(i.ROWID) as count
 FROM
- images i,
- tags t,
- imagetags it
-WHERE
- t.tag = '" . $db->escape(urldecode($_GET['tag'])) . "' and
- it.tag = t.ROWID and
- i.ROWID = it.image;";
+ images i 
+INNER JOIN imagetags it ON it.image = i.ROWID
+INNER JOIN tags t on t.ROWID = it.tag 
+WHERE t.tag in (" . $tag_in . ")
+GROUP BY (i.ROWID)
+HAVING COUNT(*) = " . count($tags_in);
 	$row = $db->fetch($db->query($sql));
 	
 	$pages = '<p id="pages">';
+	if ($page > 1 && ceil($row['count']/$pagelimit) > 1) {
+		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '">| &lt;</a> &middot; ';
+		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . ($page - 1)  . '">&lt; &lt;</a> &middot; '; 
+	}	
+	
 	for ($i = 1; $i <= ceil($row['count']/$pagelimit); $i++) {
 		if ($i != $page) $pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . $i . '">' . $i . '</a>';
 		else $pages .= $i; 
 		$pages .= ' &middot; ';
 	}
+	
+	if ($page < ceil($row['count']/$pagelimit)) {
+		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . ($page + 1)  . '">&gt; &gt;</a> &middot; ';
+		
+		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . (ceil($row['count']/$pagelimit)) . '">&gt; |</a> &middot; '; 
+	
+	}
+	
 	$pages = substr($pages, 0, -10) . '</p>';
 	
-	outputHTML('<h2>' . htmlentities(one_wordwrap($tag_text, 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities($tag_text, ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
+	//Get tags for images
+	$sql = "SELECT
+ count(t.tag) as count,
+ t.tag,
+ t.text
+FROM
+ tags t
+INNER JOIN imagetags it on it.tag = t.ROWID
+WHERE it.image in (SELECT
+					i.ROWID
+				   FROM
+ 					images i 
+				   INNER JOIN imagetags it ON it.image = i.ROWID
+				   INNER JOIN tags t2 on t2.ROWID = it.tag 
+				   WHERE
+				    t2.tag in (" . $tag_in . ")
+				   GROUP BY 
+				    i.ROWID
+				   HAVING COUNT(*) = " . count($tags_in) . ")
+GROUP BY 
+ t.tag,
+ t.text,
+ORDER BY
+ t.tag;";
+	
+	$res = $db->query($sql);
+	if ($db->numrows($res) > 0) {
+		$tags = '</div><div id="taglist"><ul>';
+		while($row = $db->fetch($res)) {
+			$tags .= '<li><a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . ',' . urlencode($row['tag']) . '">' . htmlentities($row['text'], ENT_QUOTES, 'UTF-8') . ' (' . $row['count'] . ')</a></li>';
+		}
+		$tags .= '</ul>';
+	} else {
+		$tags = '';
+	}
+	
+	outputHTML('<h2>' . htmlentities(one_wordwrap($tag_text, 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages . $tags, array('title' => 'Tag: ' . htmlentities($tag_text, ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 
 } elseif(isset($_GET['user'])) {
 	// Calculate page offset
