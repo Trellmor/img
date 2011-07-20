@@ -60,7 +60,7 @@ $mime = array(
  * 
  * If the folder don't exist, it will be created
  */
-$imgdir = date('Y/m/');
+$imgdir = 'img/' + date('Y/m/d');
 
 /**
  * Preview height and width
@@ -93,6 +93,6 @@ $admins = array(
 /**
  * Page title
  */
-$page_title = 'img.pew.cc';
+$page_title = 'loki image library';
 
 ?>

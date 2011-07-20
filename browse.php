@@ -79,24 +79,25 @@ INNER JOIN tags t on t.ROWID = it.tag
 WHERE t.tag in (" . $tag_in . ")
 GROUP BY (i.ROWID)
 HAVING COUNT(*) = " . count($tags_in);
-	$row = $db->fetch($db->query($sql));
+echo '<!--' . $sql . '-->';
+	$res = $db->query($sql);
 	
 	$pages = '<p id="pages">';
-	if ($page > 1 && ceil($row['count']/$pagelimit) > 1) {
+	if ($page > 1 && ceil($db->numrows($res)/$pagelimit) > 1) {
 		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '">| &lt;</a> &middot; ';
 		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . ($page - 1)  . '">&lt; &lt;</a> &middot; '; 
 	}	
 	
-	for ($i = 1; $i <= ceil($row['count']/$pagelimit); $i++) {
+	for ($i = 1; $i <= ceil($db->numrows($res)/$pagelimit); $i++) {
 		if ($i != $page) $pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . $i . '">' . $i . '</a>';
 		else $pages .= $i; 
 		$pages .= ' &middot; ';
 	}
 	
-	if ($page < ceil($row['count']/$pagelimit)) {
+	if ($page < ceil($db->numrows($res)/$pagelimit)) {
 		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . ($page + 1)  . '">&gt; &gt;</a> &middot; ';
 		
-		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . (ceil($row['count']/$pagelimit)) . '">&gt; |</a> &middot; '; 
+		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . (ceil($db->numrows($res)/$pagelimit)) . '">&gt; |</a> &middot; '; 
 	
 	}
 	

@@ -34,7 +34,7 @@ if (!isset($_GET['i'])) {
 $id = urlnumber_decode($_GET['i']);
 	
 // Select image
-$row = $db->fetch($db->query("SELECT ROWID as id, location, original_name, user FROM images WHERE ROWID = '" . $id . "';"));
+$row = $db->fetch($db->query("SELECT ROWID as id, location, original_name, user, path FROM images WHERE ROWID = '" . $id . "';"));
 if (!$row) {
 	errorMsg('Image not found.');
 }
@@ -44,6 +44,7 @@ $name = $row['location'];
 $preview = dirname($name) . '/preview/' . basename($name);
 $original_name = $row['original_name'];
 $user = $row['user'];
+$path = $row['path'];
 
 // Get tags
 $res = $db->query("SELECT t.tag, t.text FROM tags t, imagetags i WHERE t.ROWID = i.tag and i.image = '" . $id . "';");
@@ -78,6 +79,12 @@ $output = '<h2 id="imagename"><a href="' . $name . '">' . htmlentities(one_wordw
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="' .  url() . $name . '" /></td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="&lt;img src=&quot;' . url() . $name . '&quot; alt=&quot;' . htmlentities($original_name, ENT_QUOTES, 'UTF-8') . ' - ' . $page_title . '&quot; /&gt;" /></td>
 						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="[IMG]' . url() . $name . '[/IMG]" /></td>
+					</tr>
+					<tr>
+						<td>Path</td>
+						<td><input onclick="this.select()" type="text" size="15" readonly="readonly" value="' . $path . '" /></td>
+						<td />
+						<td />
 					</tr>
 				</tbody>
 			</table>';
