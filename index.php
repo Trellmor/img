@@ -54,9 +54,6 @@ $(document).ready(function () {
 	
 	$('#submit').click(function() {		
 		$('body').append('<div id=\"hide\" />');
-		$('body').append('<div id=\"loading\" />');
-		$('#loading').append('<img src=\"images/ico-loading.gif\" alt=\"Loading...\" />');
-		$('#loading').append('<span>Loading</span>');
 				
 		$('body').css({'overflow':'hidden'});
 		
@@ -69,6 +66,8 @@ $(document).ready(function () {
 		 'width':$(document).width(),
 		 'height':$(document).height()
 		});
+		
+		$('#loading').css({'display': 'block'});
 	});
 });
 </script>";
@@ -89,7 +88,11 @@ $content = '<form action="upload.php" method="post" enctype="multipart/form-data
 			</p>
 			<p id="browse"><a href="browse.php">Browse</a> | <a href="search.php">Search</a></p>
 			</div>
-			</form>';
+			</form>
+		</div>
+		<div id="loading">
+			<img src="images/ico-loading.gif" alt="Loading..." />
+			<span>Loading</span>';
 
 outputHTML($content, array('header' => $tagjs));
 

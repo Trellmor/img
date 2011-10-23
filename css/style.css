@@ -41,7 +41,7 @@ body {
 	left: 50%;
 	top: 50%;
 	z-index: 20;
-	display: block;
+	display: none;
 }
 
 #loading img {
