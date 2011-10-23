@@ -34,6 +34,7 @@ class image {
 	public $original_name;
 	public $user;
 	public $time;
+	public $path;
 	public $count = 1;
 	private $pdo;
 	
