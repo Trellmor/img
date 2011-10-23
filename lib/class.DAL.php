@@ -237,7 +237,7 @@ class DAL {
 			$t .= $pdo->quote($tag, PDO::PARAM_STR);
 		}
 
-		$pdo->query('BEGIN');
+		$pdo->beginTransaction();
 		try {
 			$stmt = $pdo->prepare('CREATE TEMP TABLE tempcount AS
 			SELECT
@@ -253,9 +253,9 @@ class DAL {
 			$stmt->execute();
 			$return = $pdo->query('SELECT count(*) from tempcount;')->fetchColumn(0);
 			$pdo->query('DROP TABLE tempcount');
-			$pdo->query('COMMIT;');
+			$pdo->commit();
 		} catch (PDOException $e) {
-			$pdo->query('ROLLBACK;');
+			$pdo->rollBack();
 			throw $e;
 		}
 
