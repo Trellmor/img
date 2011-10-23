@@ -280,7 +280,7 @@ class DAL {
 	
 	public static function Count_Images_By_User(PDO $pdo, $user) {
 		$stmt = $pdo->prepare('SELECT
-		 count(*);
+		 count(*)
 		FROM
 		 images
 		WHERE
