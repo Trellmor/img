@@ -2,7 +2,7 @@
 /**
  * @package img.pew.cc
  * @author Daniel Triendl <daniel@pew.cc>
- * @version $Id: upload.php 100 2011-01-06 23:17:53Z daniel $
+ * @version $Id$
  * @license http://opensource.org/licenses/agpl-v3.html
  */
 
@@ -24,10 +24,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once(__DIR__ . '/class.sqlite.php');
+require_once(__DIR__ . '/class.DAL.php');
 require_once(__DIR__ . '/functions.php');
 
-class UploadException extends Exception {};
+class UploadException extends ImgException {};
 
 class upload {
 	private $time;
@@ -35,7 +35,7 @@ class upload {
 	private $mime;
 	private $name = '';
 	private $dir;
-	private $db = NULL;
+	private $pdo = NULL;
 	private $tags = '';
 	private $preview_width = 150;
 	private $preview_height = 150;
@@ -48,7 +48,7 @@ class upload {
 	}
 
 	public function __destruct() {
-		$this->db = NULL;
+		$this->pdo = NULL;
 	}
 
 	public function image($img = NULL)
@@ -79,10 +79,10 @@ class upload {
 		return $return;
 	}
 
-	public function db($db = NULL)
+	public function pdo(PDO $pdo = NULL)
 	{
-		$return = $this->db;
-		if ($db !== NULL) $this->db = $db;
+		$return = $this->pdo;
+		if ($pdo !== NULL) $this->pdo = $pdo;
 		return $return;
 	}
 
@@ -148,7 +148,7 @@ class upload {
 		}
 
 		// Generate a URL save string to send to the browser
-		$location = trim(str_replace('//', '', $this->dir . '/'));
+		$location = trim(str_replace('//', '/', $this->dir . '/'));
 		
 		// Choose the location for the file
 		$name = trim(str_replace('//', '/', checkExists(realpath(__DIR__ . '/../') . '/' . $this->dir . '/' . $name)));
@@ -201,26 +201,9 @@ class upload {
 
 		// Save image info
 		$ip = (!isCLI()) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
-		$this->db->exec("INSERT INTO images (
-		 location,
-		 path,
-		 ip,
-		 time,
-		 original_name,
-		 user,
-		 md5
-		) VALUES (
-		 '" . $this->db->escape($location) . "',
-		 '" . $this->db->escape($name) . "',
-		 '" . ip2long($ip) . "',
-		 '" . $this->time . "',
-		 '" . $this->db->escape($this->name) . "',
-		 '" . $this->db->escape($user) . "',
-		 '" . $this->db->escape($md5) . "'
-		);" );
-		$res = $this->db->query("SELECT last_insert_rowid() as id;");
-		$row = $this->db->fetch($res);
-		$id = $row['id'];
+		$stmt = DAL::Insert_Image($this->pdo, $location, $name, ip2long($ip), $this->time, $this->name, $user, $md5);
+		$stmt->execute();
+		$id = $this->pdo->lastInsertId();
 
 		if (!empty($this->tags)) {
 			$this->tagImg($id, $this->tags);
@@ -240,33 +223,39 @@ class upload {
 		}
 		
 		//Get old tags
-		$res = $this->db->query("SELECT t.text FROM tags t, imagetags it WHERE t.ROWID = it.tag and it.image = '" . $this->db->escape($id) . "';");
-		while ($row = $this->db->fetch($res)) {
-			$tags[] = $row['text'];
-		}
+		$stmt = DAL::Select_Image_Tags($this->pdo, $id);
+		$stmt->execute();
+		$tags = array_merge($tags, $stmt->fetchAll(PDO::FETCH_COLUMN, 0));
 		
 		$tags = $this->array_unique($tags);
-		$sql = "BEGIN;\n";
-		foreach ($tags as $tag) {
-			if (empty($tag)) continue;
-			// check if the tag already exists
-			$res = $this->db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $this->db->escape(strtolower($tag)) . "' LIMIT 1");
-			if ($this->db->numrows($res) == 0) {
-				$this->db->exec("INSERT INTO tags (tag, text) VALUES ('" . $this->db->escape(strtolower($tag)) . "', '" . $this->db->escape($tag) . "');");
-				$row = $this->db->fetch($this->db->query("SELECT last_insert_rowid() as id;"));
-			} else {
-				$row = $this->db->fetch($res);
+		$this->pdo->beginTransaction();
+		try {
+			foreach($tags as $tag) {
+				if (empty($tag)) continue;
+				// check if the tag already exists
+				$stmt = DAL::Select_Tag_Id($this->pdo, strtolower($tag));
+				$stmt->execute();
+				if (($row = $stmt->fetch()) === false) {					
+					// Tag doesn't exist
+					$stmt = DAL::Insert_Tag($this->pdo, strtolower($tag), $tag);
+					$stmt->execute(); 
+					$tagid = $this->pdo->lastInsertId();
+				} else {
+					$tagid = $row['id'];
+				}
+				
+				// Check if Imagetag exists
+				$stmt = DAL::Select_ImageTag($this->pdo, $id, $tag);
+				$stmt->execute();
+				if ($stmt->fetch() === false) {
+					DAL::Insert_ImageTag($this->pdo, $id, $tagid)->execute();
+				}
 			}
-			$count = $this->db->fetch($this->db->query("SELECT count(*) as count FROM imagetags WHERE image = '" . $id . "' and tag = '" . $row['id'] . "';"));
-			if ($count['count'] == 0) {
-				// Save the tag for this image and update tag counter
-				$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $id . "', '" . $row['id'] . "');\n";
-				$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row['id'] . "';\n";
-			}
+			$this->pdo->commit();
+		} catch (Exception $e) {
+			$this->pdo->rollBack();
+			throw new UploadException('SQL Error: ' . $e->getMessage());
 		}
-		$sql .= "COMMIT;";
-		// Commit all changes
-		$this->db->exec($sql);
 	}
 	
 	protected function array_unique($a)

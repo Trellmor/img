@@ -44,7 +44,6 @@ $time = time();
 $uploadcount = 0;
 
 foreach ($_FILES['image'] as $img) {
-	
 	// Upload failed
 	if ($img['error']) {
 		unlink_safe($img['tmp_name']);
@@ -65,7 +64,7 @@ foreach ($_FILES['image'] as $img) {
 	$upload->mimeTypes($mime);
 	$name = (get_magic_quotes_gpc()) ? stripslashes($img['name']) : $img['name'];
 	$upload->name($name);
-	$upload->db($db);
+	$upload->pdo($pdo);
 	$upload->preview_height($preview_height);
 	$upload->preview_width($preview_width);
 	if (isset($_POST['tags'])) {
@@ -78,7 +77,7 @@ foreach ($_FILES['image'] as $img) {
 			$uploadcount++;
 		}
 	} catch (UploadException $e) {
-		errorMsg($$e->getMessage());
+		errorMsg($e->getMessage());
 	}
 	$uploadcount++;
 }

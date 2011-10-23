@@ -25,90 +25,28 @@
  */
 
 require_once('lib/init.php');
+require_once('lib/class.browse.php');
+require_once('lib/class.search.php');
 
 if (isset($_GET['q'])) {
-	$search = explode(' ', $_GET['q']);
-	
-	// Get matching tags
-	$tags = array();
-	$sql = "SELECT ROWID as id, text FROM tags WHERE ";
-	$clause = '';
-	$count = 0;
-	foreach ($search as $s) {
-		$s = trim($s);
-		if (!empty($s)) {
-			if (!empty($clause)) $clause .= ' or ';
-			$clause .= "tag LIKE '%" . $db->escape($s) . "%'";
-			$count++;
-		}
-	}
-	if (empty($clause)) errorMsg("Invalid search string.");
-	$sql .= $clause;
-	
-	$res = $db->query($sql);
-	
-	$tags = array();
-	while ($row = $db->fetch($res)) {
-		$tags[] = $row['id'];
-	}
-	
-	// Select all images that contain one of these tags
-	$sql = "SELECT image FROM imagetags WHERE tag IN ('" . implode("', '", $tags) . "')";
-	$res = $db->query($sql);
-	$images = array();
-	while ($row = $db->fetch($res)) {
-		if (!isset($images[$row['image']])) $images[$row['image']] = 1;
-		else $images[$row['image']]++;
-	}
-	
-	// Search image names
-	$sql = "SELECT ROWID as id FROM images WHERE ";
-	$clause = '';
-	foreach ($search as $s) {
-		$s = trim($s);
-		if (!empty($s)) {
-			if (!empty($clause)) $clause .= ' or ';
-			$clause .= "original_name LIKE '%" . $db->escape($s) . "%'";
-		}
-	}
-	// No real need to recheck $clause, because we checked it earlier when we searched tags
-	$sql .= $clause;
-	$res = $db->query($sql);
-	while ($row = $db->fetch($res)) {
-		if (!isset($images[$row['id']])) $images[$row['id']] = 1;
-		else $images[$row['id']]++;
-	}
+	$search = new search($pdo);
+	$images = $search->search($_GET['q']);
+
 
 	// If we got no results, exit
 	if (!count($images)) errorMsg("No results found.");
 	
-	// Order by relevance
-	arsort($images);
-	// Images can contain any tags or matches in filename
-	$images = array_keys($images);
-	$imagecount = count($images);
-	
 	// Only get a limited number of result
 	$page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int)$_GET['p'] : 1;
 	$offset =  ($page - 1) * $pagelimit;
+	$imagecount = count($images);
 	$images = array_slice($images, $offset, $pagelimit);
-	
-	// Get the results
-	$sql = "SELECT ROWID as id, location, original_name from images WHERE ROWID IN ('" . implode("', '", $images) . "');";
-	$res = $db->query($sql);
-	if (!$db->numrows($res)) errorMsg("No results found.");
-	// Save the results on an array;
-	$full_images = array();
-	while ($row = $db->fetch($res)) {
-		$full_images[$row['id']] = $row;
-	}
 	
 	// Output images ordered by relevance
 	$output = '';
-	foreach ($images as $i) {
-		$preview = dirname($full_images[$i]['location']) . '/preview/' . basename($full_images[$i]['location']);
-		$output .= '<div class="previewimage"><a href="' . $full_images[$i]['location'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($full_images[$i]['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
-		$output .= '<a href="image.php?i=' . urlnumber_encode($i) . '">Show</a></div>' . "\n";
+	foreach ($images as $image) {
+		$output .= '<div class="previewimage"><a href="' . $image->name . '" class="lightbox" rel="lightbox"><img src="' . $image->getPreview() . '" alt="' . htmlentities($image->original_name, ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
+		$output .= '<a href="image.php?i=' . urlnumber_encode($image->id) . '">Show</a></div>' . "\n";
 	}
 
 	// Generate page counter
@@ -121,7 +59,7 @@ if (isset($_GET['q'])) {
 	$pages = substr($pages, 0, -10) . '</p>';
 	
 	outputHTML('<h2>' . htmlentities(one_wordwrap(stripslashes_safe($_GET['q']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $output . '<br style="clear: both;" />' . $pages, array('title' => 'Search: ' . htmlentities(stripslashes_safe($_GET['q']), ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
-	
+
 } else {
 	// For advanced options
 	$header = '<script type="text/javascript">' . "\n";

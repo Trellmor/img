@@ -60,7 +60,7 @@ $mime = array(
  * 
  * If the folder don't exist, it will be created
  */
-$imgdir = 'img/' + date('Y/m/d');
+$imgdir = date('Y/m/');
 
 /**
  * Preview height and width
@@ -93,6 +93,16 @@ $admins = array(
 /**
  * Page title
  */
-$page_title = 'loki image library';
+$page_title = 'img.pew.cc';
+
+/**
+ * Database connection string
+ */
+$connection_string = 'sqlite2:' . __DIR__ . '/db.sqlite';
+
+/**
+ * Show the servers disk path to the image file
+ */
+$show_local_path = false;
 
 ?>

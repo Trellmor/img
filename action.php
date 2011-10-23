@@ -25,30 +25,31 @@
  */
 
 require_once('lib/init.php');
+require_once('lib/class.browse.php');
+require_once('lib/class.upload.php');
 
 if (!isLogin()) errorMsg('Not logged in.');
 
-$db = new sqlite('lib/db.sqlite');
-
 if (!isset($_GET['image'])) errorMsg('Image not found.');
-$res = $db->query("SELECT ROWID as id, user, location FROM images WHERE ROWID = '" . $db->escape(urlnumber_decode($_GET['image'])) . "';");
-if (!$db->numrows($res)) errorMsg("Image not found.");
-$row = $db->fetch($res);
-if ($row['user'] != $_SESSION['openid_identity'] && !isAdmin()) errorMsg('Permission denied.');
+
+$browse = new browse($pdo);
+try {
+	$image = $browse->getImage(urlnumber_decode($_GET['image']));
+} catch (BrowseException $e) {
+	errorMsg($e->getMessage());
+}
+
+if ($image->user != $_SESSION['openid_identity'] && !isAdmin()) errorMsg('Permission denied.');
 
 switch (@$_GET['type']) {
 	case 'image':
 		switch (@$_GET['action']) {
 			case 'delete':
-				$db->exec("BEGIN;
-DELETE FROM images WHERE ROWID = '" . $row['id'] . "';
-UPDATE tags SET count = count - 1 WHERE ROWID IN (SELECT tag FROM imagetags WHERE image = '" . $row['id'] . "');
-DELETE FROM tags WHERE count < 1;
-DELETE FROM imagetags WHERE image = '" . $row['id'] . "';
-COMMIT;");
-				unlink_safe($row['location']);
-				unlink_safe(dirname($row['location']) . '/preview/' . basename($row['location']));
-				errorMsg('Image deleted.', url());
+				if ($image->delete()) {
+					errorMsg('Image deleted.' . url());
+				} else {
+					errorMsg('Delte failed' . url());
+				}
 				break;
 			default:
 				errorMsg('No action set.');
@@ -58,33 +59,16 @@ COMMIT;");
 	case 'tags':
 		switch (@$_GET['action']) {
 			case 'edit':
-				if (isset($_POST['tags'])) {
-					$sql = "BEGIN;
-UPDATE tags SET count = count - 1 WHERE ROWID IN (SELECT tag FROM imagetags WHERE image = '" . $row['id'] . "');
-DELETE FROM imagetags WHERE image = '" . $row['id'] . "';\n";
+				if (isset($_POST['tags'])) {					
+					$stmt = DAL::Delete_ImageTags($pdo, $image->id);
+					$stmt->execute;
 					
-					$tags = explode(',', $_POST['tags']);
-					for ($i = 0; $i < count($tags); $i++) {
-						$tags[$i] = trim($tags[$i]);
-					}
-					$tags = array_unique($tags);
-					foreach ($tags as $tag) {
-						if (empty($tag)) continue;
-						// check if the tag already exists
-						$row2 = $db->fetch($db->query("SELECT ROWID as id FROM tags WHERE tag = '" . $db->escape(strtolower($tag)) . "'"));
-						if (!$row2) {
-							$db->exec("INSERT INTO tags (tag, text) VALUES ('" . $db->escape(strtolower($tag)) . "', '" . $db->escape($tag) . "');");
-							$row2 = $db->fetch($db->query("SELECT last_insert_rowid() as id;"));
-						}
-						// Save the tag for this image and update tag counter
-						$sql .= "INSERT INTO imagetags (image, tag) VALUES('" . $row['id'] . "', '" . $row2['id'] . "');\n";
-						$sql .= "UPDATE tags SET count = count + 1 WHERE ROWID = '" . $row2['id'] . "';\n";
-					}
-					$sql .= "DELETE FROM tags WHERE count < 1;\n";
-					$sql .= "COMMIT;";
-					$db->exec($sql);
-					header('Location: ' . url() . 'image.php?i=' . urlnumber_encode($row['id']));
-					errorMsg('Tags edited.', 'image.php?i=' . urlnumber_encode($row['id']));
+					$upload = new upload();
+					$upload->pdo($pdo);
+					$upload->tagImg($image->id, $_POST['tags']);
+					
+					header('Location: ' . url() . 'image.php?i=' . urlnumber_encode($image->id));
+					errorMsg('Tags edited.', 'image.php?i=' . urlnumber_encode($image->id));
 				}
 				break;
 			default:

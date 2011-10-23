@@ -25,6 +25,7 @@
  */
 
 require_once('lib/init.php');
+require_once('lib/class.browse.php');
 
 if (isset($_GET['tag'])) {
 
@@ -33,193 +34,100 @@ if (isset($_GET['tag'])) {
 	$offset =  ($page - 1) * $pagelimit;
 	
 	$tags_in = urldecode($_GET['tag']);
-	$tags_in = explode(',', $_GET['tag']);
-	$tag_in = '';
-	for($i = 0; $i < count($tags_in); $i++) {
-		$tag_in .= "'" . $db->escape($tags_in[$i]) . "',";
-	}
-	$tag_in = substr($tag_in, 0, -1);
-
-	$sql = "SELECT
- i.ROWID as id,
- i.location as name,
- i.original_name
-FROM
- images i 
-INNER JOIN imagetags it ON it.image = i.ROWID
-INNER JOIN tags t on t.ROWID = it.tag 
-WHERE t.tag in (" . $tag_in . ")
-GROUP BY (i.ROWID)
-HAVING COUNT(*) = " . count($tags_in) . "
-ORDER BY
- i.time DESC
-LIMIT
- " . $offset . ", " . $pagelimit . ";";
-
-	$res = $db->query($sql);
-	$images = '';
-	$tag_text = ucwords(str_ireplace(',', ', ', stripslashes_safe($_GET['tag'])));
-	// Generate HTML output
-	while ($row = $db->fetch($res)) {
-		// Save tag text to display as header
-		//$tag_text = $row['text'];
-		
-		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
-		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
-		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
-	}
+	$browse = new browse($pdo);
+	$images = $browse->getImagesByTags($tags_in, $offset, $pagelimit);
 	
-	// Generate page count
-	$sql = "SELECT
- count(i.ROWID) as count
-FROM
- images i 
-INNER JOIN imagetags it ON it.image = i.ROWID
-INNER JOIN tags t on t.ROWID = it.tag 
-WHERE t.tag in (" . $tag_in . ")
-GROUP BY (i.ROWID)
-HAVING COUNT(*) = " . count($tags_in);
-echo '<!--' . $sql . '-->';
-	$res = $db->query($sql);
+	$tag_text = ucwords(str_ireplace(',', ', ', stripslashes_safe($_GET['tag'])));
+	$img_text = '';
+	// Generate HTML output
+	foreach ($images as $image) {
+		$img_text .= '<div class="previewimage"><a href="' . $image->name . '" class="lightbox" rel="lightbox"><img src="' . $image->getPreview() . '" alt="' . htmlentities($image->original_name, ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
+		$img_text .= '<a href="image.php?i=' . urlnumber_encode($image->id) . '">Show</a></div>' . "\n";
+	}
 	
 	$pages = '<p id="pages">';
-	if ($page > 1 && ceil($db->numrows($res)/$pagelimit) > 1) {
+	if ($page > 1 && ceil($browse->resultCount()/$pagelimit) > 1) {
 		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '">| &lt;</a> &middot; ';
 		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . ($page - 1)  . '">&lt; &lt;</a> &middot; '; 
 	}	
 	
-	for ($i = 1; $i <= ceil($db->numrows($res)/$pagelimit); $i++) {
+	for ($i = 1; $i <= ceil($browse->resultCount()/$pagelimit); $i++) {
 		if ($i != $page) $pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . $i . '">' . $i . '</a>';
 		else $pages .= $i; 
 		$pages .= ' &middot; ';
 	}
 	
-	if ($page < ceil($db->numrows($res)/$pagelimit)) {
+	if ($page < ceil($browse->resultCount()/$pagelimit)) {
 		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . ($page + 1)  . '">&gt; &gt;</a> &middot; ';
-		
-		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . (ceil($db->numrows($res)/$pagelimit)) . '">&gt; |</a> &middot; '; 
+		$pages .= '<a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . '&amp;p=' . (ceil($browse->resultCount()/$pagelimit)) . '">&gt; |</a> &middot; '; 
 	
 	}
 	
 	$pages = substr($pages, 0, -10) . '</p>';
 	
 	//Get tags for images
-	$sql = "SELECT
- count(t.tag) as count,
- t.tag,
- t.text
-FROM
- tags t
-INNER JOIN imagetags it on it.tag = t.ROWID
-WHERE it.image in (SELECT
-					i.ROWID
-				   FROM
- 					images i 
-				   INNER JOIN imagetags it ON it.image = i.ROWID
-				   INNER JOIN tags t2 on t2.ROWID = it.tag 
-				   WHERE
-				    t2.tag in (" . $tag_in . ")
-				   GROUP BY 
-				    i.ROWID
-				   HAVING COUNT(*) = " . count($tags_in) . ")
-GROUP BY 
- t.tag,
- t.text,
-ORDER BY
- t.tag;";
-	
-	$res = $db->query($sql);
-	if ($db->numrows($res) > 0) {
-		$tags = '</div><div id="taglist"><ul>';
-		while($row = $db->fetch($res)) {
-			$tags .= '<li><a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . ',' . urlencode($row['tag']) . '">' . htmlentities($row['text'], ENT_QUOTES, 'UTF-8') . ' (' . $row['count'] . ')</a></li>';
+	$tags = $browse->getTagListTags($tags_in);
+	if (count($tags) > 0) {
+		$tags_text = '</div><div id="taglist"><ul>';
+		foreach($tags as $tag) {
+			$tags_text .= '<li><a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . ',' . urlencode($tag->tag) . '">' . htmlentities($tag->text, ENT_QUOTES, 'UTF-8') . '(' . $tag->count . ')</a></li>';
 		}
-		$tags .= '</ul>';
+		$tags_text .= '</ul>';
 	} else {
-		$tags = '';
+		$tags_text = '';
 	}
 	
-	outputHTML('<h2>' . htmlentities(one_wordwrap($tag_text, 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages . $tags, array('title' => 'Tag: ' . htmlentities($tag_text, ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
+	outputHTML('<h2>' . htmlentities(one_wordwrap($tag_text, 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $img_text . '<br style="clear: both;" />' . $pages . $tags_text, array('title' => 'Tag: ' . htmlentities($tag_text, ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 
 } elseif(isset($_GET['user'])) {
 	// Calculate page offset
 	$page = (isset($_GET['p']) && is_numeric($_GET['p'])) ? (int)$_GET['p'] : 1;
 	$offset =  ($page - 1) * $pagelimit;
 	
-	$sql = "SELECT
- ROWID as id,
- location as name,
- original_name
-FROM
- images
-WHERE
- user = '" . $db->escape(urldecode($_GET['user'])) . "'
-ORDER BY
- time DESC
-LIMIT
- " . $offset . ", " . $pagelimit . ";";
+	$browse = new browse($pdo);
+	$images = $browse->getImagesByUser($_GET['user'], $offset, $pagelimit);
+	
 
-	$res = $db->query($sql);
-	$images = '';
+	$img_text = '';
 	// Generate HTML output
-	while ($row = $db->fetch($res)) {
-		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
-		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
-		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
+	foreach ($images as $image) {
+		$img_text .= '<div class="previewimage"><a href="' . $image->name . '" class="lightbox" rel="lightbox"><img src="' . $image->getPreview() . '" alt="' . htmlentities($image->original_name, ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
+		$img_text .= '<a href="image.php?i=' . urlnumber_encode($image->id) . '">Show</a></div>' . "\n";
 	}
 	
-	// Generate page count
-	$sql = "SELECT
- count(ROWID) as count
-FROM
- images
-WHERE
- user = '" . $db->escape(urldecode($_GET['user'])) . "';";
-	$row = $db->fetch($db->query($sql));
-	
+	// Generate page count	
 	$pages = '<p id="pages">';
-	for ($i = 1; $i <= ceil($row['count']/$pagelimit); $i++) {
+	for ($i = 1; $i <= ceil($browse->resultCount()/$pagelimit); $i++) {
 		if ($i != $page) $pages .= '<a href="browse.php?user=' . stripslashes_safe($_GET['user']) . '&amp;p=' . $i . '">' . $i . '</a>';
 		else $pages .= $i; 
 		$pages .= ' &middot; ';
 	}
 	$pages = substr($pages, 0, -10) . '</p>';
 	
-	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode(stripslashes_safe($_GET['user'])), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities(stripslashes_safe($_GET['user']), ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
-	
+	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode(stripslashes_safe($_GET['user'])), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $img_text . '<br style="clear: both;" />' . $pages, array('title' => 'Tag: ' . htmlentities(stripslashes_safe($_GET['user']), ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 } elseif(isset($_GET['ip']) && isset($_GET['time'])) {
-	$sql = "SELECT
- ROWID as id,
- location as name,
- original_name
-FROM
- images
-WHERE
- ip = '" . $db->escape($_GET['ip']) . "' and
- time = '" . $db->escape($_GET['time']) . "';";
+	$browse = new browse($pdo);
+	$images = $browse->getImagesByIpTime($_GET['ip'], $_GET['time']);
 
-	$res = $db->query($sql);
-	$images = '';
+	$img_text = '';
 	// Generate HTML output
-	while ($row = $db->fetch($res)) {
-		$preview = dirname($row['name']) . '/preview/' . basename($row['name']);
-		$images .= '<div class="previewimage"><a href="' . $row['name'] . '" class="lightbox" rel="lightbox"><img src="' . $preview . '" alt="' . htmlentities($row['original_name'], ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
-		$images .= '<a href="image.php?i=' . urlnumber_encode($row['id']) . '">Show</a></div>' . "\n";
+	foreach ($images as $image) {
+		$img_text .= '<div class="previewimage"><a href="' . $image->name . '" class="lightbox" rel="lightbox"><img src="' . $image->getPreview() . '" alt="' . htmlentities($image->original_name, ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
+		$img_text .= '<a href="image.php?i=' . urlnumber_encode($image->id) . '">Show</a></div>' . "\n";
 	}
 	
-	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['ip'] . ' - ' . $_GET['time']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $images . '<br style="clear: both;" />', array('title' => 'Upload: ' . htmlentities($_GET['ip'] . ' - ' . $_GET['time'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
+	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['ip'] . ' - ' . $_GET['time']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $img_text . '<br style="clear: both;" />', array('title' => 'Upload: ' . htmlentities($_GET['ip'] . ' - ' . $_GET['time'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 } else {
 
 	// Get tags from db
-	$sql = "SELECT tag, text, count FROM tags ORDER BY count DESC, ROWID DESC";
-	$sql .= (isset($_GET['tags']) && $_GET['tags'] == 'all') ? ';' : ' LIMIT 100;';
-
-	$res = $db->query($sql);
+	$browse = new browse($pdo);
+	$tag_list = $browse->getTagList((isset($_GET['tags']) && $_GET['tags'] == 'all') ? -1 : 100);
+	
 	$tags = array();
 	$texts = array();
-	while ($row = $db->fetch($res)) {
-		$tags[$row['tag']] = $row['count'];
-		$texts[$row['tag']] = htmlentities($row['text'], ENT_QUOTES, 'UTF-8');
+	foreach ($tag_list as $tag) {
+		$tags[$tag->tag] = $tag->count;
+		$texts[$tag->tag] = htmlentities($tag->text, ENT_QUOTES, 'UTF-8');
 	}
 	
 	// $tags is the array

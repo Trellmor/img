@@ -30,13 +30,12 @@ if (isset($_GET['tag'])) {
 	require_once('lib/init.php');
 	
 	// Find all tags that start with the search string
-	$sql = "SELECT text FROM tags WHERE tag LIKE '" . $db->escape($_GET['tag']) . "%' LIMIT 10;";
+	$stmt = DAL::Select_TagSuggestions($pdo, $_GET['tag']);
+	$stmt->execute();
 	
-	$res = $db->query($sql);
 	$tags = array();
-	
-	while ($row = $db->fetch($res)) {
-		$tags[] = htmlentities($row['text'], ENT_QUOTES, 'UTF-8');
+	while(($tag = $stmt->fetchColumn(0)) !== false) {
+		$tags[] = htmlentities($tag, ENT_QUOTES, 'UTF-8');
 	}
 	
 	// Send results

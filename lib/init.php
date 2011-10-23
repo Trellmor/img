@@ -27,11 +27,14 @@ error_reporting(E_ALL);
 
 header('Content-Type: text/html; charset=UTF-8');
 
+class ImgException extends Exception {};
+
 require_once(__DIR__ . '/functions.php');
 require_once(__DIR__ . '/config.php');
-require_once(__DIR__ . '/class.sqlite.php');
+require_once(__DIR__ . '/class.DAL.php');
 
-$db = new sqlite(__DIR__ . '/db.sqlite');
+$pdo = new PDO($connection_string);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 session_start();
 
@@ -40,11 +43,12 @@ if (!isLogin()) {
 	if (isset($_COOKIE['openid_cookie'])) {
 		if (get_magic_quotes_gpc()) $_COOKIE['openid_cookie'] = stripslashes($_COOKIE['openid_cookie']);
 		list($identity, $cookie) = @unserialize($_COOKIE['openid_cookie']);
-		$res = $db->query("SELECT count(*) as count FROM users WHERE user = '" . $db->escape($identity) . "' and cookie = '" . $cookie . "';");
-		$row = $db->fetch($res);
-		if ($row['count']) {
+		$stmt = DAL::Select_User_Cookie($pdo, $identity, $cookie);
+		$stmt->execute();
+		if ($stmt->fetch() !== false) {
 			$_SESSION['openid_identity'] = $identity;
-			$db->exec("UPDATE users SET last_login = '" . time() . "' WHERE user = '" . $db->escape($identity) . "';");
+			$stmt = DAL::Update_User_Lastlogin($pdo, $user);
+			$stmt->execute();
 		}
 	}
 }

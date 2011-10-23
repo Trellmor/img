@@ -63,15 +63,8 @@ if ($oid->IsResponse()) {
 				$_SESSION['openid_identity'] = $oid->GetIdentifier();
 				if (isset($_SESSION['openid_remember']) && $_SESSION['openid_remember']) {
 					$cookie = md5($oid->GetIdentifier().microtime().mt_rand());
-					$db->exec("INSERT OR REPLACE INTO users (
- user,
- cookie,
- last_login
-) VALUES (
- '" . $db->escape($oid->GetIdentifier()) . "',
- '" . $db->escape($cookie) . "',
- '" . time() . "'
-);");
+					$stmt = DAL::Insert_User($pdo, $oid->GetIdentifier(), $cookie);
+					$stmt->execute();
 					setcookie('openid_cookie', serialize(array($oid->GetIdentifier(), $cookie)), time() + 60 * 60 * 24 * 30);
 				}
 				errorMsg('Login successful.<br />You are now logged in as <a href="browse.php?user=' . urlencode($oid->GetIdentifier()) . '"><i>' . htmlentities($oid->GetIdentifier(), ENT_QUOTES, 'UTF-8') . '</i></a>', url());
