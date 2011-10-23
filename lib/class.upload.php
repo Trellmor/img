@@ -268,7 +268,7 @@ class upload {
 	protected function array_iunique($a){
 		$n = array();
 		foreach ($a as $k=>$v) {
-			if (!in_iarray($v, $n)) $n[$k]=$v;
+			if (!$this->in_iarray($v, $n)) $n[$k]=$v;
 		}
 		return $n;
 	}
