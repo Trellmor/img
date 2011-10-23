@@ -47,7 +47,7 @@ if (!isLogin()) {
 		$stmt->execute();
 		if ($stmt->fetch() !== false) {
 			$_SESSION['openid_identity'] = $identity;
-			DAL::Update_User_Lastlogin($pdo, $user)->execute();
+			DAL::Update_User_Lastlogin($pdo, $identity)->execute();
 		}
 		$stmt->closeCursor();
 	}
