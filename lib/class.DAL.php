@@ -205,7 +205,7 @@ class DAL {
 		return $return;
 	}
 
-	public static function Select_Images_By_Tags(PDO $pdo, array $tags) {
+	public static function Select_Images_By_Tags(PDO $pdo, array $tags, $offset = 0, $count = 2147483647) {
 		$t = '';
 		foreach ($tags as $tag) {
 			if (!empty($t)) $t .= ',';
@@ -224,7 +224,9 @@ class DAL {
 		GROUP BY (i.id)
 		HAVING COUNT(*) = :tag_count
 		ORDER BY
-		 i.time DESC', array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+		 i.time DESC
+		LIMIT
+		 ' . (int)$offset . ', ' . (int)$count . ';');
 		$return->bindValue(':tag_count', count($tags), PDO::PARAM_INT);
 
 		return $return;
@@ -262,7 +264,7 @@ class DAL {
 		return (int)$return;
 	}
 	
-	public static function Select_Images_By_User(PDO $pdo, $user) {
+	public static function Select_Images_By_User(PDO $pdo, $user, $offset = 0, $count = 2147483647) {
 		$return = $pdo->prepare('SELECT
 		 id as id,
 		 location as name,
@@ -272,7 +274,9 @@ class DAL {
 		WHERE
 		 user = :user
 		ORDER BY
-		 time DESC;', array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
+		 time DESC
+		LIMIT
+		 ' . (int)$offset . ', ' . (int)$count . ';');
 		$return->bindValue(':user', $user, PDO::PARAM_STR);
 		
 		return $return;

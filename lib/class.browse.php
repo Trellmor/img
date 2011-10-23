@@ -114,45 +114,26 @@ class browse {
 		$this->resultCount = DAL::Count_Images_By_Tags($this->pdo, $tags);
 
 		// get Images
-		$stmt = DAL::Select_Images_By_Tags($this->pdo, $tags);
-		$stmt->setFetchMode(PDO::FETCH_CLASS, 'image', array($this->pdo));
-		$stmt->execute();
-		
-		//generate Return array		
-		$return = array();
 		if ($count == -1) 
 			$count = $this->resultCount;
-		else 
-			$count = $offset + $count;			
-			
-		for ($i = $offset; $i < $count; $i++) {
-			$r = $stmt->fetch(PDO::FETCH_CLASS, PDO::FETCH_ORI_ABS, $i);
-			if ($r === false) break;
-			$return[] = $r;
-		}			
-		return $return;	
+		$stmt = DAL::Select_Images_By_Tags($this->pdo, $tags, $offset, $count);
+		$stmt->setFetchMode(PDO::FETCH_CLASS, 'image', array($this->pdo));
+		$stmt->execute();		
+		return $stmt->fetchAll();
 	}
 	
 	public function getImagesByUser($user, $offset = 0, $count = -1) {
 		$this->resultCount = DAL::Count_Images_By_User($this->pdo, $user);
 		
-		$stmt = DAL::Select_Images_By_User($this->pdo, $user);
-		$stmt->setFetchMode(PDO::FETCH_CLASS, 'image', array($this->pdo));
-		$stmt->execute();
-		
 		//generate Return array		
 		$return = array();
 		if ($count == -1) 
 			$count = $this->resultCount;
-		else 
-			$count = $offset + $count;			
-			
-		for ($i = $offset; $i < $count; $i++) {
-			$r = $stmt->fetch(PDO::FETCH_CLASS, PDO::FETCH_ORI_ABS, $i);
-			if ($r === false) break;
-			$return[] = $r;
-		}			
-		return $return;	
+
+		$stmt = DAL::Select_Images_By_User($this->pdo, $user, $offset, $count);
+		$stmt->setFetchMode(PDO::FETCH_CLASS, 'image', array($this->pdo));
+		$stmt->execute();			
+		return $stmt->fetchAll();
 	}
 	
 	public function getImagesByIpTime($ip, $time) {
