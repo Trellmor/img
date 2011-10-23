@@ -120,7 +120,7 @@ class browse {
 		
 		//generate Return array		
 		$return = array();
-		if ($count = -1) 
+		if ($count == -1) 
 			$count = $this->resultCount;
 		else 
 			$count = $offset + $count;			
@@ -142,7 +142,7 @@ class browse {
 		
 		//generate Return array		
 		$return = array();
-		if ($count = -1) 
+		if ($count == -1) 
 			$count = $this->resultCount;
 		else 
 			$count = $offset + $count;			
