@@ -1,10 +1,10 @@
 BEGIN;
-DROP INDEX IF EXISTS idx_images_time;
-DROP INDEX IF EXISTS idx_images_md5;
-DROP INDEX IF EXISTS idx_imagetags_image;
-DROP INDEX IF EXISTS idx_tags_count;
-DROP INDEX IF EXISTS idx_tags_tag;
-DROP INDEX IF EXISTS idx_tags_text;
+DROP INDEX idx_images_time;
+DROP INDEX idx_images_md5;
+DROP INDEX idx_imagetags_image;
+DROP INDEX idx_tags_count;
+DROP INDEX idx_tags_tag;
+DROP INDEX idx_tags_text;
 
 CREATE TEMPORARY TABLE temp_images AS SELECT ROWID,* FROM images;
 DROP TABLE images;
@@ -33,7 +33,7 @@ PRIMARY KEY (id ASC)
 INSERT INTO imagetags SELECT * FROM temp_imagetags;
 DROP TABLE temp_imagetags;
 
-CREATE TEMPORARY TABLE temp_tags AS SELECT ROWID,* FROM images;
+CREATE TEMPORARY TABLE temp_tags AS SELECT ROWID,* FROM tags;
 DROP TABLE tags;
 CREATE TABLE tags (
 id INTEGER,
@@ -43,18 +43,6 @@ count INTEGER DEFAULT 0,
 PRIMARY KEY (id ASC)
 );
 INSERT INTO tags SELECT * FROM temp_tags;
-DROP TABLE temp_tags;
-
-CREATE TEMPORARY TABLE temp_users AS SELECT ROWID,* FROM users;
-DROP TABLE users;
-CREATE TABLE users (
-id INTEGER,
-user VARCHAR(255) UNIQUE PRIMARY KEY,
-cookie VARCHAR(32),
-last_login INTEGER,
-PRIMARY KEY (id ASC)
-);
-INSERT INTO users SELECT * from temp_users;
 DROP TABLE temp_tags;
 
 create index idx_images_time on images(time);
