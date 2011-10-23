@@ -89,7 +89,7 @@ $output .= '				</tbody>
 $header = '';
 
 if(isLogin()) {
-	if ($user == $_SESSION['openid_identity'] || isAdmin()) {
+	if ($image->user == $_SESSION['openid_identity'] || isAdmin()) {
 		$header  = '<script src="js/jquery.tag.js" type="text/javascript"></script>';
 		$header .= '<script type="text/javascript" src="js/image.js"></script>';
 	}
