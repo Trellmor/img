@@ -39,6 +39,7 @@ if (isset($_GET['tag'])) {
 	
 	$tag_text = ucwords(str_ireplace(',', ', ', stripslashes_safe($_GET['tag'])));
 	$img_text = '';
+	
 	// Generate HTML output
 	foreach ($images as $image) {
 		$img_text .= '<div class="previewimage"><a href="' . $image->name . '" class="lightbox" rel="lightbox"><img src="' . $image->getPreview() . '" alt="' . htmlentities($image->original_name, ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
@@ -70,7 +71,7 @@ if (isset($_GET['tag'])) {
 	if (count($tags) > 0) {
 		$tags_text = '</div><div id="taglist"><ul>';
 		foreach($tags as $tag) {
-			$tags_text .= '<li><a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . ',' . urlencode($tag->tag) . '">' . htmlentities($tag->text, ENT_QUOTES, 'UTF-8') . '(' . $tag->count . ')</a></li>';
+			$tags_text .= '<li><a href="browse.php?tag=' . stripslashes_safe($_GET['tag']) . ',' . urlencode($tag->tag) . '">' . htmlentities($tag->text, ENT_QUOTES, 'UTF-8') . '</a> (' . $tag->count . ')</li>';
 		}
 		$tags_text .= '</ul>';
 	} else {
