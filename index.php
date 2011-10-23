@@ -51,6 +51,25 @@ $(document).ready(function () {
 			'<img src=\"images/add.png\" id=\"addimage\" alt=\"Add another image\" title=\"Add another image\" /><br /><br />');
 		$('#addimage').click(arguments.callee);
 	});
+	
+	$('#submit').click(function() {		
+		$('body').append('<div id=\"hide\" />');
+		$('body').append('<div id=\"loading\" />');
+		$('#loading').append('<img src=\"images/ico-loading.gif\" alt=\"Loading...\" />');
+		$('#loading').append('<span>Loading</span>');
+				
+		$('body').css({'overflow':'hidden'});
+		
+		$('#hide').css({
+		 'background-color': '#000000',
+		 'position': 'absolute',
+		 'top': 0,
+		 'left': 0,
+		 'opacity': 0.8,
+		 'width':$(document).width(),
+		 'height':$(document).height()
+		});
+	});
 });
 </script>";
 

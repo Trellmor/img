@@ -29,6 +29,27 @@ body {
 	border: 2px solid #404040;
 }
 
+#loading {
+	width: 250px;
+	height: 32px;
+	padding: 10px;
+	background: #181818;
+	border: 2px solid #404040;
+	position: absolute;
+	margin-left: -125px;
+	margin-top: -25px;
+	left: 50%;
+	top: 50%;
+	z-index: 20;
+	display: block;
+}
+
+#loading img {
+	vertical-align: middle;
+	padding-right: 20px;
+	margin-left: -20px;	
+}
+
 a {
 	color: #FFD100;
 	cursor: pointer;
