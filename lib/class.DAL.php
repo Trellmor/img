@@ -99,7 +99,9 @@ class DAL {
 		$return = $pdo->prepare('SELECT ROWID as id,
 		 location as name, 
 		 original_name, 
-		 user 
+		 user,
+		 time,
+		 path
 		FROM images WHERE ROWID = :id;');
 		$return->bindValue(':id', $id);
 
