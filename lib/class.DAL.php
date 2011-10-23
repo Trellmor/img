@@ -224,7 +224,7 @@ class DAL {
 		GROUP BY (i.id)
 		HAVING COUNT(*) = :tag_count
 		ORDER BY
-		 i.time DESC');
+		 i.time DESC', array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 		$return->bindValue(':tag_count', count($tags), PDO::PARAM_INT);
 
 		return $return;
@@ -272,7 +272,7 @@ class DAL {
 		WHERE
 		 user = :user
 		ORDER BY
-		 time DESC;');
+		 time DESC;', array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
 		$return->bindValue(':user', $user, PDO::PARAM_STR);
 		
 		return $return;
