@@ -96,13 +96,13 @@ class DAL {
 	}
 
 	public static function Select_Image(PDO $pdo, $id) {
-		$return = $pdo->prepare('SELECT ROWID as id,
+		$return = $pdo->prepare('SELECT id,
 		 location as name, 
 		 original_name, 
 		 user,
 		 time,
 		 path
-		FROM images WHERE ROWID = :id;');
+		FROM images WHERE id = :id;');
 		$return->bindValue(':id', $id);
 
 		return $return;
@@ -111,11 +111,11 @@ class DAL {
 	public static function Delete_Image(PDO $pdo, $id) {
 		$return = new PDOMultiStatement($pdo);
 
-		$stmt = $pdo->prepare('DELETE FROM images WHERE ROWID = :id');
+		$stmt = $pdo->prepare('DELETE FROM images WHERE id = :id');
 		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 		$return->add($stmt);
 
-		$stmt = $pdo->prepare('UPDATE tags Set count = count - 1 WHERE ROWID IN (SELECT tag FROM imagetags WHERE image = :id);');
+		$stmt = $pdo->prepare('UPDATE tags Set count = count - 1 WHERE id IN (SELECT tag FROM imagetags WHERE image = :id);');
 		$stmt->bindValue(':id', $id, PDO::PARAM_INT);
 		$return->add($stmt);
 
@@ -160,14 +160,14 @@ class DAL {
 	}
 
 	public static function Select_Image_Tags(PDO $pdo, $image) {
-		$return = $pdo->prepare('SELECT t.ROWID as id, t.tag as tag, t.text as text FROM tags t, imagetags it WHERE t.ROWID = it.tag and it.image = :image;');
+		$return = $pdo->prepare('SELECT t.id as id, t.tag as tag, t.text as text FROM tags t, imagetags it WHERE t.id = it.tag and it.image = :image;');
 		$return->bindValue(':image', $image, PDO::PARAM_INT);
 
 		return $return;
 	}
 
 	public static function Select_Tag_Id(PDO $pdo, $tag) {
-		$return = $pdo->prepare('SELECT ROWID as id FROM tags WHERE tag = :tag');
+		$return = $pdo->prepare('SELECT id FROM tags WHERE tag = :tag');
 		$return->bindValue(':tag', $tag, PDO::PARAM_STR);
 
 		return $return;
@@ -182,7 +182,7 @@ class DAL {
 	}
 
 	public static function Select_ImageTag(PDO $pdo, $image, $tag) {
-		$return = $pdo->prepare('SELECT ROWID as id FROM imagetags WHERE image = :image and tag = :tag;');
+		$return = $pdo->prepare('SELECT id FROM imagetags WHERE image = :image and tag = :tag;');
 		$return->bindValue(':image', $image, PDO::PARAM_INT);
 		$return->bindValue(':tag', $image, PDO::PARAM_INT);
 
@@ -198,7 +198,7 @@ class DAL {
 		$stmt->bindValue(':tag', $tag, PDO::PARAM_INT);
 		$return->add($stmt);
 
-		$stmt = $pdo->prepare('UPDATE tags SET count = count + 1 WHERE ROWID = :tag;');
+		$stmt = $pdo->prepare('UPDATE tags SET count = count + 1 WHERE id = :tag;');
 		$stmt->bindValue(':tag', $tag, PDO::PARAM_INT);
 		$return->add($stmt);
 
@@ -213,15 +213,15 @@ class DAL {
 		}
 
 		$return = $pdo->prepare('SELECT
-		 i.ROWID as id,
+		 i.id as id,
 		 i.location as name,
 		 i.original_name as original_name
 		FROM
 		 images i 
-		INNER JOIN imagetags it ON it.image = i.ROWID
-		INNER JOIN tags t on t.ROWID = it.tag 
+		INNER JOIN imagetags it ON it.image = i.id
+		INNER JOIN tags t on t.id = it.tag 
 		WHERE t.tag in (' . $t . ')
-		GROUP BY (i.ROWID)
+		GROUP BY (i.id)
 		HAVING COUNT(*) = :tag_count
 		ORDER BY
 		 i.time DESC');
@@ -241,13 +241,13 @@ class DAL {
 		try {
 			$stmt = $pdo->prepare('CREATE TEMP TABLE tempcount AS
 			SELECT
-			 count(i.ROWID) as count
+			 count(i.id) as count
 			FROM
 			 images i 
-			INNER JOIN imagetags it ON it.image = i.ROWID
-			INNER JOIN tags t on t.ROWID = it.tag 
+			INNER JOIN imagetags it ON it.image = i.id
+			INNER JOIN tags t on t.id = it.tag 
 			WHERE t.tag in (' . $t . ')
-			GROUP BY (i.ROWID)
+			GROUP BY (i.id)
 			HAVING COUNT(*) = :tag_count;');
 			$stmt->bindValue(':tag_count', count($tags), PDO::PARAM_INT);
 			$stmt->execute();
@@ -264,7 +264,7 @@ class DAL {
 	
 	public static function Select_Images_By_User(PDO $pdo, $user) {
 		$return = $pdo->prepare('SELECT
-		 ROWID as id,
+		 id as id,
 		 location as name,
 		 original_name
 		FROM
@@ -301,22 +301,22 @@ class DAL {
 
 		$return = $pdo->prepare('SELECT
 		 count(t.tag) as count,
-		 t.ROWID as id,
+		 t.id as id,
 		 t.tag as tag,
 		 t.text as text
 		FROM
 		 tags t
-		INNER JOIN imagetags it on it.tag = t.ROWID
+		INNER JOIN imagetags it on it.tag = t.id
 		WHERE it.image in (SELECT
-							i.ROWID
+							i.id
 						   FROM
 		 					images i 
-						   INNER JOIN imagetags it ON it.image = i.ROWID
-						   INNER JOIN tags t2 on t2.ROWID = it.tag 
+						   INNER JOIN imagetags it ON it.image = i.id
+						   INNER JOIN tags t2 on t2.id = it.tag 
 						   WHERE
 						    t2.tag in (' . $t . ')
 						   GROUP BY 
-						    i.ROWID
+						    i.id
 						   HAVING COUNT(*) = :tag_count)
 		GROUP BY 
 		 t.tag,
@@ -329,14 +329,14 @@ class DAL {
 	}
 
 	public static function Select_Tags(PDO $pdo, $limit = -1) {
-		$sql = 'SELECT ROWID as id, tag, text, count FROM tags ORDER BY count DESC, ROWID DESC';
+		$sql = 'SELECT id, tag, text, count FROM tags ORDER BY count DESC, id DESC';
 		$sql .= ($limit != -1) ? ' LIMIT ' . $limit . ';' : ';';
 		return $pdo->prepare($sql);
 	}
 
 	public static function Select_Images_By_Ip_Time(PDO $pdo, $ip, $time) {
 		$return = $pdo->prepare('SELECT
-		 ROWID as id,
+		 id,
 		 location as name,
 		 original_name as original_name
 		FROM
@@ -361,7 +361,7 @@ class DAL {
 		$return = new PDOMultiStatement($pdo);
 		
 		$sql = 'SELECT 
-		 i.ROWID as id,
+		 i.id as id,
 		 i.location as name,
 		 i.original_name as original_name,
 		 i.user as user,
@@ -370,8 +370,8 @@ class DAL {
 		 images i,
 		 imagetags it
 		WHERE
-		 i.ROWID = it.image and
-		 it.tag in (SELECT ROWID FROM tags WHERE ';
+		 i.id = it.image and
+		 it.tag in (SELECT id FROM tags WHERE ';
 		
 		$condition = '';
 		foreach ($tags as $tag) {
@@ -379,11 +379,11 @@ class DAL {
 			$condition .= 'tag LIKE ' . $pdo->quote($tag, PDO::PARAM_STR);
 		}
 		
-		$sql .= $condition . ' GROUP BY ROWID);';
+		$sql .= $condition . ' GROUP BY id);';
 		$return->add($pdo->prepare($sql));
 		
 		$sql = 'SELECT
-		 ROWID as id,
+		 id,
 		 location as name,
 		 original_name,
 		 user,
@@ -406,7 +406,7 @@ class DAL {
 	public static function Delete_ImageTags(PDO $pdo, $image) {
 		$return = new PDOMultiStatement($pdo);
 
-		$stmt = $pdo->prepare('UPDATE tags SET count = count - 1 WHERE ROWID IN (SELECT tag FROM imagetags WHERE image = :image);');
+		$stmt = $pdo->prepare('UPDATE tags SET count = count - 1 WHERE id IN (SELECT tag FROM imagetags WHERE image = :image);');
 		$stmt->bindValue(':image', $image, PDO::PARAM_INT);
 		$return->add($stmt);
 
