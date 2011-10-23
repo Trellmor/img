@@ -227,7 +227,7 @@ class upload {
 		$stmt->execute();
 		$tags = array_merge($tags, $stmt->fetchAll(PDO::FETCH_COLUMN, 1));
 		
-		$tags = $this->array_unique($tags);
+		$tags = $this->array_iunique($tags);
 		$this->pdo->beginTransaction();
 		try {
 			foreach($tags as $tag) {
