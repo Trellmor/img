@@ -320,7 +320,7 @@ class DAL {
 						   HAVING COUNT(*) = :tag_count)
 		GROUP BY 
 		 t.tag,
-		 t.text,
+		 t.text
 		ORDER BY
 		 t.tag;');
 		$return->bindValue(':tag_count', count($tags), PDO::PARAM_INT);
