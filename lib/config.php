@@ -75,7 +75,7 @@ $preview_height = 150;
  * 
  * Controls how many images per page are returned for tag browsing/search
  */
-$pagelimit = 30;
+$pagelimit = 3;
 
 /**
  * Tag cloud font size in pixels

@@ -245,7 +245,7 @@ class upload {
 				}
 				
 				// Check if Imagetag exists
-				$stmt = DAL::Select_ImageTag($this->pdo, $id, $tag);
+				$stmt = DAL::Select_ImageTag($this->pdo, $id, $tagid);
 				$stmt->execute();
 				if ($stmt->fetch() === false) {
 					DAL::Insert_ImageTag($this->pdo, $id, $tagid)->execute();
