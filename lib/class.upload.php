@@ -225,7 +225,7 @@ class upload {
 		//Get old tags
 		$stmt = DAL::Select_Image_Tags($this->pdo, $id);
 		$stmt->execute();
-		$tags = array_merge($tags, $stmt->fetchAll(PDO::FETCH_COLUMN, 0));
+		$tags = array_merge($tags, $stmt->fetchAll(PDO::FETCH_COLUMN, 1));
 		
 		$tags = $this->array_unique($tags);
 		$this->pdo->beginTransaction();
@@ -258,17 +258,19 @@ class upload {
 		}
 	}
 	
-	protected function array_unique($a)
-	{
-		$va = array();
-		foreach($a as $k => $v) {
-			if (array_key_exists(strtolower($v), $va)) {
-				unset($a[$k]);
-			} else {
-				$va[strtolower($v)] = $v;
-			}
+	protected function in_iarray($str, $a){
+		foreach ($a as $v) {
+			if (strcasecmp($str, $v)==0) return true;
 		}
-		return $a;
+		return false;
+	}
+	
+	protected function array_iunique($a){
+		$n = array();
+		foreach ($a as $k=>$v) {
+			if (!in_iarray($v, $n)) $n[$k]=$v;
+		}
+		return $n;
 	}
 }
 
