@@ -184,7 +184,7 @@ class DAL {
 	public static function Select_ImageTag(PDO $pdo, $image, $tag) {
 		$return = $pdo->prepare('SELECT id FROM imagetags WHERE image = :image and tag = :tag;');
 		$return->bindValue(':image', $image, PDO::PARAM_INT);
-		$return->bindValue(':tag', $image, PDO::PARAM_INT);
+		$return->bindValue(':tag', $tag, PDO::PARAM_INT);
 
 		return $return;
 	}

@@ -33,7 +33,9 @@ require_once(__DIR__ . '/functions.php');
 require_once(__DIR__ . '/config.php');
 require_once(__DIR__ . '/class.DAL.php');
 
-$pdo = new PDO($connection_string);
+$pdo = new PDO($connection_string, $dbuser, $dbpass, array(PDO::ATTR_PERSISTENT => true));
+unset($dbuser);
+unset($dbpass);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 session_start();

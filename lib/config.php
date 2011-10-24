@@ -75,7 +75,7 @@ $preview_height = 150;
  * 
  * Controls how many images per page are returned for tag browsing/search
  */
-$pagelimit = 3;
+$pagelimit = 30;
 
 /**
  * Tag cloud font size in pixels
@@ -96,9 +96,11 @@ $admins = array(
 $page_title = 'img.pew.cc';
 
 /**
- * Database connection string
+ * Database connection settings
  */
 $connection_string = 'sqlite2:' . __DIR__ . '/db.sqlite';
+$dbuser = '';
+$dbpass = '';
 
 /**
  * Show the servers disk path to the image file
