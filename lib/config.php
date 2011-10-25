@@ -107,4 +107,14 @@ $dbpass = '';
  */
 $show_local_path = false;
 
+/**
+ * Debug mode, display all errors if true, supress all if false
+ */
+$debug = true;
+
+/**
+ * Log errors to lob/application.log
+ */
+$logerrors = true;
+
 ?>

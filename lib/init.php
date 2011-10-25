@@ -31,9 +31,20 @@ class ImgException extends Exception {};
 
 require_once(__DIR__ . '/functions.php');
 require_once(__DIR__ . '/config.php');
+
+if ($debug)	error_reporting(0);
+else error_reporting(E_ALL);
+set_error_handler(create_function('$a, $b, $c, $d', 'throw new ErrorException($b, 0, $a, $c, $d);'), E_ALL);
+set_exception_handler('exception_handler');
+
 require_once(__DIR__ . '/class.DAL.php');
 
-$pdo = new PDO($connection_string, $dbuser, $dbpass, array(PDO::ATTR_PERSISTENT => true));
+try {
+	$pdo = new PDO($connection_string, $dbuser, $dbpass, array(PDO::ATTR_PERSISTENT => true));
+} catch (PDOException $e) {
+	exception_handler($e); //Log exception
+	errorMsg('Database connection error.');
+}
 unset($dbuser);
 unset($dbpass);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

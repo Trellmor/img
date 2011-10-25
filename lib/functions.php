@@ -396,4 +396,49 @@ function isCLI()
 	}
 }
 
+/**
+ * Global exeption handler
+ * 
+ * @param $exception
+ */
+function exception_handler($exception) {
+	log_error($exception->getFile(), $exception->getLine(), $exception->getMessage() . "\n" . $exception->getTraceAsString());
+}
+
+/**
+ * Log error to lib/application.log
+ * 
+ * @param $file		Filename
+ * @param $line		Line number
+ * @param $error	Error message
+ */
+function log_error($file, $line, $error) {
+	global $logerrors;
+	if (!$logerrors) return;
+	
+	$logfile = __DIR__ . '/application.log';
+	$error = date('c') . ' - ' . $file . ':' . $line . ' - ' . $error . "\n\n";
+	
+	$handle = null;
+	if (file_exists($logfile)) {
+		if (is_writable($logfile)) $handle = fopen($logfile, 'a');
+	} else {
+		if (is_writeable(dirname($logfile))) $handle = fopen($logfile, 'a');
+	}
+	
+	if ($handle != null && is_resource($handle)) {
+		// get exclusive lock
+		flock($handle, LOCK_EX);
+		
+		// write data
+		fwrite($handle, $error);
+		
+		// release lock
+		flock($handle, LOCK_UN);
+		
+		// close handle
+		fclose($handle);
+	}
+}
+
 ?>
