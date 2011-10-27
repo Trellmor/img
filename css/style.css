@@ -27,6 +27,9 @@ body {
 	padding-top: 30px;
 	background: #181818;
 	border: 2px solid #404040;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 #loading {
@@ -171,6 +174,9 @@ p.tagMatches span {
 	border: 2px solid #404040;
 	border-top: none;
 	border-right: none;
+	border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-bottom-left-radius: 10px;
 }
 
 #login_icon img {
@@ -189,6 +195,9 @@ p.tagMatches span {
 	border-right: none;
 	font-size: small;
 	text-align: left;	
+	border-bottom-left-radius: 10px;
+	-moz-border-radius-bottomleft: 10px;
+	-webkit-border-bottom-left-radius: 10px;
 }
 
 #login_form {
@@ -224,6 +233,10 @@ p.tagMatches span {
 	border: 2px solid #404040;
 	padding: 0px;
 	margin: 0px;
+	margin-bottom: 20px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
 }
 
 #taglist ul {
