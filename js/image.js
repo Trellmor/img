@@ -14,7 +14,7 @@ $.extend({
 	}
 });
 
-$(document).ready(function() {
+$(document).ready(function() {	
 	$('#imagename').hover(function() {
 		$('#imagename').append('<a id="imagedelete" href="action.php?action=delete&amp;type=image&amp;image=' + $.getUrlVar('i') + '">' +
 		'<img src="images/delete.png" alt="Delete" /></a>');
@@ -24,7 +24,7 @@ $(document).ready(function() {
 	
 	$('#tags').hover(function() {
 		$('#tags').append(' <img id="tagsedit" src="images/edit.png" alt="Edit" />').click(function(e) {
-			$("#tags").unbind();
+			$('#tags').unbind();
 			var tags = '';
 			$('#tags a').each(function() { tags += $(this).text() + ', '; });
 			$('#tags').empty().css('text-align', 'left').append('<form action="action.php?action=edit&amp;type=tags&amp;image=' + $.getUrlVar('i') + '" method="post">' + 

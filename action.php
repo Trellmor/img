@@ -61,7 +61,7 @@ switch (@$_GET['type']) {
 			case 'edit':
 				if (isset($_POST['tags'])) {					
 					$stmt = DAL::Delete_ImageTags($pdo, $image->id);
-					$stmt->execute;
+					$stmt->execute();
 					
 					$upload = new upload();
 					$upload->pdo($pdo);

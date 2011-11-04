@@ -53,6 +53,7 @@ $content = '<form action="upload.php" method="post" enctype="multipart/form-data
 			</div>
 			</form>
 		</div>
+		<div id="dropbox"><h1>Drop images here</h1></div>
 		<div id="loading">
 			<img src="images/ico-loading.gif" alt="Loading..." />
 			<span>Loading</span>';
