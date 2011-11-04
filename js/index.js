@@ -22,7 +22,7 @@ $(document).ready(function () {
 	});
 	*/
 	
-	function upload(event) {
+	function upload() {
 		if (filelist.length == 0) return;
 
 		var boundary = '------multipartformboundary' + (new Date).getTime();
