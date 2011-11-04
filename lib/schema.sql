@@ -25,8 +25,7 @@ PRIMARY KEY (id ASC)
 CREATE TABLE users (
 user VARCHAR(255) UNIQUE PRIMARY KEY,
 cookie VARCHAR(32),
-last_login INTEGER,
-PRIMARY KEY (id ASC)
+last_login INTEGER
 );
 create index idx_images_time on images(time);
 create index idx_images_md5 on images(md5);
