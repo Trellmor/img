@@ -72,7 +72,18 @@ function byteConvert($bytes)
  */
 function errorMsg($msg, $return = 'javascript:history.back();')
 {
-	outputHTML($msg . '<br /><br /><a href="' . $return . '">Return</a>');
+	switch (@$_GET['response']) {
+		case 'json':
+			if ($return == 'javascript:history.back();') $return = url();
+			echo json_encode(array(
+				'error' => $msg,
+				'url' => $return
+			));
+			break;
+		default:
+			outputHTML($msg . '<br /><br /><a href="' . $return . '">Return</a>');
+			break;
+	}
 	die();
 }
 

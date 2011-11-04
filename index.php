@@ -32,25 +32,35 @@ foreach ($mime as $f) {
 }
 $filetypes = substr($filetypes, 0, -2);
 
-$tagjs  = '<script src="js/jquery.tag.js" type="text/javascript"></script>' . "\n";
-$tagjs .= '<script src="js/index.js" type="text/javascript"></script>' . "\n";
+$tagjs = '<script src="js/index.js" type="text/javascript"></script>' . "\n";
 
 $content = '<form action="upload.php" method="post" enctype="multipart/form-data">
-			<div>
-			<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
-			<div id="inputimagecontainer">
-			<span class="text">File:</span><input type="file" size="39" name="image[]" />&nbsp;
-			<img src="images/add.png" id="addimage" alt="Add another image" title="Add another image" /><br /><br />
-			</div>
-			<span class="text">Tags:</span><input id="inputtags" type="text" size="39" name="tags" />
-			<span class="text">&nbsp;</span><input id="submit" type="submit" name="submit" value="Upload" />
-			<p id="info">
-				Maximum upload size: ' . byteConvert($maxsize) . '<br />
-				Allowed file types: ' . $filetypes . '<br />
-				Use , (comma) to seperate tags 
-			</p>
-			<p id="browse"><a href="browse.php">Browse</a> | <a href="search.php">Search</a></p>
-			</div>
+				<div>
+					<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
+					<div id="inputimagecontainer">
+						<span class="text">Files:</span>
+						<div id="imageslist"></div>
+						<div id="inputimagesbutton">
+							<input type="file" size="39" id="inputimages" name="image[]" multiple="" />
+							<input type="submit" id="addimages" value="Add images" />
+						</div>
+					</div>
+					<br />
+					<br />
+					<span class="text">Tags:</span>
+					<input id="inputtags" type="text" name="tags" />
+					<script src="js/jquery.tag.js" type="text/javascript"></script><noscript><p></p></noscript>
+					<span class="text">&nbsp;</span>
+					<input id="submit" type="submit" name="submit" value="Upload" />
+					
+				<p id="info">
+					Maximum upload size: ' . byteConvert($maxsize) . '<br />
+					Allowed file types: ' . $filetypes . '<br />
+					Use , (comma) to seperate tags 
+				</p>
+				
+				<p id="browse"><a href="browse.php">Browse</a> | <a href="search.php">Search</a></p>
+				</div>
 			</form>
 		</div>
 		<div id="dropbox"><h1>Drop images here</h1></div>

@@ -32,6 +32,46 @@ body {
 	-webkit-border-radius: 10px;
 }
 
+#inputimagecontainer {
+	position: relative;
+}
+
+#inputimagesbutton {
+	display: block;
+	width: 105px;
+	height: 25px;
+	overflow: hidden;
+	position: absolute;
+	left: 350px;
+}
+
+#inputimages {
+	cursor: pointer;
+	height: 1000px;
+	opacity: 0;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 2;
+}
+
+#addimages {
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	right: 0;
+}
+
+#inputtags {
+	width: 400px;
+}
+	
+#imageslist {
+	display: none;
+	margin-left: 50px;
+	font-size: small;
+}
+
 #loading {
 	width: 250px;
 	height: 32px;

@@ -98,7 +98,7 @@ $page_title = 'img.pew.cc';
 /**
  * Database connection settings
  */
-$connection_string = 'sqlite:' . __DIR__ . '/db.sqlite3';
+$connection_string = 'sqlite2:' . __DIR__ . '/db.sqlite';
 $dbuser = '';
 $dbpass = '';
 
