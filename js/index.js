@@ -128,17 +128,69 @@ $(document).ready(function () {
 		upload();
 	});
 	
+	function setPopup(e) {		
+		$('#imagePopup').empty().append('<img alt="' + $(this).text() + '" />');
+		
+		var reader = new FileReader();
+		reader.onloadend = function() {
+			$('#imagePopup img').attr('src', reader.result);
+			$('#imagePopup').show();
+		}
+		reader.readAsDataURL(filelist[$(this).data('image')]);
+		
+		updatePopupPosition(e)
+	}
+	
+	function updatePopupPosition(e) {
+		
+		var windowSize = getWindowSize();
+		var popupSize = getPopupSize();
+		
+		if (windowSize.width + windowSize.scrollLeft < e.pageX + popupSize.width + 15) {
+			$('#imagePopup').css("left", e.pageX - popupSize.width - 15);
+		} else {
+			$('#imagePopup').css("left", e.pageX + 15);
+		}
+		if (windowSize.height + windowSize.scrollTop < e.pageY + popupSize.height + 15) {
+			$('#imagePopup').css("top", e.pageY - popupSize.height - 15);
+		} else {
+			$('#imagePopup').css("top", e.pageY + 15);
+		}
+	}
+	
+	function hidePopup(event)
+	{
+		$('#imagePopup').empty().hide();
+	}
+
+	function getWindowSize() {
+		return {
+			scrollLeft: $(window).scrollLeft(),
+			scrollTop: $(window).scrollTop(),
+			width: $(window).width(),
+			height: $(window).height()
+		};
+	}
+		
+	function getPopupSize() {
+		return {
+			width: $('#imagePopup').width(),
+			height: $('#imagePopup').height()
+		};
+	}
+	
 	function refreshFileList() {
 		$('#imageslist').empty();
 		if (filelist.length > 0) {
 			$('#imageslist').show();
 			for (var i = 0; i < filelist.length; i++) {
-				$('#imageslist').append(filelist[i].name + '<br />');
+				$('#imageslist').append('<div class="imageslistentry">' + filelist[i].name + '</div>');
+				$('.imageslistentry:last').data('image', i).hover(setPopup, hidePopup).mousemove(updatePopupPosition);
 			}
 		} else {
 			$('#imageslist').hide();
 		}
-	}
+	}	
 	
 	$('#inputimages').change(function() {
 		var files = document.getElementById('inputimages').files;

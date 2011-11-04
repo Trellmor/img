@@ -42,7 +42,7 @@ $content = '<form action="upload.php" method="post" enctype="multipart/form-data
 						<div id="imageslist"></div>
 						<div id="inputimagesbutton">
 							<input type="file" size="39" id="inputimages" name="image[]" multiple="" />
-							<input type="submit" id="addimages" value="Add images" />
+							<input type="submit" id="addimages" value="Add images" onclick="return false;" />
 						</div>
 					</div>
 					<br />
@@ -64,6 +64,7 @@ $content = '<form action="upload.php" method="post" enctype="multipart/form-data
 			</form>
 		</div>
 		<div id="dropbox"><h1>Drop images here</h1></div>
+		<div id="imagePopup"></div>
 		<div id="loading">
 			<img src="images/ico-loading.gif" alt="Loading..." />
 			<span>Loading</span>';

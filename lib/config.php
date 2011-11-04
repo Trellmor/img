@@ -25,6 +25,10 @@
  */
 
 /**
+ * Copy this file to localconfig.php and modify it there, this will be overwritten on update
+ */
+
+/**
  * Maximum allowed size for an image file
  * 
  * We use the upload_max_filesize from php.ini, if you want a lower
@@ -87,7 +91,6 @@ $min_size = 12;
  * Admin OpenID accounts
  */
 $admins = array(
-	'http://trellmor.myopenid.com/',
 );
 
 /**
@@ -110,7 +113,7 @@ $show_local_path = false;
 /**
  * Debug mode, display all errors if true, supress all if false
  */
-$debug = true;
+$debug = false;
 
 /**
  * Log errors to lob/application.log

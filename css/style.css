@@ -72,6 +72,10 @@ body {
 	font-size: small;
 }
 
+#imageslistentry {
+	margin-bottom: 2px;
+}
+
 #loading {
 	width: 250px;
 	height: 32px;
@@ -308,4 +312,23 @@ p.tagMatches span {
 	margin-left: -200px;
 	margin-top: -25px;
 	padding: 0;
+}
+
+#imagePopup {
+	position: absolute;
+	display: none;
+	background: #181818;
+	border: 2px solid #404040;
+	padding: 5px;
+	padding-bottom: 2px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	z-index: 5;
+}
+
+#imagePopup img {
+	max-width: 150px;
+	max-height: 150px;
+	margin: 0;
 }

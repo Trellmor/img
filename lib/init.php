@@ -30,7 +30,12 @@ header('Content-Type: text/html; charset=UTF-8');
 class ImgException extends Exception {};
 
 require_once(__DIR__ . '/functions.php');
-require_once(__DIR__ . '/config.php');
+// Prefer localconfig.php over the default (svn) config.php
+if (file_exists(__DIR__ . '/localconfig.php')) {
+	require_once(__DIR__ . '/localconfig.php');
+} else {
+	require_once(__DIR__ . '/config.php');
+}
 
 if ($debug)	error_reporting(0);
 else error_reporting(E_ALL);
