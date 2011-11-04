@@ -119,8 +119,9 @@ $(document).ready(function () {
 		 'top': 0,
 		 'left': 0,
 		 'opacity': 0.8,
-		 'width':$(document).width(),
-		 'height':$(document).height()
+		 'width': $(document).width(),
+		 'height': $(document).height(),
+		 'z-index': 100	 
 		});
 		
 		$('#loading').css({'display': 'block'});
