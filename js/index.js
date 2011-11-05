@@ -25,7 +25,7 @@ $(function () {
 		//$('#filelist').html("<div>Current runtime: " + params.runtime + "</div>");
 	});
 		
-	$('#inputsubmit').click(function(e) {
+	$('#submit').click(function(e) {
 		uploader.settings['multipart_params'] = {
 			'tags': $('#inputtags').attr('value'),
 			'submit': 'Upload'
