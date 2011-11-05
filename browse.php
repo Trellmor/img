@@ -118,9 +118,13 @@ if (isset($_GET['tag'])) {
 	}
 	
 	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['ip'] . ' - ' . $_GET['time']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $img_text . '<br style="clear: both;" />', array('title' => 'Upload: ' . htmlentities($_GET['ip'] . ' - ' . $_GET['time'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
-} elseif(isset($_GET['uploadid'])) {
+} elseif(isset($_GET['upload'])) {
 	$browse = new browse($pdo);
-	$images = $browse->getImagesByUploadID($_GET['uploadid']);
+	$images = $browse->getImagesByUploadID($_GET['upload']);
+	
+	if (count($images) == 0) {
+		errorMsg('No images found, upload failed.');
+	} 
 	
 	$img_text = '';
 	// Generate HTML output
@@ -129,7 +133,7 @@ if (isset($_GET['tag'])) {
 		$img_text .= '<a href="image.php?i=' . urlnumber_encode($image->id) . '">Show</a></div>' . "\n";
 	}
 	
-	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['uploadid']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $img_text . '<br style="clear: both;" />', array('title' => 'Upload: ' . htmlentities($_GET['uploadid'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
+	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['upload']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $img_text . '<br style="clear: both;" />', array('title' => 'Upload: ' . htmlentities($_GET['upload'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 } else {
 
 	// Get tags from db
