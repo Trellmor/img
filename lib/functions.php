@@ -76,10 +76,7 @@ function errorMsg($msg, $return = 'javascript:history.back();')
 	switch ($_GET['response']) {
 		case 'json':
 			if ($return == 'javascript:history.back();') $return = url();
-			echo json_encode(array(
-				'error' => $msg,
-				'url' => $return
-			));
+			die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "'. $msg .'"}, "id" : "id"}');
 			break;
 		default:
 			outputHTML($msg . '<br /><br /><a href="' . $return . '">Return</a>');

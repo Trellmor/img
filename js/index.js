@@ -12,7 +12,7 @@ $(function () {
 		browse_button : 'addimages',
 		container : 'imageslist',
 		max_file_size : '10mb',
-		url : 'upload.php',
+		url : 'upload.php?response=json',
 		flash_swf_url : 'js/plupload.flash.swf',
 		silverlight_xap_url : 'js/plupload.silverlight.xap',
 		multipart : true,
@@ -64,6 +64,10 @@ $(function () {
 		
 	uploader.bind('FileUploaded', function(up, file) {
 		$('#' + file.id + " b").html("100%");
+	});
+	
+	uploader.bind('UploadComplete', function(up, files) {
+		
 	});
 
 	$('#inputimages').hide();

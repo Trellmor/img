@@ -87,10 +87,7 @@ if ($uploadcount > 0) {
 	if (!isset($_GET['response'])) $_GET['response'] = '';
 	switch ($_GET['response']) {
 		case 'json':
-			echo json_encode(array(
-				'error' => '',
-				'url' => url() . 'browse.php?ip=' . ip2long($_SERVER['REMOTE_ADDR']) . '&time=' . $time,
-			));
+			die('{"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
 			break;
 		default:
 			header('Location: ' . url() . 'browse.php?ip=' . ip2long($_SERVER['REMOTE_ADDR']) . '&time=' . $time);
