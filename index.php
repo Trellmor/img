@@ -32,7 +32,9 @@ foreach ($mime as $f) {
 }
 $filetypes = substr($filetypes, 0, -2);
 
-$tagjs = '<script src="js/index.js" charset="UTF-8" type="text/javascript"></script>' . "\n";
+$tagjs  = '<script src="js/index.js" charset="UTF-8" type="text/javascript"></script>' . "\n";
+$tagjs .= '<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>' . "\n";
+$tagjs .= '<script type="text/javascript" src="js/plupload.full.js"></script>' . "\n";
 
 $content = '<form action="upload.php" method="post" enctype="multipart/form-data">
 				<div>
@@ -64,7 +66,7 @@ $content = '<form action="upload.php" method="post" enctype="multipart/form-data
 			</form>
 		</div>
 		<div id="dropbox"><h1>Drop images here</h1></div>
-		<div id="imagePopup"></div>
+		<div id="imagePopup"><div></div></div>
 		<div id="loading">
 			<img src="images/ico-loading.gif" alt="Loading..." />
 			<span>Loading</span>';
