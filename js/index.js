@@ -67,7 +67,7 @@ $(function () {
 	});
 	
 	uploader.bind('UploadComplete', function(up, files) {
-		
+		alert('test');
 	});
 
 	$('#inputimages').hide();
