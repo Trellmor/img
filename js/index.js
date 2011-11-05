@@ -38,6 +38,7 @@ $(document).ready(function () {
 		builder += boundary;
 		builder += crlf;
 		
+		//Submit button
 		builder += 'Content-Disposition: form-data; name="submit"';
 		builder += crlf;
 		builder += 'Content-Type: text/plain';
@@ -45,7 +46,20 @@ $(document).ready(function () {
 		builder += crlf;
 		builder += 'Submit';
 		builder += crlf;
+		/* Write boundary. */
+		builder += dashdash;
+		builder += boundary;
+		builder += crlf;
 		
+		
+		//tags
+		builder += 'Content-Disposition: form-data; name="tags"';
+		builder += crlf;
+		builder += 'content-type: text/plain;charset=UTF-8';
+		builder += crlf;
+		builder += crlf;
+		builder += $('#inputtags').attr('value');	
+		builder += crlf;
 		/* Write boundary. */
 		builder += dashdash;
 		builder += boundary;

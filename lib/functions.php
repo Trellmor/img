@@ -72,7 +72,8 @@ function byteConvert($bytes)
  */
 function errorMsg($msg, $return = 'javascript:history.back();')
 {
-	switch (@$_GET['response']) {
+	if (!isset($_GET['response'])) $_GET['response'] = '';
+	switch ($_GET['response']) {
 		case 'json':
 			if ($return == 'javascript:history.back();') $return = url();
 			echo json_encode(array(

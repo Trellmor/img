@@ -41,7 +41,10 @@ try {
 
 if ($image->user != $_SESSION['openid_identity'] && !isAdmin()) errorMsg('Permission denied.');
 
-switch (@$_GET['type']) {
+if (!isset($_GET['type'])) $_GET['type'] = '';
+if (!isset($_GET['action'])) $_GET['action'] = '';
+
+switch ($_GET['type']) {
 	case 'image':
 		switch (@$_GET['action']) {
 			case 'delete':
@@ -57,7 +60,7 @@ switch (@$_GET['type']) {
 		}
 		break;
 	case 'tags':
-		switch (@$_GET['action']) {
+		switch ($_GET['action']) {
 			case 'edit':
 				if (isset($_POST['tags'])) {					
 					$stmt = DAL::Delete_ImageTags($pdo, $image->id);

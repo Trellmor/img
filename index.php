@@ -32,7 +32,7 @@ foreach ($mime as $f) {
 }
 $filetypes = substr($filetypes, 0, -2);
 
-$tagjs = '<script src="js/index.js" type="text/javascript"></script>' . "\n";
+$tagjs = '<script src="js/index.js" charset="UTF-8" type="text/javascript"></script>' . "\n";
 
 $content = '<form action="upload.php" method="post" enctype="multipart/form-data">
 				<div>

@@ -84,7 +84,8 @@ foreach ($_FILES['image'] as $img) {
 
 if ($uploadcount > 0) {
 	// Redirect to image
-	switch (@$_GET['response']) {
+	if (!isset($_GET['response'])) $_GET['response'] = '';
+	switch ($_GET['response']) {
 		case 'json':
 			echo json_encode(array(
 				'error' => '',
