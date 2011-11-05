@@ -39,7 +39,14 @@ if (!isset($_POST['submit'])) {
  * ["size"]		- Size in bytes
  */
 //header('Content-type: text/plain');
-fixFilesArray($_FILES['image']);
+if (isset($_FILES['image'])) {
+	fixFilesArray($_FILES['image']);
+} elseif (isset($_FILES['file'])) {
+	$_FILES['image'] = array($_FILES['file']);
+} else {
+	errorMsg('No file uploaded.');
+}
+
 $time = time();
 $uploadcount = 0;
 

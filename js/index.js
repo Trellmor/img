@@ -12,7 +12,7 @@ $(function () {
 		browse_button : 'addimages',
 		container : 'imageslist',
 		max_file_size : '10mb',
-		url : 'upload.php?response=json',
+		url : 'upload.php',
 		flash_swf_url : 'js/plupload.flash.swf',
 		silverlight_xap_url : 'js/plupload.silverlight.xap',
 		multipart : true,
