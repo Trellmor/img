@@ -68,7 +68,7 @@ $(function () {
 	});
 	
 	uploader.bind('UploadComplete', function(up, files) {
-		window.location = 'image.php?upload=' + $('#inputuploadid').attr('value');
+		window.location = 'browse.php?upload=' + $('#inputuploadid').attr('value');
 	});
 
 	$('#inputimages').hide();
