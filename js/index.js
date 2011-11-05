@@ -7,6 +7,9 @@ $(function () {
 		tagContainer: 'p',
 	});
 	
+	var uploading = false;
+	var nativeFiles = {};
+	
 	var uploader = new plupload.Uploader({
 		runtimes : 'gears,html5,flash,silverlight,browserplus',
 		browse_button : 'addimages',
@@ -16,6 +19,7 @@ $(function () {
 		flash_swf_url : 'js/plupload.flash.swf',
 		silverlight_xap_url : 'js/plupload.silverlight.xap',
 		multipart : true,
+		drop_element: 'dropbox',
 		filters : [
 		           {title : "Image files", extensions : "jpg,gif,png,bmp"}
 		           ]
@@ -26,6 +30,25 @@ $(function () {
 	});
 		
 	$('#submit').click(function(e) {
+		uploading = true;
+		
+		$('body').append('<div id="hide" />');
+		
+		$('body').css({'overflow':'hidden'});
+		
+		$('#hide').css({
+		 'background-color': '#000000',
+		 'position': 'absolute',
+		 'top': 0,
+		 'left': 0,
+		 'opacity': 0.8,
+		 'width': $(document).width(),
+		 'height': $(document).height(),
+		 'z-index': 100	 
+		});
+		
+		$('#loading').css({'display': 'block'});
+		
 		uploader.settings['multipart_params'] = {
 			'tags': $('#inputtags').attr('value'),
 			'uploadid': $('#inputuploadid').attr('value'),
@@ -50,6 +73,19 @@ $(function () {
 		up.refresh(); // Reposition Flash/Silverlight
 	});
 	
+	uploader.bind('PostInit', function(up, params) {
+		// Initialize Preview.
+		if(uploader.runtime == "html5") {
+			var inputFile = document.getElementById(uploader.id + '_html5');
+			var oldFunction = inputFile.onchange;
+
+			inputFile.onchange = function() {
+				nativeFiles = this.files;
+				oldFunction.call(inputFile);
+			}
+		}
+	});
+	
 	uploader.bind('UploadProgress', function(up, file) {
 		$('#' + file.id + " b").html(file.percent + "%");
 	});
@@ -72,4 +108,26 @@ $(function () {
 	});
 
 	$('#inputimages').hide();
+
+	window.addEventListener('dragenter', function (e) {
+		if (uploading) return;
+		
+		e.stopPropagation();
+		e.preventDefault();
+		
+		$('#dropbox').fadeIn();
+			
+	}, false);
+	
+	var dropbox = document.getElementById('dropbox');			
+	var dropboxHideTimer;
+	
+	dropbox.addEventListener('dragover', function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		
+		clearTimeout(dropboxHideTimer);
+		dropboxHideTimer = setTimeout("$('#dropbox').fadeOut();", 250);
+	}, false);
+			
 });

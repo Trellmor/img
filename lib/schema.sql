@@ -7,6 +7,7 @@ ip INTEGER,
 time INTEGER,
 user VARCHAR(255),
 md5 VARCHAR(32),
+uploadid VARCHAR(36),
 PRIMARY KEY (id ASC)
 );
 CREATE TABLE imagetags (
