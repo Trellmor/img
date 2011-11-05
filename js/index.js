@@ -13,7 +13,7 @@ $(function () {
 	var uploader = new plupload.Uploader({
 		runtimes : 'gears,html5,flash,silverlight,browserplus',
 		browse_button : 'addimages',
-		container : 'imageslist',
+		container : 'inputimagecontainer',
 		max_file_size : '10mb',
 		url : 'upload.php',
 		flash_swf_url : 'js/plupload.flash.swf',
