@@ -49,9 +49,9 @@ switch ($_GET['type']) {
 		switch (@$_GET['action']) {
 			case 'delete':
 				if ($image->delete()) {
-					errorMsg('Image deleted.' . url());
+					errorMsg('Image deleted.', url());
 				} else {
-					errorMsg('Delte failed' . url());
+					errorMsg('Delete failed');
 				}
 				break;
 			default:

@@ -31,14 +31,13 @@ if (!isset($_GET['i'])) {
 	errorMsg('Image not found.');
 }
 
-// Open database connection
 $id = urlnumber_decode($_GET['i']);
 
 $browse = new browse($pdo);
 try {
 	$image = $browse->getImage($id);
 } catch (BrowseException $e) {
-	errorMsg($e->getMessage);
+	errorMsg($e->getMessage());
 }
 
 // Get tags
