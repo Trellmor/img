@@ -37,6 +37,12 @@ $(function () {
 	uploader.init();
 		
 	uploader.bind('FilesAdded', function(up, files) {
+		if (files.length > 0) {
+			$('#imagelist').show();
+		} else {
+			$('#imagelist').hide();
+		}
+		
 		$.each(files, function(i, file) {
 			$('#imageslist').append(
 				'<div id="' + file.id + '">' +
