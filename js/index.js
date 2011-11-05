@@ -37,11 +37,7 @@ $(function () {
 	uploader.init();
 		
 	uploader.bind('FilesAdded', function(up, files) {
-		if (files.length > 0) {
-			$('#imagelist').show();
-		} else {
-			$('#imagelist').hide();
-		}
+		$('#imageslist').show();
 		
 		$.each(files, function(i, file) {
 			$('#imageslist').append(
