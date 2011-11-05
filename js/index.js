@@ -47,44 +47,61 @@ $(document).ready(function () {
 	    return out;
 	}
 	
+	var tryFFSend = false;
+	
+	if (typeof BlobBuilder === 'undefined') {
+		tryFFSend = true;
+		
+		function BlobBuilder () {
+			var string = '';
+			this.append = function(s) {
+				string += s;
+			}
+			
+			this.getBlob = function() {
+				return string;
+			}				
+		}
+	}
+	
 	function upload() {
 		if (filelist.length == 0) return;
 
 		boundary = '------multipartformboundary' + (new Date).getTime();
 
 		/* Build RFC2388 string. */
-		var builder = '';
+		var builder = new BlobBuilder();
 
-		builder += dashdash;
-		builder += boundary;
-		builder += crlf;
+		builder.append(dashdash);
+		builder.append(boundary);
+		builder.append(crlf);
 		
 		//Submit button
-		builder += 'Content-Disposition: form-data; name="submit"';
-		builder += crlf;
-		builder += 'Content-Type: text/plain';
-		builder += crlf;
-		builder += crlf;
-		builder += 'Submit';
-		builder += crlf;
+		builder.append('Content-Disposition: form-data; name="submit"');
+		builder.append(crlf);
+		builder.append('Content-Type: text/plain');
+		builder.append(crlf);
+		builder.append(crlf);
+		builder.append('Submit');
+		builder.append(crlf);
 		/* Write boundary. */
-		builder += dashdash;
-		builder += boundary;
-		builder += crlf;
+		builder.append(dashdash);
+		builder.append(boundary);
+		builder.append(crlf);
 		
 		
 		//tags
-		builder += 'Content-Disposition: form-data; name="tags"';
-		builder += crlf;
-		builder += 'content-type: text/plain;charset=UTF-8';
-		builder += crlf;
-		builder += crlf;
-		builder += utf16to8($('#inputtags').attr('value'));	
-		builder += crlf;
+		builder.append('Content-Disposition: form-data; name="tags"');
+		builder.append(crlf);
+		builder.append('content-type: text/plain;charset=UTF-8');
+		builder.append(crlf);
+		builder.append(crlf);
+		builder.append(utf16to8($('#inputtags').attr('value')));	
+		builder.append(crlf);
 		/* Write boundary. */
-		builder += dashdash;
-		builder += boundary;
-		builder += crlf;
+		builder.append(dashdash);
+		builder.append(boundary);
+		builder.append(crlf);
 		
 		addFileToBuilder(0, builder);
 	}
@@ -94,26 +111,26 @@ $(document).ready(function () {
 		currFile++;
 
 		/* Generate headers. */			
-		builder += 'Content-Disposition: form-data; name="image[]"';
+		builder.append('Content-Disposition: form-data; name="image[]"');
 		if (file.name) {
-		  builder += '; filename="' + file.name + '"';
+		  builder.append('; filename="' + file.name + '"');
 		}
-		builder += crlf;
+		builder.append(crlf);
 
-		builder += 'Content-Type: application/octet-stream';
-		builder += crlf;
-		builder += crlf; 
+		builder.append('Content-Type: application/octet-stream');
+		builder.append(crlf);
+		builder.append(crlf); 
 
 		/* Append binary data. */
 		var reader = new FileReader();
 		reader.onloadend = function() {
-			builder += reader.result;
-			builder += crlf;
+			builder.append(reader.result);
+			builder.append(crlf);
 
 			/* Write boundary. */
-			builder += dashdash;
-			builder += boundary;
-			builder += crlf;
+			builder.append(dashdash);
+			builder.append(boundary);
+			builder.append(crlf);
 			
 			if (currFile < filelist.length) {
 				addFileToBuilder(currFile, builder);
@@ -126,20 +143,20 @@ $(document).ready(function () {
 		
 	function sendRequest(builder) {
 		/* Mark end of the request. */
-		builder += dashdash;
-		builder += boundary;
-		builder += dashdash;
-		builder += crlf;
+		builder.append(dashdash);
+		builder.append(boundary);
+		builder.append(dashdash);
+		builder.append(crlf);
 		
-		if (builder.length > $('input[name="MAX_FILE_SIZE"]').attr('value')) {
-			alert('Images file size too big.');
-			return;
-		}
 		
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", "upload.php?response=json", true);
 		xhr.setRequestHeader('content-type', 'multipart/form-data; boundary=' + boundary);
-		xhr.sendAsBinary(builder);		
+		if (tryFFSend) {
+			xhr.sendAsBinary(builder.getBlob())
+		} else {
+			xhr.send(builder);
+		}
 		
 		xhr.onload = function(event) { 
 			if (xhr.responseText) {
@@ -162,6 +179,8 @@ $(document).ready(function () {
 	}
 	
 	$('#submit').click(function(e) {
+		if (typeof FileReader === 'undefined') return;
+		
 		e.preventDefault();
 		
 		$('body').append('<div id="hide" />');
@@ -249,6 +268,7 @@ $(document).ready(function () {
 	}	
 	
 	$('#inputimages').change(function() {
+		if (typeof FileReader === 'undefined') return;
 		var files = document.getElementById('inputimages').files;
 		for (var i = 0; i < files.length; i++) {
 			var file = files[i];
@@ -259,39 +279,43 @@ $(document).ready(function () {
 		refreshFileList();
 	});
 	
-	window.addEventListener('dragenter', function (e) {
-		if (uploading) return;
-		
-		e.stopPropagation();
-		e.preventDefault();
-		
-		$('#dropbox').fadeIn();
-			
-	}, false);
+	//If filereader doesn't exist, Drag'n'Drop support isn't working
+	if (typeof FileReader !== 'undefined') {
 	
-	var dropbox = document.getElementById('dropbox');			
-	var dropboxHideTimer;
-	
-	dropbox.addEventListener('dragover', function(e) {
-		e.stopPropagation();
-		e.preventDefault();
-		
-		clearTimeout(dropboxHideTimer);
-		dropboxHideTimer = setTimeout("$('#dropbox').fadeOut();", 250);
-	}, false);
-		
-	dropbox.addEventListener('drop', function (e) {
-		e.stopPropagation();
-		e.preventDefault();
+		window.addEventListener('dragenter', function (e) {
+			if (uploading) return;
 			
-		var files = e.dataTransfer.files;
+			e.stopPropagation();
+			e.preventDefault();
+			
+			$('#dropbox').fadeIn();
+				
+		}, false);
 		
-		for (var i = 0; i < files.length; i++) {
-			var file = files[i];
-			if (file.type.match(/image.*/)) {
-				filelist[filelist.length] = file;
+		var dropbox = document.getElementById('dropbox');			
+		var dropboxHideTimer;
+		
+		dropbox.addEventListener('dragover', function(e) {
+			e.stopPropagation();
+			e.preventDefault();
+			
+			clearTimeout(dropboxHideTimer);
+			dropboxHideTimer = setTimeout("$('#dropbox').fadeOut();", 250);
+		}, false);
+			
+		dropbox.addEventListener('drop', function (e) {
+			e.stopPropagation();
+			e.preventDefault();
+				
+			var files = e.dataTransfer.files;
+			
+			for (var i = 0; i < files.length; i++) {
+				var file = files[i];
+				if (file.type.match(/image.*/)) {
+					filelist[filelist.length] = file;
+				}
 			}
-		}
-		refreshFileList();
-	}, false);	
+			refreshFileList();
+		}, false);	
+	}
 });
