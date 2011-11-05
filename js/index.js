@@ -20,6 +20,7 @@ $(function () {
 		silverlight_xap_url : 'js/plupload.silverlight.xap',
 		multipart : true,
 		drop_element: 'dropbox',
+		max_file_size: $('input[name="MAX_FILE_SIZE"]').attr('value') + 'b',
 		filters : [
 		           {title : "Image files", extensions : "jpg,gif,png,bmp"}
 		           ]
@@ -71,19 +72,6 @@ $(function () {
 		});
 	 
 		up.refresh(); // Reposition Flash/Silverlight
-	});
-	
-	uploader.bind('PostInit', function(up, params) {
-		// Initialize Preview.
-		if(uploader.runtime == "html5") {
-			var inputFile = document.getElementById(uploader.id + '_html5');
-			var oldFunction = inputFile.onchange;
-
-			inputFile.onchange = function() {
-				nativeFiles = this.files;
-				oldFunction.call(inputFile);
-			}
-		}
 	});
 	
 	uploader.bind('UploadProgress', function(up, file) {
