@@ -129,7 +129,7 @@ class DAL {
 		return $return;
 	}
 
-	public static function Insert_Image(PDO $pdo, $location, $path, $ip, $time, $original_name, $user, $md5) {
+	public static function Insert_Image(PDO $pdo, $location, $path, $ip, $time, $original_name, $user, $md5, $uploadid) {
 		$return = $pdo->prepare('INSERT INTO images (
 		 location,
 		 path,
@@ -137,7 +137,8 @@ class DAL {
 		 time,
 		 original_name,
 		 user,
-		 md5
+		 md5,
+		 uploadid
 		) VALUES (
 		 :location,
 		 :path,
@@ -145,7 +146,8 @@ class DAL {
 		 :time,
 		 :original_name,
 		 :user,
-		 :md5
+		 :md5,
+		 :uploadid
 		);');
 
 		$return->bindValue(':location', $location, PDO::PARAM_STR);
@@ -155,6 +157,7 @@ class DAL {
 		$return->bindValue(':original_name', $original_name, PDO::PARAM_STR);
 		$return->bindValue(':user', $user, PDO::PARAM_STR);
 		$return->bindValue(':md5', $md5, PDO::PARAM_STR);
+		$return->bindValue(':uploadid', $uploadid, PDO::PARAM_STR);
 
 		return $return;
 	}
@@ -337,7 +340,21 @@ class DAL {
 		$sql .= ($limit != -1) ? ' LIMIT ' . $limit . ';' : ';';
 		return $pdo->prepare($sql);
 	}
+	
+	public static function Select_Images_By_UploadID(PDO $pdo, $uploadID) {
+		$return = $pdo->prepare('SELECT
+		 id,
+		 location as name,
+		 original_name as original_name
+		FROM
+		 images
+		WHERE
+		 uploadid = :uploadid;');
+		$return->bindValue(':uploadid', $uploadID, PDO::PARAM_STR);
 
+		return $return;
+	}
+	
 	public static function Select_Images_By_Ip_Time(PDO $pdo, $ip, $time) {
 		$return = $pdo->prepare('SELECT
 		 id,

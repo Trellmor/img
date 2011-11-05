@@ -39,6 +39,7 @@ $tagjs .= '<script type="text/javascript" src="js/plupload.full.js"></script>' .
 $content = '<form action="upload.php" method="post" enctype="multipart/form-data">
 				<div>
 					<input type="hidden" name="MAX_FILE_SIZE" value="' . $maxsize.'" />
+					<input type="hidden" name="uploadid" id="inputuploadid" value="' . uuid() . '" />
 					<div id="inputimagecontainer">
 						<span class="text">Files:</span>
 						<div id="imageslist"></div>

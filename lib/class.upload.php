@@ -201,7 +201,8 @@ class upload {
 
 		// Save image info
 		$ip = (!isCLI()) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
-		$stmt = DAL::Insert_Image($this->pdo, $location, $name, ip2long($ip), $this->time, $this->name, $user, $md5);
+		$uploadid = (!empty($_POST['uploadid'])) ? $_POST['uploadid'] : '';
+		$stmt = DAL::Insert_Image($this->pdo, $location, $name, ip2long($ip), $this->time, $this->name, $user, $md5, $uploadid);
 		$stmt->execute();
 		$id = $this->pdo->lastInsertId();
 

@@ -84,16 +84,8 @@ foreach ($_FILES['image'] as $img) {
 
 if ($uploadcount > 0) {
 	// Redirect to image
-	if (!isset($_GET['response'])) $_GET['response'] = '';
-	switch ($_GET['response']) {
-		case 'json':
-			die('{"jsonrpc" : "2.0", "result" : null, "id" : "id"}');
-			break;
-		default:
-			header('Location: ' . url() . 'browse.php?ip=' . ip2long($_SERVER['REMOTE_ADDR']) . '&time=' . $time);
-			errorMsg('Image saved.<br /><br /><a href="' . url() . 'browse.php?ip=' . ip2long($_SERVER['REMOTE_ADDR']) . '&time=' . $time . '">Continue</a>');
-			break;
-	}
+	header('Location: ' . url() . 'browse.php?ip=' . ip2long($_SERVER['REMOTE_ADDR']) . '&time=' . $time);
+	errorMsg('Image saved.<br /><br /><a href="' . url() . 'browse.php?ip=' . ip2long($_SERVER['REMOTE_ADDR']) . '&time=' . $time . '">Continue</a>');
 } else {
 	errorMsg('No images uploaded.');
 }

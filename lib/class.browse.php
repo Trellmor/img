@@ -143,6 +143,13 @@ class browse {
 		return $stmt->fetchAll();
 	}
 	
+	public function getImagesByUploadID($uploadID) {
+		$stmt = DAL::Select_Images_By_UploadID($this->pdo, $uploadID);
+		$stmt->setFetchMode(PDO::FETCH_CLASS, 'image', array($this->pdo));
+		$stmt->execute();
+		return $stmt->fetchAll();
+	}
+	
 	public function getTagListTags($tags) {
 		// prepare tag list
 		$tags = $this->prepareTags($tags);

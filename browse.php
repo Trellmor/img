@@ -118,6 +118,18 @@ if (isset($_GET['tag'])) {
 	}
 	
 	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['ip'] . ' - ' . $_GET['time']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $img_text . '<br style="clear: both;" />', array('title' => 'Upload: ' . htmlentities($_GET['ip'] . ' - ' . $_GET['time'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
+} elseif(isset($_GET['uploadid'])) {
+	$browse = new browse($pdo);
+	$images = $browse->getImagesByUploadID($_GET['uploadid']);
+	
+	$img_text = '';
+	// Generate HTML output
+	foreach ($images as $image) {
+		$img_text .= '<div class="previewimage"><a href="' . $image->name . '" class="lightbox" rel="lightbox"><img src="' . $image->getPreview() . '" alt="' . htmlentities($image->original_name, ENT_QUOTES, 'UTF-8') . '" /></a><br />' . "\n";
+		$img_text .= '<a href="image.php?i=' . urlnumber_encode($image->id) . '">Show</a></div>' . "\n";
+	}
+	
+	outputHTML('<h2>' . htmlentities(one_wordwrap(urldecode($_GET['uploadid']), 5, '&shy;'), ENT_QUOTES, 'UTF-8', false) . '</h2>' . $img_text . '<br style="clear: both;" />', array('title' => 'Upload: ' . htmlentities($_GET['uploadid'], ENT_QUOTES, 'UTF-8'), 'lightbox' => true));
 } else {
 
 	// Get tags from db

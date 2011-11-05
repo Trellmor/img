@@ -72,16 +72,7 @@ function byteConvert($bytes)
  */
 function errorMsg($msg, $return = 'javascript:history.back();')
 {
-	if (!isset($_GET['response'])) $_GET['response'] = '';
-	switch ($_GET['response']) {
-		case 'json':
-			if ($return == 'javascript:history.back();') $return = url();
-			die('{"jsonrpc" : "2.0", "error" : {"code": 101, "message": "'. $msg .'"}, "id" : "id"}');
-			break;
-		default:
-			outputHTML($msg . '<br /><br /><a href="' . $return . '">Return</a>');
-			break;
-	}
+	outputHTML($msg . '<br /><br /><a href="' . $return . '">Return</a>');
 	die();
 }
 
@@ -448,6 +439,19 @@ function log_error($file, $line, $error) {
 		// close handle
 		fclose($handle);
 	}
+}
+
+/**
+ * Generates a RFC 4122 pseudo-random UUID
+ * @return 	UUID string
+ */
+function uuid()
+{
+	return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+		mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+		mt_rand(0, 0x0fff) | 0x4000,
+		mt_rand(0, 0x3fff) | 0x8000,
+		mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff));
 }
 
 ?>

@@ -28,6 +28,7 @@ $(function () {
 	$('#submit').click(function(e) {
 		uploader.settings['multipart_params'] = {
 			'tags': $('#inputtags').attr('value'),
+			'uploadid': $('#inputuploadid').attr('value'),
 			'submit': 'Upload'
 		};
 		uploader.start();
@@ -67,7 +68,7 @@ $(function () {
 	});
 	
 	uploader.bind('UploadComplete', function(up, files) {
-		alert('test');
+		window.location = 'image.php?upload=' + $('#inputuploadid').attr('value'));
 	});
 
 	$('#inputimages').hide();
