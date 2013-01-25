@@ -23,7 +23,8 @@ $(document).ready(function() {
 	});
 	
 	$('#tags').hover(function() {
-		$('#tags').append(' <img id="tagsedit" src="images/edit.png" alt="Edit" />').click(function(e) {
+		$('#tags').append(' <img id="tagsedit" src="images/edit.png" alt="Edit" />');
+		$('#tagsedit').css('cursor', 'pointer').click(function(e) {
 			$('#tags').unbind();
 			var tags = '';
 			$('#tags a').each(function() { tags += $(this).text() + ', '; });
