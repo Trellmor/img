@@ -63,7 +63,10 @@ $mime = array(
  * You can set this to any path you want
  * 
  * If the folder don't exist, it will be created
+ * 
+ * You must change your date zone 
  */
+date_default_timezone_set('Europe/Istanbul');
 $imgdir = date('Y/m/');
 
 /**
