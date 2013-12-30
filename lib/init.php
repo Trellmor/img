@@ -37,7 +37,7 @@ if (file_exists(__DIR__ . '/localconfig.php')) {
 	require_once(__DIR__ . '/config.php');
 }
 
-if ($debug)	error_reporting(0);
+if (!$debug)	error_reporting(0);
 else error_reporting(E_ALL);
 set_error_handler(create_function('$a, $b, $c, $d', 'throw new ErrorException($b, 0, $a, $c, $d);'), E_ALL);
 set_exception_handler('exception_handler');
