@@ -25,7 +25,7 @@
  */
 
 require_once('lib/init.php');
-require_once('lib/openid/class.openid.php');
+require_once('lib/class.openid.php');
 
 if (isset($_GET['action']) && $_GET['action'] == 'logout') {
 	$_SESSION['openid_identity'] = '';
