@@ -15,19 +15,19 @@ $view->load('header');
         <table class="table">
           <tbody>
             <tr>
-              <th scope="row"><?php HTML::out(_('Size')); ?></td>
+              <th scope="row"><?php HTML::out(_('Size')); ?></th>
               <td><?php HTML::out($image->getFormattedSize()); ?></td>
             </tr>
             <tr>
-              <th scope="row"><?php HTML::out(_('Width')); ?></td>
+              <th scope="row"><?php HTML::out(_('Width')); ?></th>
               <td><?php HTML::out($image->getWidth() . ' px'); ?></td>
             </tr>
             <tr>
-              <th scope="row"><?php HTML::out(_('Height')); ?></td>
+              <th scope="row"><?php HTML::out(_('Height')); ?></th>
               <td><?php HTML::out($image->getHeight() . ' px'); ?></td>
             </tr>
             <tr>
-              <th scope="row"><?php HTML::out(_('Date')); ?></td>
+              <th scope="row"><?php HTML::out(_('Date')); ?></th>
               <td><?php HTML::out(date('r', $image->getTime())); ?></td>
             </tr>
           </tbody>

@@ -53,7 +53,7 @@ $js[] = Uri::getBase() . 'view/js/signin.js';
           </ul>
           <div class="navbar-form navbar-right">
 <?php if ($user == null): ?>
-      <div id="g-signin-button" class="g-signin2" data-onsuccess="onGooglePlatformSignIn" data-loginpage="<?php HTML::out(Uri::to('login/')); ?>" />      
+      <div id="g-signin-button" class="g-signin2" data-onsuccess="onGooglePlatformSignIn" data-loginpage="<?php HTML::out(Uri::to('login/')); ?>"></div>
 <?php else: ?>
       <button id="g-signout-button" class="btn btn-default" data-logoutpage="<?php HTML::out(Uri::to('logout/')); ?>"><?php HTML::out(_('Sign out')); ?></button>
 <?php endif; ?>          

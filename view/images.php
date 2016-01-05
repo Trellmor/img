@@ -14,7 +14,7 @@ $js[] = Uri::getBase() . 'view/js/jquery.blueimp-gallery.min.js';
         <div class="thumbnail">
           <a href="<?php HTML::out(Uri::getBase() . $image->getLocation()); ?>" data-gallery="#blueimp-gallery" 
               title="<?php HTML::out($image->getOriginalName()); ?>">
-            <img src="<?php HTML::out(Uri::getBase() . $image->getPreview()); ?>" />
+            <img src="<?php HTML::out(Uri::getBase() . $image->getPreview()); ?>" alt="<?php HTML::out($image->getOriginalName()); ?>" />
           </a>
           <div class="caption text-center small">
             <a href="<?php HTML::out(Uri::to('image/' . $image->getEncodedId())); ?>"><?php HTML::out(_('Details')); ?></a>
