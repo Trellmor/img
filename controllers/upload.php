@@ -22,7 +22,7 @@ class Upload extends JSONController {
 			
 			$input = new Input(Input::POST);
 			$input->filter('tags', FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW | FILTER_REQUIRE_ARRAY);
-
+			$input->filter('name', FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW);
 			
 			$input->filter('uploadid', FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW);
 			$uploadid = null;
@@ -45,6 +45,10 @@ class Upload extends JSONController {
 				throw new ValidationException(_('Image too big.'));
 			}
 			
+			if ($input->name !== false) {
+				$file['name'] = $input->name;
+			}
+
 			$image = new Image();
 			$image->upload($file, $input->tags, $uploadid);
 			

@@ -162,7 +162,7 @@ class Image {
 		$this->md5 = md5_file($file['tmp_name']);
 		
 		// Assign the correct extension for this image
-		$name = str_replace('\'', '', $file['name']);
+		$name = str_replace('\'', '', basename($file['name']));
 		$name = explode('.', $name);
 		
 		if(count($name) < 2) {

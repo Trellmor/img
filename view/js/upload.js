@@ -35,10 +35,13 @@ var uploader = new plupload.Uploader({
 			$('#imageslist').show();
 			
 			$.each(files, function(i, file) {
-				$('#imageslist').append(
-					'<div id="' + file.id + '">' +
-					file.name + ' (' + plupload.formatSize(file.size) + ')' +
-					'</div>');
+				$('#imageslist').append('<div id="' + file.id + '">');
+				var div = $('#' + file.id);
+
+				div.append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
+				div.append('<a tabindex="0" role="button" class="img-popover" data-toggle="popover" data-file="' + file.id + '">' + 
+						'<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>' + 
+						'</a>');
 			});
 		 
 			up.refresh(); // Reposition Flash/Silverlight
@@ -106,3 +109,151 @@ dropbox.addEventListener('dragover', function(e) {
 	clearTimeout(dropboxHideTimer);
 	dropboxHideTimer = setTimeout("$('#dropbox').fadeOut();", 250);
 }, false);
+
+function imgpopover_getTitle() {
+	var file = uploader.getFile($(this).data('file'));
+	return file.name;
+}
+
+function imgpopover_getContent() {
+	var file = uploader.getFile($(this).data('file'));
+	var source = file.getSource();
+	var img = new mOxie.Image();
+	img.onload = function() {
+		$('#img' + file.id).attr('src', this.getAsDataURL());
+	}
+	img.load(source);
+	return '<img id="img' + file.id + '" class="img-responsive" />';
+}
+
+$('body').popover({
+	html: true,
+	trigger: 'hover focus',
+	selector: '.img-popover',
+	template: '<div class="popover" role="tooltip"><h3 class="popover-title"></h3><div class="popover-content"></div></div>',
+	title: imgpopover_getTitle,
+	content: imgpopover_getContent,
+});
+
+//=== Clipboard ================================================================
+
+document.onkeydown = function(e) { return on_keyboard_action(e); }
+document.onkeyup = function(e) { return on_keyboardup_action(e); }
+
+var ctrl_pressed = false;
+
+function on_keyboard_action(event){
+	k = event.keyCode;
+	//ctrl
+	if (k==17) {
+		if(ctrl_pressed == false)
+			ctrl_pressed = true;
+		if (!window.Clipboard)
+			pasteCatcher.focus();
+	}
+}
+function on_keyboardup_action(event) {
+	k = event.keyCode;
+	//ctrl
+	if(k==17)
+		ctrl_pressed = false;
+}
+
+//firefox
+var pasteCatcher;
+if (!window.Clipboard) {
+	pasteCatcher = document.createElement("div");
+	pasteCatcher.setAttribute("id", "paste_ff");
+	pasteCatcher.setAttribute("contenteditable", "");
+	pasteCatcher.style.cssText = 'opacity:0;position:fixed;top:0px;left:0px;';
+	pasteCatcher.style.marginLeft = "-20px";
+	document.body.appendChild(pasteCatcher);
+	pasteCatcher.focus();
+
+	document.getElementById('paste_ff').addEventListener('DOMSubtreeModified', function() {
+		if(pasteCatcher.children.length == 1){
+			img = pasteCatcher.firstElementChild.src;
+
+			var blob = dataURLtoBlob(img);
+
+			paste_createImage(blob);
+			pasteCatcher.innerHTML = '';
+		}
+	}, false);
+}
+
+function dataURLtoBlob(dataurl) {
+    var arr = dataurl.split(',');
+    var mime = arr[0].match(/:(.*?);/)[1];
+    var bstr = atob(arr[1]);
+    var n = bstr.length
+    var u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type:mime});
+}
+
+//chrome
+window.addEventListener("paste", pasteHandler);
+
+function pasteHandler(e) {
+	if(e.clipboardData) {
+		var items = e.clipboardData.items;
+		if (items) {
+			for (var i = 0; i < items.length; i++) {
+				if (items[i].type.indexOf("image") !== -1) {
+					var blob = items[i].getAsFile();
+					//var URLObj = window.URL || window.webkitURL;
+					//var source = URLObj.createObjectURL(blob);
+					paste_createImage(blob);
+				}
+			}
+		}
+	} else {
+		setTimeout(paste_check_Input, 1);
+	}
+}
+
+function paste_check_Input() {
+	var child = pasteCatcher.childNodes[0];
+	pasteCatcher.innerHTML = "";
+	if (child) {
+		if (cild.tagName === "IMG") {
+			paste_createImage(child.src);
+		}
+	}
+}
+
+function pad(number) {
+	return ('0' + number).slice(-2);
+}
+
+function getDateString() {
+	var date = new Date();
+	return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()) + 
+		'_' + pad(date.getHours()) + pad(date.getMinutes()) + pad(date.getSeconds());
+}
+
+function getExtension(blob) {
+	switch(blob.type) {
+	case 'image/gif':
+		return '.gif';
+	case 'image/jpeg':
+		return '.jpg'
+	case 'image/png':
+		return '.png';
+	case 'image/bmp':
+		return '.bmp';
+	}
+}
+
+function paste_createImage(blob) {
+	//Add do plupload
+	var image = new mOxie.Image();
+	var file = new mOxie.File(null, blob);
+	file.name = 'clipboard-' + getDateString() + getExtension(blob);
+	uploader.addFile(file);
+}
+
+//=== /Clipboard ===============================================================
