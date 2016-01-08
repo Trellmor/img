@@ -4,7 +4,7 @@ use View\HTML;
 
 $view->load('header');
 
-$js[] = Uri::getBase() . 'view/js/jquery.blueimp-gallery.min.js';
+$js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
 ?>
 <div class="row">
   <div class="col-sm-9">

@@ -70,6 +70,8 @@ $config['maxsize'] = 2 * 1024 * 1024;
 /**
  * Image store location
  *
+ * Will be created as a subfolder of /public/
+ *
  * We create new folder vor every month
  *
  * You can set this to any path you want

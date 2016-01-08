@@ -1,0 +1,23 @@
+{
+	"require": {
+		"twbs/bootstrap": "^3.3.6",
+		"moxiecode/plupload": "^2.1.0",
+		"select2/select2": "^4.0.1",
+		"npm-asset/select2-bootstrap-theme": "0.1.0-beta.4",
+		"npm-asset/blueimp-gallery": "~2.17.0"
+	},
+
+	"autoload": {
+		"psr-4": {
+			"Application\\": "Application/",
+			"Controllers\\": "Controllers/",
+			"DAL\\": "DAL/",
+			"Models\\": "Models/",
+			"View\\": "View/"
+		}
+	},
+
+	"scripts": {
+		"post-install-cmd": "Application\\AssetManager::Build"
+	}
+}

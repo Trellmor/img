@@ -1,6 +1,14 @@
-.buildpath
-.settings
-.project
+/.buildpath
+/.settings
+/.project
 
-20*
+/vendor
+/components
+
+public/20*
 data/db.sqlite3
+public/fonts
+public/img
+public/css/*.min.css
+public/js/*.min.js
+Application/localconfig.php

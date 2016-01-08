@@ -1,6 +1,6 @@
 <?php namespace Application;
 
-class Input{
+class Input {
 	const POST = 'POST';
 	const GET = 'GET';
 	

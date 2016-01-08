@@ -4,8 +4,8 @@ use Application\Uri;
 
 $view->load('header');
 
-$js[] = Uri::getBase() . 'view/js/select2.min.js';
-$js[] = Uri::getBase() . 'view/js/tags.js';
+$js[] = Uri::getBase() . 'js/select2.min.js';
+$js[] = Uri::getBase() . 'js/tags.js';
 ?>
 <div id="searchform">
   <h1><?php HTML::out(_('Search')); ?></h1>

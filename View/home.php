@@ -4,10 +4,10 @@ use View\HTML;
 
 $view->load('header');
 
-$js[] = Uri::getBase() . 'view/js/plupload.full.min.js';
-$js[] = Uri::getBase() . 'view/js/select2.min.js';
-$js[] = Uri::getBase() . 'view/js/upload.js';
-$js[] = Uri::getBase() . 'view/js/tags.js';
+$js[] = Uri::getBase() . 'js/plupload.full.min.js';
+$js[] = Uri::getBase() . 'js/select2.min.js';
+$js[] = Uri::getBase() . 'js/upload.js';
+$js[] = Uri::getBase() . 'js/tags.js';
 ?>
 
 <div id="uploadform" data-uploadid="<?php HTML::out($uploadid) ?>" data-csrf="<?php HTML::out($csrf->getToken()); ?>">

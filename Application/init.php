@@ -31,25 +31,15 @@ if (get_magic_quotes_gpc()) {
 /**
  * Autoloader
  */
-require_once APP_ROOT . '/app/autoloader.php';
+require_once APP_ROOT . '/vendor/autoload.php';
 
 /**
  * Load application config
  */
-require_once APP_ROOT . '/app/config.php';
-if (file_exists(APP_ROOT . '/app/localconfig.php')) {
-	require_once APP_ROOT . '/app/localconfig.php';
+require_once APP_ROOT . '/Application/config.php';
+if (file_exists(APP_ROOT . '/Application/localconfig.php')) {
+	require_once APP_ROOT . '/Application/localconfig.php';
 }
-
-/**
- * Initialize autoloader
- */
-$autoloader = new Autoloader(APP_ROOT);
-$autoloader->addNamespace('\\', APP_ROOT);
-$autoloader->addNamespace('Application\\', APP_ROOT . '/app');
-$autoloader->addNamespace('DAL', APP_ROOT . '/DAL');
-$autoloader->register();
-Registry::getInstance()->autoloader = $autoloader;
 
 /**
  * Initialize database connection
@@ -67,7 +57,7 @@ Registry::getInstance()->config = $config;
  * Initialize routing
  */
 Registry::getInstance()->router = new Router();
-require_once APP_ROOT . '/controllers/routes.php';
+require_once APP_ROOT . '/Controllers/routes.php';
 
 /**
  * Internationalization

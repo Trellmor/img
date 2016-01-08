@@ -141,8 +141,8 @@ class Image {
 			$qb = new QueryBuilder();
 			$qb->table('images')->where('id = ?', [[$this->id, \PDO::PARAM_INT]])->delete();
 
-			File::unlink($this->path);
-			File::unlink(dirname($this->path) . '/preview/' . basename($this->path));
+			File::unlink(APP_ROOT . '/' . $this->path);
+			File::unlink(dirname(APP_ROOT . '/' . $this->path) . '/preview/' . basename($this->path));
 			
 			Registry::getInstance()->db->commit();
 		} catch (\PDOException $e) {
@@ -176,7 +176,11 @@ class Image {
 		$location = trim(str_replace('//', '/', Registry::getInstance()->config['imgdir'] . '/'));
 			
 		// Choose the location for the file
-		$this->path = trim(str_replace('//', '/', File::getUniqueueName(Registry::getInstance()->config['imgdir'] . '/' . $name)));
+		$realpath = APP_ROOT + '/public/' . Registry::getInstance()->config['imgdir'] . '/' . $name;
+		$realpath = File::getUniqueueName($realpath);
+
+		$this->path =  str_replace(APP_ROOT + '/', '', $realpath, 1);
+
 		$location .= basename($this->path);
 		$location = explode('/', $location);
 		for ($i = 0; $i < count($location); $i++) {
@@ -185,7 +189,7 @@ class Image {
 		$this->location = implode('/', $location);
 		
 		// Move the file to it's new location
-		if (!File::move_uploaded_file($file['tmp_name'], $this->path)) {
+		if (!File::move_uploaded_file($file['tmp_name'], $realpath)) {
 			File::unlink($file['tmp_name']);
 			throw new UploadException('Can\'t move uploaded file.');
 		}
@@ -203,14 +207,14 @@ class Image {
 		*/
 		$w = Registry::getInstance()->config['preview']['width'];
 		$h = Registry::getInstance()->config['preview']['height'];
-		$preview = dirname($this->path) . '/preview/' . basename($this->path);
+		$preview = dirname($realpath) . '/preview/' . basename($realpath);
 		if (!file_exists(dirname($preview))) mkdir(dirname($preview), 0755);
-		exec('convert -define jpeg:size=' . $w * 2 . 'x' . $h * 2 . ' \\
-		  \'' . $this->path . '\'[0] -thumbnail ' . $w . 'x' . $h . ' \\
-		 -unsharp 0x.5 -strip \'' . $preview . '\'');
-		
+		exec ('convert -define jpeg:size=' . $w * 2 . 'x' . $h * 2 . ' \\
+		  ' . escapeshellarg($realpath) . '[0] -thumbnail ' . $w . 'x' . $h . ' \\
+		 -unsharp 0x.5 -strip ' . escapeshellarg($preview) . '');
+
 		// This is to make sure the image contains no privacy releated tags or anything
-		exec('mogrify -strip \'' . $this->path . '\'');
+		exec('mogrify -strip ' . escapeshellarg($realpath) . '');
 		
 		$this->ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0'; 
 		
