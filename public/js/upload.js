@@ -48,7 +48,10 @@ var uploader = new plupload.Uploader({
 		},
 		
 		UploadFile: function(up, file) {
-			$('#' + file.id).after('<div id="' + file.id + 'progress" />');
+			var div = $('#' + file.id);
+			div.html(file.name + ' <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>');
+			scrollTo(div)
+			div.after('<div id="' + file.id + 'progress" />');
 			$('#' + file.id + 'progress').addClass('progress').append('<div class="progress-bar"' +
 					'role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" />');
 		},
@@ -109,6 +112,12 @@ dropbox.addEventListener('dragover', function(e) {
 	clearTimeout(dropboxHideTimer);
 	dropboxHideTimer = setTimeout("$('#dropbox').fadeOut();", 250);
 }, false);
+
+function scrollTo(element) {
+	$('html, body').animate({
+		scrollTop: element.offset().top
+	}, 2000);
+}
 
 function imgpopover_getTitle() {
 	var file = uploader.getFile($(this).data('file'));
