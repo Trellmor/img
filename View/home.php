@@ -32,7 +32,7 @@ $js[] = Uri::getBase() . 'js/tags.js';
   </div>
 </div>
 
-<p><?php HTML::out('Upload files by using the "Add images" button, dragging images onto this windows or pasting them with CTRL+V.'); ?></p>
+<p><?php HTML::out('Upload files by using the "Add images" button, dragging images onto this window or pasting them with CTRL+V.'); ?></p>
 
 <div id="dropbox"><h1><?php HTML::out('Drop images here'); ?></h1></div>
 
