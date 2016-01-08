@@ -163,6 +163,7 @@ class Image {
 		
 		// Assign the correct extension for this image
 		$name = str_replace('\'', '', basename($file['name']));
+		$name = str_replace(':', '', $name);
 		$name = explode('.', $name);
 		
 		if(count($name) < 2) {
