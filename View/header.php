@@ -47,6 +47,7 @@ use Application\Registry;
           <ul class="nav navbar-nav">
             <li><a href="<?php HTML::out(Uri::to('/')); ?>"><?php HTML::out(_('Upload')); ?></a></li>
             <li><a href="<?php HTML::out(Uri::to('search/')); ?>"><?php HTML::out(_('Search')); ?></a></li>
+            <li><a href="<?php HTML::out(Uri::to('tags/')); ?>"><?php HTML::out(_('Tags')); ?></a></li>
           </ul>
           <div class="navbar-form navbar-right">
 <?php if ($user == null): ?>

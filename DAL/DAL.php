@@ -52,4 +52,29 @@ LIMIT ' . (int)$offset . ', ' . (int)$count . ';';
 		$stmt->execute();
 		return $stmt;
 	}
+
+	public static function Select_TagCount($count, $reverse) {
+		$order = ($reverse) ? 'ASC' : 'DESC';
+		$sql = 'SELECT count FROM tags';
+		if ($count > 0) {
+			$sql .= ' ORDER BY count DESC LIMIT ' . (int)$count;
+			$sql = 'SELECT count FROM (' . $sql . ')';
+		}
+		$sql .= ' ORDER BY count ' . $order . ' LIMIT 1';
+		$stmt = Registry::getInstance()->db->prepare($sql);
+		$stmt->execute();
+		return $stmt;
+	}
+
+	public static function Select_TopTags($count) {
+		$sql = 'SELECT tag, count FROM tags';
+		if ($count > 0) {
+			$sql .= ' ORDER BY count DESC LIMIT ' . (int)$count;
+			$sql = 'SELECT tag, count FROM (' . $sql . ')';
+		}
+		$sql .= ' ORDER BY tag ASC';
+		$stmt = Registry::getInstance()->db->prepare($sql);
+		$stmt->execute();
+		return $stmt;
+	}
 }

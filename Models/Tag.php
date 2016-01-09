@@ -1,6 +1,7 @@
 <?php namespace Models;
 
 use DAL\QueryBuilder;
+use DAL\DAL;
 
 class Tag {
 	private $id;
@@ -46,11 +47,33 @@ class Tag {
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
 	}
 	
+	public static function getTopTags($count) {
+		$stmt = DAL::Select_TopTags($count);
+		return $stmt->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
+	}
+
+	public static function getMinCount($count) {
+		return static::getTagCount($count, true);
+	}
+
+	public static function getMaxCount($count) {
+		return static::getTagCount($count, false);
+	}
+
+	private static function getTagCount($count, $reverse) {
+		$stmt = DAL::Select_TagCount($count, $reverse);
+		return $stmt->fetchColumn(0);
+	}
+
 	public function getTag() {
 		return $this->tag;
 	}	
 	
 	public function getCount() {
 		return $this->count;
+	}
+
+	public function getScale($min, $div) {
+		return round(log($this->count - ($min - 1)) / $div);
 	}
 }

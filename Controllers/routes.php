@@ -15,6 +15,8 @@ Registry::getInstance()->router->addRoute(Route::get('Controllers\Browse', 'sear
 Registry::getInstance()->router->addRoute(Route::post('Controllers\Browse', 'performSearch', 'search/'));
 Registry::getInstance()->router->addRoute(Route::get('Controllers\Browse', 'tags', 'tags/([^/]+)/'));
 Registry::getInstance()->router->addRoute(Route::get('Controllers\Browse', 'tags', 'tags/([^/]+)/([0-9]+)/'));
+Registry::getInstance()->router->addRoute(Route::get('Controllers\Tags', 'tags', 'tags/'));
+Registry::getInstance()->router->addRoute(Route::get('Controllers\Tags', 'allTags', 'alltags/'));
 Registry::getInstance()->router->addRoute(Route::post('Controllers\Login', 'login', 'login/'));
 Registry::getInstance()->router->addRoute(Route::get('Controllers\Login', 'logout', 'logout/'));
 Registry::getInstance()->router->addRoute(Route::get('Controllers\Image', 'download', 'download/([^/]+)/[^/]+/'));
