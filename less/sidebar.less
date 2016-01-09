@@ -3,9 +3,11 @@
 }
 
 .sidebar {
-  margin: floor((@grid-gutter-width / 2)) 0 ceil((@grid-gutter-width / 2)) 0;
+  margin-top: 0;
+  margin-bottom: floor((@grid-gutter-width / 2));
+  margin-left: 0;
     
   @media (min-width: @screen-sm-min) {
-    margin: 0 ceil((@grid-gutter-width / 2)) 0 floor((@grid-gutter-width / 2));
+    margin-left: floor((@grid-gutter-width / 2));
   }
 }
