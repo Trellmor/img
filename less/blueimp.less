@@ -1,0 +1,36 @@
+.blueimp-gallery {
+  > .prev,
+  > .next {
+    font-size: ceil((@font-size-base * 2.5));
+    border: none;
+    background: none;
+  }
+
+  > .close {
+    font-size: (@font-size-base * 2);
+  }
+
+  > .play-pause {
+    text-decoration: none;
+
+    > .play {
+      display: inline;
+    }
+
+    > .pause {
+      display: none;
+    }
+  }
+}
+
+.blueimp-gallery-playing {
+  > .play-pause {
+    > .play {
+      display: none;
+    }
+
+    > .pause {
+      display: inline;
+    }
+  }
+}

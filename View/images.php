@@ -7,7 +7,7 @@ $view->load('header');
 $js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
 ?>
 <div class="row">
-  <div class="col-sm-9">
+  <div class="col-sm-9 content-box">
     <div class="row">
 <?php foreach ($images as $image): ?>
       <div class="col-md-3 col-sm-6">
@@ -35,7 +35,7 @@ $js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
     </ul>
 <?php endif; ?>
   </div>
-  <div class="col-sm-3 sidebar">
+  <div class="col-sm-2 content-box sidebar">
     <h4><?php HTML::out(_('Tags')); ?></h4>
 <?php foreach ($tags as $tag): ?>
     <ol class="list-unstyled">

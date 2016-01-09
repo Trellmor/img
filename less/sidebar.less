@@ -1,0 +1,11 @@
+.sidebar-module {
+  padding-bottom: floor((@grid-gutter-width / 2));
+}
+
+.sidebar {
+  margin: floor((@grid-gutter-width / 2)) 0 ceil((@grid-gutter-width / 2)) 0;
+    
+  @media (min-width: @screen-sm-min) {
+    margin: 0 ceil((@grid-gutter-width / 2)) 0 floor((@grid-gutter-width / 2));
+  }
+}

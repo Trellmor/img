@@ -2,9 +2,6 @@
 use Application\Uri;
 use View\HTML;
 use Application\Registry;
-
-$js[] = Uri::getBase() . 'js/bootstrap.min.js';
-$js[] = Uri::getBase() . 'js/signin.js';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +21,7 @@ $js[] = Uri::getBase() . 'js/signin.js';
     <link href="<?php echo Uri::getBase(); ?>css/select2.min.css" rel="stylesheet">
     <link href="<?php echo Uri::getBase(); ?>css/select2-bootstrap.min.css" rel="stylesheet">
     
-    <link href="<?php echo Uri::getBase(); ?>css/site.css" rel="stylesheet">
+    <link href="<?php echo Uri::getBase(); ?>css/site.min.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

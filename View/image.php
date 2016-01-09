@@ -5,12 +5,12 @@ use View\HTML;
 $view->load('header');
 ?>
 <div class="row">
-  <div class="col-sm-9">
+  <div class="col-sm-9 content-box">
     <h1><?php HTML::out($image->getOriginalName()); ?></h1>
     <a href="<?php HTML::out(Uri::getBase() . $image->getLocation()); ?>" target="_blank">
       <img src="<?php HTML::out(Uri::getBase() .$image->getLocation()); ?>" class="img-responsive" alt="<?php HTML::out($image->getOriginalName()); ?>" />
     </a>
-    <div id="imageinfo" class="row">
+    <div class="imageinfo" class="row">
       <div class="col-sm-6">
         <table class="table">
           <tbody>
@@ -35,7 +35,7 @@ $view->load('header');
       </div>
     </div>
   </div>
-  <div class="col-sm-3 sidebar">
+  <div class="col-sm-2 content-box sidebar">
     <div class="sidebar-module">
       <h4><?php HTML::out(_('Tags')); ?></h4>
 <?php foreach ($tags as $tag): ?>

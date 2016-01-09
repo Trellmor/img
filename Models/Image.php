@@ -177,10 +177,10 @@ class Image {
 		$location = trim(str_replace('//', '/', Registry::getInstance()->config['imgdir'] . '/'));
 			
 		// Choose the location for the file
-		$realpath = APP_ROOT + '/public/' . Registry::getInstance()->config['imgdir'] . '/' . $name;
+		$realpath = APP_ROOT . '/public/' . Registry::getInstance()->config['imgdir'] . '/' . $name;
 		$realpath = File::getUniqueueName($realpath);
 
-		$this->path =  str_replace(APP_ROOT + '/', '', $realpath, 1);
+		$this->path = str_replace(APP_ROOT . '/', '', $realpath);
 
 		$location .= basename($this->path);
 		$location = explode('/', $location);
@@ -235,7 +235,7 @@ class Image {
 					'uploadid' => $uploadid,
 					'width' => $info[0],
 					'height' => $info[1],
-					'size' => filesize ($this->path),
+					'size' => filesize($realpath),
 			]);
 			
 			$this->saveTags($tags);

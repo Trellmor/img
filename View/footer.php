@@ -1,6 +1,9 @@
 <?php
 use Application\Uri;
 use View\HTML;
+
+$js[] = Uri::getBase() . 'js/bootstrap.min.js';
+$js[] = Uri::getBase() . 'js/site.min.js';
 ?>
     </div>
     <footer class="footer navbar-inverse">

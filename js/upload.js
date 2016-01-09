@@ -1,3 +1,5 @@
+if (typeof plupload !== 'undefined') {
+
 var redirect = window.location.href;
 var uploading = false;
 
@@ -32,10 +34,10 @@ var uploader = new plupload.Uploader({
 		},
 		
 		FilesAdded: function(up, files) {
-			$('#imageslist').show();
+			$('#image-list').show();
 			
 			$.each(files, function(i, file) {
-				$('#imageslist').append('<div id="' + file.id + '">');
+				$('#image-list').append('<div id="' + file.id + '">');
 				var div = $('#' + file.id);
 
 				div.append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
@@ -266,3 +268,4 @@ function paste_createImage(blob) {
 }
 
 //=== /Clipboard ===============================================================
+}
