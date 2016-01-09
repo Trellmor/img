@@ -10,34 +10,24 @@ class Login extends JSONController {
 		try {
 			$input = new Input('POST');
 			$input->filter('id_token', FILTER_UNSAFE_RAW);
-			$id_token = $input->id_token;
 			
-			$curl = curl_init('https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=' . $id_token);
-			curl_setopt_array($curl, [
-					CURLOPT_RETURNTRANSFER => true,
-					CURLOPT_SSL_VERIFYPEER => true,
-					CURLOPT_TIMEOUT => 10
-			]);
+			$gc = new \Google_Client();
+			$gc->setClientId(Registry::getInstance()->config['google-signin']['client_id']);
+			$gc->setClientSecret(Registry::getInstance()->config['google-signin']['client_secret']);
 			
-			if (($data = curl_exec($curl)) !== false) {
-				$data = json_decode($data);
-				
-				if (isset($data->aud) && $data->aud == Registry::getInstance()->config['google-signin-client_id']) {
-					$user = User::loadUser($data->sub);
-					if ($user === false) {
-						$user = new User();
-						$user->setUser($data->sub);
-						$user->setMail($data->email);
-						$user->save();
-					}
-					Session::start();
-					$_SESSION['user_id'] = $user->getId();
-					$this->returnJSON([
-							'status' => 'ok'
-					]);
-				} else {
-					$this->jsonError(202, 'Invalid token');
+			if (($data = $gc->verifyIdToken($input->id_token)) !== false) {
+				$user = User::loadUser($data['sub']);
+				if ($user === false) {
+					$user = new User();
+					$user->setUser($data['sub']);
+					$user->setMail($data['email']);
+					$user->save();
 				}
+				Session::start();
+				$_SESSION['user_id'] = $user->getId();
+				$this->returnJSON([
+						'status' => 'ok'
+				]);
 			} else {
 				$this->jsonError(201, 'Token validation failed');
 			}

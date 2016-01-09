@@ -98,10 +98,13 @@ $config['preview'] = array(
 $config['pagelimit'] = 16;
 
 /**
- * Google Sign In client id
+ * Google Sign In
  * 
  * See https://developers.google.com/identity/sign-in/web/devconsole-project
  */
-$config['google-signin-client_id'] = '';
+$config['google-signin'] = array(
+	'client_id' => '',
+	'client_secret' => ''
+);
 
 ?>
