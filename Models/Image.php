@@ -153,7 +153,7 @@ class Image {
 	
 	public function upload($file, $tags, $uploadid) {
 		$info = getimagesize($file['tmp_name']);
-		
+
 		if (!isset(Registry::getInstance()->config['mime'][$info['mime']])) {
 			File::unlink($file['tmp_name']);
 			throw new ValidationException(_('Imagetype not allowed.'));
@@ -177,7 +177,7 @@ class Image {
 		$location = trim(str_replace('//', '/', Registry::getInstance()->config['imgdir'] . '/'));
 			
 		// Choose the location for the file
-		$realpath = APP_ROOT . '/public/' . Registry::getInstance()->config['imgdir'] . '/' . $name;
+		$realpath = APP_ROOT . '/public/' . $location . $name;
 		$realpath = File::getUniqueueName($realpath);
 
 		$this->path = str_replace(APP_ROOT . '/', '', $realpath);
