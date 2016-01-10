@@ -72,7 +72,7 @@ class Browse extends Controller {
 		foreach ($tags as $tag) {
 			$tag = trim($tag);
 			if (!empty($tag)) {
-				$search .= str_replace(' ', '_', $tag) . ' ';
+				$search .= Tag::encodeTag($tag) . ' ';
 			}
 		}
 		return substr($search, 0, -1);
@@ -82,7 +82,7 @@ class Browse extends Controller {
 		$tags = explode(' ', $tags);
 		
 		for ($i = 0; $i < count($tags); $i++) {
-			$tags[$i] = trim(str_replace('_', ' ', $tags[$i]));
+			$tags[$i] = Tag::decodeTag($tags[$i]);
 			if (empty($tags[$i])) {
 				unset($tags[i]);
 			}

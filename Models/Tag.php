@@ -76,4 +76,16 @@ class Tag {
 	public function getScale($min, $div) {
 		return round(log($this->count - ($min - 1)) / $div);
 	}
+
+	public function getEncodedTag() {
+		return static::encodeTag($this->tag);
+	}
+
+	public static function encodeTag($tag) {
+		return str_replace(' ', '_', $tag);
+	}
+
+	public static function decodeTag($tag) {
+		return trim(str_replace('_', ' ', $tag));
+	}
 }
