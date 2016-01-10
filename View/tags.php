@@ -3,7 +3,6 @@ use View\HTML;
 use Application\Uri;
 
 $view->load('header');
-$js[] = Uri::getBase() . '../js/tagcloud.js';
 ?>
 <div id="tagcloud" class="content-box">
 <?php foreach ($tags as $tag): ?>
@@ -11,9 +10,8 @@ $js[] = Uri::getBase() . '../js/tagcloud.js';
 <?php endforeach; ?>
 <?php if($count > 0 && count($tags) == $count): ?>
   <p class="text-right"><a href="<?php HTML::out(Uri::to('alltags')); ?>"><?php HTML::out(_('Show all tags')); ?></a>
-</div>
 <?php endif; ?>
-
+</div>
 <?php 
 $view->load('footer');
 ?>
