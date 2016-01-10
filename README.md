@@ -1,12 +1,12 @@
 # img.pew.cc
 
-img.pew.cc is a small website for simple image hosting. See [img.pew.cc](http://img.pew.cc]
+img.pew.cc is a small website for simple image hosting. See [img.pew.cc](http://img.pew.cc)
 
 ## Setup
 
 * Use [composer](https://getcomposer.org/) to install the dependencies: `composer install`
-* Create `localconfig.php` and edit the config values from  `config.php` there
-* Use `date\schema.sql` to create a sqlite3 database `sqlite3 data/db.sqlite3 < data/schema.sql`
+* Create `Application/localconfig.php` and edit the config values from  `Application/config.php` there.
+* Use `data/schema.sql` to create a sqlite3 database `sqlite3 data/db.sqlite3 < data/schema.sql`
 * Point the web server root directory to `public/`
 
 ## Development
