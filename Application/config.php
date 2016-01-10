@@ -60,6 +60,7 @@ $config['mime'] = array(
 	'image/jpeg'	=> 'jpg',
 	'image/png'		=> 'png',
 	'image/bmp'		=> 'bmp',
+	'image/x-ms-bmp'=> 'bmp'
 );
 
 /**
