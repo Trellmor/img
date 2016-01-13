@@ -51,10 +51,9 @@ use Application\Registry;
           </ul>
           <div class="navbar-form navbar-right">
 <?php if ($user == null): ?>
-      <div id="g-signin-button" class="g-signin2" data-onsuccess="onGooglePlatformSignIn" data-loginpage="<?php HTML::out(Uri::to('login/')); ?>"></div>
-<?php else: ?>
-      <button id="g-signout-button" class="btn btn-default" data-logoutpage="<?php HTML::out(Uri::to('logout/')); ?>"><?php HTML::out(_('Sign out')); ?></button>
-<?php endif; ?>          
+            <div id="g-signin-button" data-loginpage="<?php HTML::out(Uri::to('login/')); ?>"></div>
+<?php endif ?>
+            <button id="g-signout-button" class="btn btn-default<?php if ($user == null) echo ' hidden'; ?>" data-logoutpage="<?php HTML::out(Uri::to('logout/')); ?>"><?php HTML::out(_('Sign out')); ?></button>
           </div>
         </div><!--/.navbar-collapse -->
       </div>

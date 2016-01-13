@@ -3,7 +3,8 @@ function onGooglePlatformSignIn(googleUser) {
 	var url = $('#g-signin-button').data('loginpage');
 	$.post(url, { 'id_token': id_token }, function(data) {
 		if (typeof(data.status) != 'undefined' && data.status == 'ok') {
-			location.reload(true);
+			$('#g-signin-button').addClass('hidden');
+			$('#g-signout-button').removeClass('hidden');
 		} else {
 			signOut();
 		}
@@ -12,7 +13,11 @@ function onGooglePlatformSignIn(googleUser) {
 
 function onGooglePlatformLoaded() {
 	gapi.load('auth2', function() {
-		gapi.auth2.init();
+		var auth2 = gapi.auth2.init();
+		gapi.signin2.render('g-signin-button', {
+			'scope': 'email',
+			'onsuccess': onGooglePlatformSignIn
+		});
 	});
 }
 
