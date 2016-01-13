@@ -4,7 +4,7 @@ use Application\Uri;
 
 $view->load('header');
 ?>
-<div id="tagcloud" class="content-box">
+<div id="tagcloud" class="content-box wordbreak">
 <?php foreach ($tags as $tag): ?>
   <a href="<?php HTML::out(Uri::to('tags/' . $tag->getEncodedTag())); ?>" style="font-size: <?php HTML::out(100 + $tag->getScale($min, $div)); ?>%"><?php HTML::out($tag->getTag()); ?></a>
 <?php endforeach; ?>

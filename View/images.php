@@ -38,7 +38,7 @@ $js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
   <div class="col-sm-2 content-box sidebar">
     <h4><?php HTML::out(_('Tags')); ?></h4>
 <?php foreach ($tags as $tag): ?>
-    <ol class="list-unstyled">
+    <ol class="list-unstyled wordbreak">
       <li><a href="<?php HTML::out(Uri::to('tags/' . str_replace(' ', '_', $tag->getTag()))); ?>"><?php HTML::out($tag->getTag()); ?></a> (<?php HTML::out($tag->getCount()); ?>)
     </ol>
 <?php endforeach; ?>

@@ -6,7 +6,7 @@ $view->load('header');
 ?>
 <div class="row">
   <div class="col-sm-9 content-box">
-    <h1><?php HTML::out($image->getOriginalName()); ?></h1>
+    <h1 class="wordbreak"><?php HTML::out($image->getOriginalName()); ?></h1>
     <a href="<?php HTML::out(Uri::getBase() . $image->getLocation()); ?>" target="_blank">
       <img src="<?php HTML::out(Uri::getBase() .$image->getLocation()); ?>" class="img-responsive" alt="<?php HTML::out($image->getOriginalName()); ?>" />
     </a>
@@ -39,7 +39,7 @@ $view->load('header');
     <div class="sidebar-module">
       <h4><?php HTML::out(_('Tags')); ?></h4>
 <?php foreach ($tags as $tag): ?>
-      <ol class="list-unstyled">
+      <ol class="list-unstyled wordbreak">
         <li><a href="<?php HTML::out(Uri::to('tags/' . str_replace(' ', '_', $tag->getTag()))); ?>"><?php HTML::out($tag->getTag()); ?></a> (<?php HTML::out($tag->getCount()); ?>)
       </ol>
 <?php endforeach; ?>
