@@ -77,7 +77,7 @@ class QueryBuilder {
 		if (!empty($this->limit)) {
 			$query .= $this->limit;
 		}
-		
+
 		$sth = Registry::getInstance()->db->prepare($query);
 		$this->bindValues($sth, $this->selectionArgs);
 		$sth->execute();

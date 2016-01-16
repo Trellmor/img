@@ -66,6 +66,17 @@ class Image {
 		return $stmt->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
 	}
 
+	public static function getImagesByUser($user, $offset) {
+		$qb = new QueryBuilder();
+		$qb->table('users u')->innerJoin('images i', 'i.user = u.id');
+		$qb->where('u.user = ?', [$user]);
+		$qb->orderBy(['i.time DESC']);
+		$qb->limit(Registry::getInstance()->config['pagelimit'], $offset);
+
+		$stmt = $qb->query(static::$columns);
+		return $stmt->fetchAll(\PDO::FETCH_CLASS, __CLASS__);
+	}
+
 	public function getId() {
 		return $this->id;
 	}

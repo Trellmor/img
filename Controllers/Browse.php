@@ -67,6 +67,29 @@ class Browse extends Controller {
 		}
 	}
 	
+	public function user($user, $page = 1) {
+		try {
+			$offset = ($page - 1) * Registry::getInstance()->config['pagelimit'];
+
+			$images = Image::getImagesByUser($user, $offset);
+			if (count($images) > 0) {
+				$imagetags = Tag::getTagsForImages($images);
+
+				$this->view->assignVar('images', $images);
+				$this->view->assignVar('tags', $imagetags);
+				$this->view->assignVar('page', $page);
+				$this->view->assignVar('pagelimit', Registry::getInstance()->config['pagelimit']);
+				$this->view->assignVar('nextpage', Uri::to('user/' . $user . '/' . ($page + 1) . '/'));
+				$this->view->assignVar('prevpage', Uri::to('user/' . $user . '/' . ($page - 1) . '/'));
+				$this->view->load('images');
+			} else {
+				$this->error(200, _('No images found'));
+			}
+		} catch (\Exception $e) {
+			$this->error(200, $e->getMessage());
+		}
+	}
+
 	private function encodeTags($tags) {
 		$search = '';
 		foreach ($tags as $tag) {
