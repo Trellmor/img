@@ -23,5 +23,6 @@ Registry::getInstance()->router->addRoute(Route::get('Controllers\Tags', 'tags',
 Registry::getInstance()->router->addRoute(Route::get('Controllers\Tags', 'allTags', 'alltags/'));
 Registry::getInstance()->router->addRoute(Route::post('Controllers\Login', 'login', 'login/'));
 Registry::getInstance()->router->addRoute(Route::get('Controllers\Login', 'logout', 'logout/'));
+Registry::getInstance()->router->addRoute(Route::get('Controllers\Partial', 'navbar', 'partial/navbar/'));
 
 ?>

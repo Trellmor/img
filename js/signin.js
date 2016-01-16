@@ -3,8 +3,10 @@ function onGooglePlatformSignIn(googleUser) {
 	var url = $('#g-signin-button').data('loginpage');
 	$.post(url, { 'id_token': id_token }, function(data) {
 		if (typeof(data.status) != 'undefined' && data.status == 'ok') {
-			$('#g-signin-button').addClass('hidden');
-			$('#g-signout-button').removeClass('hidden');
+			var url = $('#navbar').data('reload');
+			$.get(url, function(data) {
+				$('#navbar').replaceWith(data);
+			});
 		} else {
 			signOut();
 		}

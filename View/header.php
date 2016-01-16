@@ -32,31 +32,6 @@ use Application\Registry;
     <meta name="google-signin-client_id" content="<?php HTML::out(Registry::getInstance()->config['google-signin']['client_id']); ?>">
   </head>
   <body>
-    <nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only"><?php HTML::out(_('Toggle navigation')); ?></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="<?php HTML::out(Uri::to('/')); ?>"><?php HTML::out($page_title); ?></a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="<?php HTML::out(Uri::to('/')); ?>"><?php HTML::out(_('Upload')); ?></a></li>
-            <li><a href="<?php HTML::out(Uri::to('search/')); ?>"><?php HTML::out(_('Search')); ?></a></li>
-            <li><a href="<?php HTML::out(Uri::to('tags/')); ?>"><?php HTML::out(_('Tags')); ?></a></li>
-          </ul>
-          <div class="navbar-form navbar-right">
-<?php if ($user == null): ?>
-            <div id="g-signin-button" data-loginpage="<?php HTML::out(Uri::to('login/')); ?>"></div>
-<?php endif ?>
-            <button id="g-signout-button" class="btn btn-default<?php if ($user == null) echo ' hidden'; ?>" data-logoutpage="<?php HTML::out(Uri::to('logout/')); ?>"><?php HTML::out(_('Sign out')); ?></button>
-          </div>
-        </div><!--/.navbar-collapse -->
-      </div>
-    </nav>  
+<?php $view->load('navbar'); ?>
   
     <div class="container">
