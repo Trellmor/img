@@ -3,9 +3,9 @@ function onGooglePlatformSignIn(googleUser) {
 	var url = $('#g-signin-button').data('loginpage');
 	$.post(url, { 'id_token': id_token }, function(data) {
 		if (typeof(data.status) != 'undefined' && data.status == 'ok') {
-			var url = $('#navbar').data('reload');
+			var url = $('#site-navigation').data('reload');
 			$.get(url, function(data) {
-				$('#navbar').replaceWith(data);
+				$('#site-navigation').replaceWith(data);
 			});
 		} else {
 			signOut();

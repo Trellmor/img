@@ -2,7 +2,7 @@
 use Application\Uri;
 use View\HTML;
 ?>
-    <nav id="navbar" class="navbar navbar-inverse navbar-static-top" data-reload="<?php HTML::out(Uri::to('partial/navbar/')); ?>">
+    <nav id="site-navigation" class="navbar navbar-inverse navbar-static-top" data-reload="<?php HTML::out(Uri::to('partial/navbar/')); ?>">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -13,7 +13,7 @@ use View\HTML;
           </button>
           <a class="navbar-brand" href="<?php HTML::out(Uri::to('/')); ?>"><?php HTML::out($page_title); ?></a>
         </div>
-        <div class="navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li><a href="<?php HTML::out(Uri::to('/')); ?>"><?php HTML::out(_('Upload')); ?></a></li>
             <li><a href="<?php HTML::out(Uri::to('search/')); ?>"><?php HTML::out(_('Search')); ?></a></li>
