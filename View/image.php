@@ -36,6 +36,7 @@ $view->load('header');
     </div>
   </div>
   <div class="col-sm-2 content-box sidebar">
+<?php if (count($tags) > 0): ?>
     <div class="sidebar-module">
       <h4><?php HTML::out(_('Tags')); ?></h4>
 <?php foreach ($tags as $tag): ?>
@@ -44,6 +45,7 @@ $view->load('header');
       </ol>
 <?php endforeach; ?>
     </div>
+<?php endif; ?>
 <?php if ($image->getUploadId() != null): ?>
     <div class="sidebar-module">
       <h4>
