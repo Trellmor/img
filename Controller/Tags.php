@@ -1,8 +1,11 @@
-<?php namespace Controllers;
+<?php
 
-use Models\Tag;
+namespace Controller;
 
-class Tags extends Controller {
+use Model\Tag;
+
+class Tags extends ImgController {
+
 	public function tags() {
 		$this->getTags(100);
 	}

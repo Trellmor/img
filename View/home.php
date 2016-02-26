@@ -12,7 +12,7 @@ $js[] = Uri::getBase() . 'js/select2.min.js';
   <div class="col-sm-8 content-box">
     <div id="uploadform" data-uploadid="<?php HTML::out($uploadid) ?>" data-csrf="<?php HTML::out($csrf->getToken()); ?>">
       <h1><?php HTML::out(_('Upload')); ?></h1>
-  
+
       <div class="form-group">
         <label ><?php HTML::out(_('Images')); ?></label>
         <div id="image-list"></div>
@@ -40,4 +40,3 @@ $js[] = Uri::getBase() . 'js/select2.min.js';
 
 <?php
 $view->load('footer');
-?>

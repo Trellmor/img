@@ -1,4 +1,4 @@
-<?php 
+<?php
 use Application\Uri;
 use View\HTML;
 
@@ -65,8 +65,7 @@ $view->load('header');
       </h4>
     </div>
 <?php endif; ?>
-  </div>  
+  </div>
 </div>
-<?php 
+<?php
 $view->load('footer');
-?>

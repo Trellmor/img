@@ -2,9 +2,9 @@
 
 /**
  * Configuration file
- * 
- * Do not modify the values here, instead create a file name 
- * app/localconfig.php and change the individual there. 
+ *
+ * Do not modify the values here, instead create a file name
+ * app/localconfig.php and change the individual there.
  * @var unknown
  */
 
@@ -12,7 +12,7 @@ $config = array();
 
 /**
  * Database connection settings
- * 
+ *
  * Warning: only sqlite is supported
  */
 $config['database'] = array(
@@ -100,12 +100,10 @@ $config['pagelimit'] = 16;
 
 /**
  * Google Sign In
- * 
+ *
  * See https://developers.google.com/identity/sign-in/web/devconsole-project
  */
 $config['google-signin'] = array(
 	'client_id' => '',
 	'client_secret' => ''
 );
-
-?>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 use View\HTML;
 use Application\Uri;
 
@@ -12,6 +12,5 @@ $view->load('header');
   <p class="text-right"><a href="<?php HTML::out(Uri::to('alltags')); ?>"><?php HTML::out(_('Show all tags')); ?></a>
 <?php endif; ?>
 </div>
-<?php 
+<?php
 $view->load('footer');
-?>

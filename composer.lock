@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "33a3be2f67de2574e2191a54a417385f",
-    "content-hash": "8eee5b5f6ddeb15699914f0ab626d703",
+    "hash": "45863c5da5a479ad991d07696f6185e0",
+    "content-hash": "8a7fec5b397579c325454aa1e98f56d8",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -52,16 +52,16 @@
         },
         {
             "name": "google/apiclient",
-            "version": "v2.0.0-RC4",
+            "version": "v2.0.0-RC5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/google/google-api-php-client.git",
-                "reference": "5620e578b495942a3b60eb99e2f0c1aeca23fbed"
+                "reference": "fb16405770d7a4e3c4c3af6ece8a2aebc549eafe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/5620e578b495942a3b60eb99e2f0c1aeca23fbed",
-                "reference": "5620e578b495942a3b60eb99e2f0c1aeca23fbed",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/fb16405770d7a4e3c4c3af6ece8a2aebc549eafe",
+                "reference": "fb16405770d7a4e3c4c3af6ece8a2aebc549eafe",
                 "shasum": ""
             },
             "require": {
@@ -103,7 +103,7 @@
             "keywords": [
                 "google"
             ],
-            "time": "2015-12-28 18:50:26"
+            "time": "2016-02-10 23:39:47"
         },
         {
             "name": "google/auth",
@@ -212,16 +212,16 @@
         },
         {
             "name": "guzzlehttp/psr7",
-            "version": "1.2.1",
+            "version": "1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/psr7.git",
-                "reference": "4d0bdbe1206df7440219ce14c972aa57cc5e4982"
+                "reference": "2e89629ff057ebb49492ba08e6995d3a6a80021b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/psr7/zipball/4d0bdbe1206df7440219ce14c972aa57cc5e4982",
-                "reference": "4d0bdbe1206df7440219ce14c972aa57cc5e4982",
+                "url": "https://api.github.com/repos/guzzle/psr7/zipball/2e89629ff057ebb49492ba08e6995d3a6a80021b",
+                "reference": "2e89629ff057ebb49492ba08e6995d3a6a80021b",
                 "shasum": ""
             },
             "require": {
@@ -266,7 +266,7 @@
                 "stream",
                 "uri"
             ],
-            "time": "2015-11-03 01:34:55"
+            "time": "2016-02-18 21:54:00"
         },
         {
             "name": "guzzlehttp/ringphp",
@@ -484,16 +484,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "a74aa9efbe61430fcb60157c8e025a48ec8ff604"
+                "reference": "ba6fb78f727cd09f2a649113b95468019e490585"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/a74aa9efbe61430fcb60157c8e025a48ec8ff604",
-                "reference": "a74aa9efbe61430fcb60157c8e025a48ec8ff604",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/ba6fb78f727cd09f2a649113b95468019e490585",
+                "reference": "ba6fb78f727cd09f2a649113b95468019e490585",
                 "shasum": ""
             },
             "require": {
@@ -509,8 +509,7 @@
                 "ext-gmp": "Install the GMP (GNU Multiple Precision) extension in order to speed up arbitrary precision integer arithmetic operations.",
                 "ext-libsodium": "SSH2/SFTP can make use of some algorithms provided by the libsodium-php extension.",
                 "ext-mcrypt": "Install the Mcrypt extension in order to speed up a few other cryptographic operations.",
-                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations.",
-                "pear-pear/PHP_Compat": "Install PHP_Compat to get phpseclib working on PHP < 5.0.0."
+                "ext-openssl": "Install the OpenSSL extension in order to speed up a wide variety of cryptographic operations."
             },
             "type": "library",
             "autoload": {
@@ -519,9 +518,6 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "phpseclib/"
-            ],
             "license": [
                 "MIT"
             ],
@@ -544,6 +540,11 @@
                 {
                     "name": "Hans-Jürgen Petrich",
                     "email": "petrich@tronic-media.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com",
                     "role": "Developer"
                 }
             ],
@@ -568,7 +569,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2015-08-04 04:48:03"
+            "time": "2016-01-18 17:07:21"
         },
         {
             "name": "psr/http-message",
@@ -700,12 +701,43 @@
             ],
             "description": "A lightweight implementation of CommonJS Promises/A for PHP",
             "time": "2015-07-03 13:48:55"
+        },
+        {
+            "name": "trellmor/php-framework",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "/home/daniel/git/php-framework",
+                "reference": "b1b47ba3ab499ee3037135d6bfbf9616094d2ead"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Application\\": "Application/",
+                    "Controller\\": "Controller/",
+                    "DAL\\": "DAL/",
+                    "Model\\": "Model/",
+                    "View\\": "View/"
+                }
+            },
+            "license": [
+                "AGPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Triendl",
+                    "email": "daniel@pew.cc"
+                }
+            ],
+            "description": "A php framework for Trellmor's websites",
+            "time": "2016-02-25 00:28:13"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "trellmor/php-framework": 20,
         "google/apiclient": 5
     },
     "prefer-stable": false,

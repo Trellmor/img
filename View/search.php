@@ -19,6 +19,5 @@ $js[] = Uri::getBase() . 'js/select2.min.js';
     </form>
   </div>
 </div>
-<?php 
+<?php
 $view->load('footer');
-?>

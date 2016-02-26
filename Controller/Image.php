@@ -1,12 +1,14 @@
-<?php namespace Controllers;
+<?php
+
+namespace Controller;
 
 use Application\CSRF;
-use Application\Exceptions\ValidationException;
-use Models\Tag;
+use Application\Exception\ValidationException;
+use Model\Tag;
 use Application\Registry;
 use Application\Uri;
 
-class Image extends Controller {
+class Image extends ImgController {
 	private $csrf;
 
 	public function __construct() {
@@ -17,15 +19,14 @@ class Image extends Controller {
 	}
 
 	public function image($id) {
-		$image = \Models\Image::getImageByEncodedId($id);
+		$image = \Model\Image::getImageByEncodedId($id);
 
 		if ($image !== false) {
 			$tags = Tag::getTagsForImage($image->getId());
 
 			$this->view->assignVar('image', $image);
 			$this->view->assignVar('tags', $tags);
-			$this->view->assignVar('deletelink', ($this->canDelete($image)) ?
-					Uri::to('delete/' . $image->getEncodedId())->param($this->csrf->getName(), $this->csrf->getToken()) : null);
+			$this->view->assignVar('deletelink', ($this->canDelete($image)) ? Uri::to('delete/' . $image->getEncodedId())->param($this->csrf->getName(), $this->csrf->getToken()) : null);
 			$this->view->load('image');
 		} else {
 			$this->error(404, _('Image not found.'));
@@ -34,7 +35,7 @@ class Image extends Controller {
 	}
 
 	public function download($id) {
-		$image = \Models\Image::getImageByEncodedId($id);
+		$image = \Model\Image::getImageByEncodedId($id);
 
 		if ($image !== false) {
 			$path = APP_ROOT . '/' . $image->getPath();
@@ -71,8 +72,7 @@ class Image extends Controller {
 				throw new ValidationException(_('Access denied'), 403);
 			}
 
-			$image = \Models\Image::getImageByEncodedId($id);
-
+			$image = \Model\Image::getImageByEncodedId($id);
 
 			if ($image === false) {
 				throw new ValidationException(_('Image not found.'), 404);

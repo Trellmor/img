@@ -1,7 +1,9 @@
-<?php namespace Models;
+<?php
+
+namespace Model;
 
 use Application\Registry;
-use Application\Exceptions\ValidationException;
+use Application\Exception\ValidationException;
 use DAL;
 
 class User {
@@ -14,15 +16,32 @@ class User {
 	}
 
 	public static function load($userId) {
-		$qb = new DAL\QueryBuilder();
-		$qb->table('users')->where('id = ?', [[$userId, \PDO::PARAM_INT]]);
-		return $qb->query(['id', 'user', 'mail', 'admin'])->fetchObject(__CLASS__);
+		$qb = new DAL\SQLiteQueryBuilder();
+		$qb->table('users')->where('id = ?', [
+				[
+						$userId,
+						\PDO::PARAM_INT
+				]
+		]);
+		return $qb->query([
+				'id',
+				'user',
+				'mail',
+				'admin'
+		])->fetchObject(__CLASS__);
 	}
 
 	public static function loadUser($user) {
-		$qb = new DAL\QueryBuilder();
-		$qb->table('users')->where('user = ?', [$user]);
-		return $qb->query(['id', 'user', 'mail', 'admin'])->fetchObject(__CLASS__);
+		$qb = new DAL\SQLiteQueryBuilder();
+		$qb->table('users')->where('user = ?', [
+				$user
+		]);
+		return $qb->query([
+				'id',
+				'user',
+				'mail',
+				'admin'
+		])->fetchObject(__CLASS__);
 	}
 
 	public function save() {
@@ -41,10 +60,10 @@ class User {
 	private function insert($contentValues) {
 		Registry::getInstance()->db->beginTransaction();
 		try {
-				$qb = new DAL\QueryBuilder();
-				$this->id = $qb->table('users')->insert($contentValues);
+			$qb = new DAL\SQLiteQueryBuilder();
+			$this->id = $qb->table('users')->insert($contentValues);
 
-				Registry::getInstance()->db->commit();
+			Registry::getInstance()->db->commit();
 		} catch (\PDOException $e) {
 			Registry::getInstance()->db->rollback();
 			throw $e;
@@ -54,8 +73,13 @@ class User {
 	private function update($contentValues) {
 		Registry::getInstance()->db->beginTransaction();
 		try {
-			$qb = new DAL\QueryBuilder();
-			$qb->table('users')->where('id = :id', ['id' => [$this->id, \PDO::PARAM_INT]])->update($contentValues);
+			$qb = new DAL\SQLiteQueryBuilder();
+			$qb->table('users')->where('id = :id', [
+					'id' => [
+							$this->id,
+							\PDO::PARAM_INT
+					]
+			])->update($contentValues);
 
 			Registry::getInstance()->db->commit();
 		} catch (\PDOException $e) {
@@ -95,5 +119,3 @@ class User {
 		return (bool) $this->admin;
 	}
 }
-
-?>

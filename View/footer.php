@@ -14,7 +14,7 @@ $js[] = Uri::getBase() . 'js/site.min.js';
           </div>
           <div class="col-xs-4 text-right small">
             <a class="navbar-link" href="https://github.com/Trellmor/img/issues/new"><?php HTML::out(_('Report a bug')); ?></a>
-          </div>        
+          </div>
         </div>
       </div>
     </footer>

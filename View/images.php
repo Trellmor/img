@@ -1,4 +1,4 @@
-<?php 
+<?php
 use Application\Uri;
 use View\HTML;
 
@@ -12,7 +12,7 @@ $js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
 <?php foreach ($images as $image): ?>
       <div class="col-md-3 col-sm-6">
         <div class="thumbnail">
-          <a href="<?php HTML::out(Uri::getBase() . $image->getLocation()); ?>" data-gallery="#blueimp-gallery" 
+          <a href="<?php HTML::out(Uri::getBase() . $image->getLocation()); ?>" data-gallery="#blueimp-gallery"
               title="<?php HTML::out($image->getOriginalName()); ?>">
             <img src="<?php HTML::out(Uri::getBase() . $image->getPreview()); ?>" alt="<?php HTML::out($image->getOriginalName()); ?>" />
           </a>
@@ -31,7 +31,7 @@ $js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
 
 <?php if ($page > 1): ?>
       <li class="previous"><a href="<?php HTML::out($prevpage); ?>">&larr; <?php HTML::out(_('Previous')); ?></a></li>
-<?php endif;?>  
+<?php endif;?>
     </ul>
 <?php endif; ?>
   </div>
@@ -57,6 +57,5 @@ $js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
   </a>
   <ol class="indicator"></ol>
 </div>
-<?php 
+<?php
 $view->load('footer');
-?>

@@ -1,5 +1,6 @@
 {
 	"require": {
+		"trellmor/php-framework": "dev-master",
 		"moxiecode/plupload": "^2.1.0",
 		"google/apiclient": "^2.0.0-RC4",
 		"guzzlehttp/guzzle": "~5.2"
@@ -8,9 +9,9 @@
 	"autoload": {
 		"psr-4": {
 			"Application\\": "Application/",
-			"Controllers\\": "Controllers/",
+			"Controller\\": "Controller/",
 			"DAL\\": "DAL/",
-			"Models\\": "Models/",
+			"Model\\": "Model/",
 			"View\\": "View/"
 		}
 	}

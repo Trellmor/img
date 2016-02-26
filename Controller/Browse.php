@@ -1,34 +1,37 @@
-<?php namespace Controllers;
+<?php
 
-use Models\Image;
-use Models\Tag;
+namespace Controller;
+
+use Model\Image;
+use Model\Tag;
 use Application\Registry;
 use Application\Uri;
 use Application\Input;
 
-class Browse extends Controller {
+class Browse extends ImgController {
+
 	public function search() {
 		$this->view->load('search');
 	}
-	
+
 	public function performSearch() {
 		$input = new Input('POST');
 		$input->filter('tags', FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW | FILTER_REQUIRE_ARRAY);
-		
+
 		if ($input->tags === false) {
 			$this->error(200, _('Invalid search string'));
 			return;
 		}
-		
+
 		$this->redirect(Uri::to('tags/') . $this->encodeTags($input->tags) . '/');
 	}
-	
+
 	public function tags($tags, $page = 1) {
 		try {
 			$offset = ($page - 1) * Registry::getInstance()->config['pagelimit'];
-			
-			$tags = $this->decodeTags($tags);			
-			
+
+			$tags = $this->decodeTags($tags);
+
 			$images = Image::getImagesByTags($tags, $offset);
 			if (count($images) > 0) {
 				$imagetags = Tag::getTagsForImages($images);
@@ -47,14 +50,14 @@ class Browse extends Controller {
 			$this->error(200, $e->getMessage());
 		}
 	}
-	
+
 	public function album($uploadId) {
 		try {
 			$uploadId = urldecode($uploadId);
 			$images = Image::getImagesByUploadId($uploadId);
 			if (count($images) > 0) {
 				$tags = Tag::getTagsForImages($images);
-				
+
 				$this->view->assignVar('images', $images);
 				$this->view->assignVar('tags', $tags);
 				$this->view->assignVar('page', 0);
@@ -66,7 +69,7 @@ class Browse extends Controller {
 			$this->error(200, $e->getMessage());
 		}
 	}
-	
+
 	public function user($user, $page = 1) {
 		try {
 			$offset = ($page - 1) * Registry::getInstance()->config['pagelimit'];
@@ -100,10 +103,10 @@ class Browse extends Controller {
 		}
 		return substr($search, 0, -1);
 	}
-	
-	private function decodeTags($tags) {		
+
+	private function decodeTags($tags) {
 		$tags = explode(' ', $tags);
-		
+
 		for ($i = 0; $i < count($tags); $i++) {
 			$tags[$i] = Tag::decodeTag($tags[$i]);
 			if (empty($tags[$i])) {

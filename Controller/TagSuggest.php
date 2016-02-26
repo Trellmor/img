@@ -1,12 +1,16 @@
-<?php namespace Controllers;
+<?php
+
+namespace Controller;
 
 use Application\Input;
-use Models\Tag;
+use Model\Tag;
+
 class TagSuggest extends JSONController {
+
 	public function suggest() {
 		$input = new Input('GET');
 		$input->filter('term', FILTER_UNSAFE_RAW, FILTER_FLAG_STRIP_LOW);
-		$result = [];
+		$result = [ ];
 		$tags = Tag::getMatchingTags($input->term);
 		foreach ($tags as $tag) {
 			$result[] = [
@@ -17,5 +21,3 @@ class TagSuggest extends JSONController {
 		$this->returnJSON($result);
 	}
 }
-
-?>
