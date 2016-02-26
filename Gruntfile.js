@@ -20,6 +20,7 @@ module.exports = function (grunt) {
     concat: {
       site: {
         src: [
+          'js/gallery.js',
           'js/upload.js',
           'js/signin.js',
           'js/tags.js'
