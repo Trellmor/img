@@ -43,12 +43,21 @@ var uploader = new plupload.Uploader({
 				div.append(file.name + ' (' + plupload.formatSize(file.size) + ') ');
 				div.append('<a tabindex="0" role="button" class="img-popover" data-toggle="popover" data-file="' + file.id + '">' + 
 						'<span class="glyphicon glyphicon-picture" aria-hidden="true"></span>' + 
+						'</a> ');
+				div.append('<a tabindex="0" role="button" class="img-remove" data-file="' + file.id + '">' +
+						'<span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>' +
 						'</a>');
 			});
 		 
 			up.refresh(); // Reposition Flash/Silverlight
 		},
 		
+		FilesRemoved: function(up, files) {
+			$.each(files, function(i, file) {
+				$('#' + file.id).remove();
+			});
+		},
+
 		UploadFile: function(up, file) {
 			var div = $('#' + file.id);
 			div.html(file.name + ' <span class="glyphicon glyphicon-upload" aria-hidden="true"></span>');
@@ -136,6 +145,10 @@ function imgpopover_getContent() {
 	img.load(source);
 	return '<img id="img' + file.id + '" class="img-responsive" />';
 }
+
+$('#image-list').delegate('.img-remove', 'click', function () {
+	uploader.removeFile($(this).data('file'));
+});
 
 $('body').popover({
 	html: true,
