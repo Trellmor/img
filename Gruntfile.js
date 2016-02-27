@@ -131,7 +131,8 @@ module.exports = function (grunt) {
           'node_modules/bootstrap/dist/js/bootstrap.min.js',
           'node_modules/select2/dist/js/select2.min.js',
           'node_modules/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
-          'vendor/moxiecode/plupload/js/plupload.full.min.js'
+          'vendor/moxiecode/plupload/js/plupload.full.min.js',
+          'build/js/site.js'
         ],
         dest: 'public/js/'
       },

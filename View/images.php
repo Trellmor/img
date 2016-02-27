@@ -5,6 +5,7 @@ use View\HTML;
 $view->load('header');
 
 $js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
+$js[] = Uri::getBase() . 'js/jquery.ba-bbq.min.js';
 ?>
 <div class="row">
   <div class="col-sm-9 content-box">
@@ -13,7 +14,8 @@ $js[] = Uri::getBase() . 'js/jquery.blueimp-gallery.min.js';
       <div class="col-md-3 col-sm-6">
         <div class="thumbnail">
           <a href="<?php HTML::out(Uri::getBase() . $image->getLocation()); ?>" data-gallery="#blueimp-gallery"
-              title="<?php HTML::out($image->getOriginalName()); ?>">
+              title="<?php HTML::out($image->getOriginalName()); ?>"
+              data-id="<?php HTML::out($image->getEncodedId()); ?>">
             <img src="<?php HTML::out(Uri::getBase() . $image->getPreview()); ?>" alt="<?php HTML::out($image->getOriginalName()); ?>" />
           </a>
           <div class="caption text-center small">
