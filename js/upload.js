@@ -218,9 +218,6 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], {type:mime});
 }
 
-//chrome
-window.addEventListener("paste", pasteHandler);
-
 function pasteHandler(e) {
 	if(e.clipboardData) {
 		var items = e.clipboardData.items;
@@ -238,6 +235,9 @@ function pasteHandler(e) {
 		setTimeout(paste_check_Input, 1);
 	}
 }
+
+//chrome
+window.addEventListener("paste", pasteHandler);
 
 function paste_check_Input() {
 	var child = pasteCatcher.childNodes[0];
