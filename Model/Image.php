@@ -196,7 +196,6 @@ class Image {
 		$info = getimagesize($file['tmp_name']);
 
 		if (!isset(Registry::getInstance()->config['mime'][$info['mime']])) {
-			File::unlink($file['tmp_name']);
 			throw new ValidationException(_('Imagetype not allowed.'));
 		}
 
@@ -232,7 +231,6 @@ class Image {
 
 		// Move the file to it's new location
 		if (!File::move_uploaded_file($file['tmp_name'], $realpath)) {
-			File::unlink($file['tmp_name']);
 			throw new UploadException('Can\'t move uploaded file.');
 		}
 

@@ -13,10 +13,13 @@ use Application\Uri;
 class Upload extends JSONController {
 
 	public function upload() {
+		$file = null;
 		try {
 			if (!isset($_FILES['file'])) {
 				throw new ValidationException(_('Upload failed.'));
 			}
+
+			$file = $_FILES['file'];
 
 			$csrf = new CSRF();
 			if (!$csrf->verifyToken()) {
@@ -35,16 +38,12 @@ class Upload extends JSONController {
 				}
 			}
 
-			$file = $_FILES['file'];
-
 			if ($file['error'] !== UPLOAD_ERR_OK) {
-				File::unlink($_FILES['tmp_name']);
 				throw new ValidationException(_('Upload failed.'));
 			}
 
 			// The image is to big
 			if ($file['size'] > Registry::getInstance()->config['maxsize']) {
-				File::unlink($img['tmp_name']);
 				throw new ValidationException(_('Image too big.'));
 			}
 
@@ -60,6 +59,7 @@ class Upload extends JSONController {
 					'redirect' => (string) Uri::to('album/' . urlencode($uploadid) . '/')
 			]);
 		} catch (\Exception $e) {
+			if ($file != null) File::unlink($file['tmp_name']);
 			$this->jsonError(100, $e->getMessage());
 		}
 	}
