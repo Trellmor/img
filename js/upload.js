@@ -164,14 +164,13 @@ $('body').popover({
 document.onkeydown = function(e) { return on_keyboard_action(e); }
 document.onkeyup = function(e) { return on_keyboardup_action(e); }
 
-var ctrl_pressed = false;
+var pasted = false;
 
 function on_keyboard_action(event){
 	k = event.keyCode;
 	//ctrl
 	if (k==17) {
-		if(ctrl_pressed == false)
-			ctrl_pressed = true;
+		pasted = false;
 		if (!window.Clipboard)
 			pasteCatcher.focus();
 	}
@@ -180,7 +179,7 @@ function on_keyboardup_action(event) {
 	k = event.keyCode;
 	//ctrl
 	if(k==17)
-		ctrl_pressed = false;
+		pasted = false;
 }
 
 //firefox
@@ -194,13 +193,16 @@ if (!window.Clipboard) {
 	document.body.appendChild(pasteCatcher);
 	pasteCatcher.focus();
 
-	document.getElementById('paste_ff').addEventListener('DOMSubtreeModified', function() {
-		if(pasteCatcher.children.length == 1){
-			img = pasteCatcher.firstElementChild.src;
+	pasteCatcher.addEventListener('DOMSubtreeModified', function() {
+		if (pasteCatcher.children.length == 1) {
+			if (!pasted) {
+				img = pasteCatcher.firstElementChild.src;
 
-			var blob = dataURLtoBlob(img);
+				var blob = dataURLtoBlob(img);
 
-			paste_createImage(blob);
+				paste_createImage(blob);
+				pasted = true;
+			}
 			pasteCatcher.innerHTML = '';
 		}
 	}, false);
@@ -212,42 +214,33 @@ function dataURLtoBlob(dataurl) {
     var bstr = atob(arr[1]);
     var n = bstr.length
     var u8arr = new Uint8Array(n);
-    while(n--){
+    while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
     return new Blob([u8arr], {type:mime});
 }
 
 function pasteHandler(e) {
-	if(e.clipboardData) {
+	if (pasted)
+		return;
+
+	if (e.clipboardData) {
 		var items = e.clipboardData.items;
 		if (items) {
 			for (var i = 0; i < items.length; i++) {
 				if (items[i].type.indexOf("image") !== -1) {
 					var blob = items[i].getAsFile();
-					//var URLObj = window.URL || window.webkitURL;
-					//var source = URLObj.createObjectURL(blob);
+					
 					paste_createImage(blob);
+					pasted = true;
 				}
 			}
 		}
-	} else {
-		setTimeout(paste_check_Input, 1);
 	}
 }
 
 //chrome
 window.addEventListener("paste", pasteHandler);
-
-function paste_check_Input() {
-	var child = pasteCatcher.childNodes[0];
-	pasteCatcher.innerHTML = "";
-	if (child) {
-		if (cild.tagName === "IMG") {
-			paste_createImage(child.src);
-		}
-	}
-}
 
 function pad(number) {
 	return ('0' + number).slice(-2);
