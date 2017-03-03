@@ -18,6 +18,9 @@ module.exports = function (grunt) {
     },
 
     concat: {
+      options: {
+        sourceMap: true
+      },
       site: {
         src: [
           'js/gallery.js',
@@ -25,17 +28,22 @@ module.exports = function (grunt) {
           'js/signin.js',
           'js/tags.js'
         ],
-        dest: 'build/js/site.js'
+        dest: 'build/js/site.js',
       }
     },
 
     uglify: {
       options: {
-        mangle: true
+        mangle: true,
+        sourceMap: true,
+        sourceMapIncludeSources: true
       },
       site: {
+        options: {
+          sourceMapIn: 'build/js/site.js.map'
+        },
         src: 'build/js/site.js',
-        dest: 'public/js/site.min.js'
+        dest: 'build/js/site.min.js'
       }
     },
 
@@ -93,11 +101,11 @@ module.exports = function (grunt) {
       },
       minifyBootstrap: {
         src: 'build/css/bootstrap.css',
-        dest: 'public/css/bootstrap.min.css'
+        dest: 'build/css/bootstrap.min.css'
       },
       minifySite: {
         src: 'build/css/site.css',
-        dest: 'public/css/site.min.css'
+        dest: 'build/css/site.min.css'
       }
     },
 
@@ -120,7 +128,11 @@ module.exports = function (grunt) {
         src: [
           'node_modules/select2/dist/css/select2.min.css',
           'node_modules/select2-bootstrap-theme/dist/select2-bootstrap.min.css',
-          'node_modules/blueimp-gallery/css/blueimp-gallery.min.css'
+          'node_modules/blueimp-gallery/css/blueimp-gallery.min.css',
+          'build/css/bootstrap.min.css',
+          'build/css/bootstrap.min.css.map',
+          'build/css/site.min.css',
+          'build/css/site.min.css.map'
         ],
         dest: 'public/css/'
       },
@@ -132,7 +144,8 @@ module.exports = function (grunt) {
           'node_modules/select2/dist/js/select2.min.js',
           'node_modules/blueimp-gallery/js/jquery.blueimp-gallery.min.js',
           'vendor/moxiecode/plupload/js/plupload.full.min.js',
-          'build/js/site.js'
+          'build/js/site.min.js',
+          'build/js/site.min.js.map'
         ],
         dest: 'public/js/'
       },
