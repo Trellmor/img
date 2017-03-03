@@ -138,7 +138,7 @@ function imgpopover_getTitle() {
 function imgpopover_getContent() {
 	var file = uploader.getFile($(this).data('file'));
 	var source = file.getSource();
-	var img = new mOxie.Image();
+	var img = new moxie.image.Image();
 	img.onload = function() {
 		$('#img' + file.id).attr('src', this.getAsDataURL());
 	}
@@ -274,8 +274,8 @@ function getExtension(blob) {
 
 function paste_createImage(blob) {
 	//Add do plupload
-	var image = new mOxie.Image();
-	var file = new mOxie.File(null, blob);
+	var image = new moxie.image.Image();
+	var file = new moxie.file.File(null, blob);
 	file.name = 'clipboard-' + getDateString() + getExtension(blob);
 	uploader.addFile(file);
 }

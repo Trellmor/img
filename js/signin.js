@@ -13,12 +13,18 @@ function onGooglePlatformSignIn(googleUser) {
 	});
 }
 
+
+function onGooglePlatformSignInFailure(error) {
+	console.log(error);
+}
+
 function onGooglePlatformLoaded() {
 	gapi.load('auth2', function() {
 		var auth2 = gapi.auth2.init();
 		gapi.signin2.render('g-signin-button', {
 			'scope': 'email',
-			'onsuccess': onGooglePlatformSignIn
+			'onsuccess': onGooglePlatformSignIn,
+			'onfailure': onGooglePlatformSignInFailure
 		});
 	});
 }
